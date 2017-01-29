@@ -27,7 +27,7 @@ export default class WishBoard extends React.Component {
 //    const query = new Parse.Query('Item');
 //    console.log("user id " + Parse.User.current().id);
 //    //query.equalTo('ownerId', Parse.User.current().id);
-//    
+//
 //    query.limit(200);
 //    query.descending('updatedAt');
 //    query.find().then(items => {
@@ -41,7 +41,6 @@ export default class WishBoard extends React.Component {
 //  }
 
   render() {
-    console.log("render")
     return (
         <div className="well" style={wellStyles}>
         <Button bsStyle="primary" bsSize="large" block>Driver</Button>
