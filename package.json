@@ -38,7 +38,8 @@
     "react-router": "3.0.2",
     "moment": "^2.14.1",
     "react-spinjs": "^2.0.1",
-    "react-bootstrap": "0.30.7"
+    "react-bootstrap": "0.30.7",
+    "express": "4.14.1"
   },
   "scripts": {
     "clean": "rimraf dist",
