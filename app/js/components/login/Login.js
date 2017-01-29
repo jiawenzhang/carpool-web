@@ -1,5 +1,6 @@
 import React from 'react'
 import Parse from 'parse'
+
 require('./login.less')
 require('../../../style.css')
 
@@ -88,7 +89,7 @@ class Login extends React.Component {
       }
 
       Parse.User.logIn(email, password).then(() => {
-        this.props.history.replace('/');
+        this.context.router.replace('/');
       }, (error) => {
         console.log(error)
         this.setState({error: error.message});
@@ -131,7 +132,7 @@ class Login extends React.Component {
 
       user.signUp(null).then(() => {
         console.log("signup success");
-        this.props.history.replace('/');
+        this.context.router.replace('/');
       }, (error) => {
         console.log(error);
         this.setState({error: error.message});
@@ -154,7 +155,7 @@ class Login extends React.Component {
         } else {
           console.log("User logged in through Facebook!");
         }
-        this.props.history.replace('/');
+        this.context.router.replace('/');
       },
       error: (user, error) => {
         console.error("User cancelled the Facebook login or did not fully authorize.");
@@ -170,5 +171,10 @@ class Login extends React.Component {
     });
   }
 }
+
+Login.contextTypes = {
+    router: React.PropTypes.func.isRequired
+};
+
 
 export default Login
