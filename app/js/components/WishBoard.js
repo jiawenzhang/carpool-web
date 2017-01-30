@@ -13,7 +13,7 @@ import '../../style.css'
 const wellStyles = {maxWidth: 400, margin: '0 auto 10px'};
 
 //export default class WishBoard extends ParseComponent {
-export default class WishBoard extends React.Component {
+class WishBoard extends React.Component {
 
     constructor(props) {
         super(props)
@@ -42,10 +42,35 @@ export default class WishBoard extends React.Component {
 
   render() {
     return (
-        <div className="well" style={wellStyles}>
-        <Button bsStyle="primary" bsSize="large" block>Driver</Button>
-        <Button bsSize="large" block>Rider</Button>
-        </div>
+      <div className="well" style={wellStyles}>
+        <Button
+          bsSize="large"
+          onClick={this.driverClick.bind(this)}
+          block>
+          Driver
+        </Button>
+        <Button
+          bsSize="large"
+          onClick={this.riderClick.bind(this)}
+          block>
+          Rider
+        </Button>
+      </div>
     );
   }
+
+  driverClick() {
+    console.log("driver click")
+    this.context.router.replace('/driver');
+  }
+
+  riderClick() {
+    console.log("rider click")
+  }
 }
+
+WishBoard.contextTypes = {
+    router: React.PropTypes.func.isRequired
+};
+
+export default WishBoard

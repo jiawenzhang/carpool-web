@@ -13,6 +13,7 @@ Parse.serverURL = 'http://192.168.1.68:1337/parse'
 import App from './components/App'
 import Login from './components/login/Login'
 import WishBoard from './components/WishBoard'
+import DriverPage from './components/DriverPage'
 
 const loginRequired = (nextState, replace) => {
   if (!Parse.User.current()) {
@@ -25,7 +26,7 @@ ReactDOM.render((
     <Route component={App} path='/'>
       <Route path='login' component={Login}/>
       <IndexRoute onEnter={loginRequired} component={WishBoard}/>
+      <Route path='driver' component={DriverPage}/>
     </Route>
   </Router>
 ), document.getElementById('app'))
-
