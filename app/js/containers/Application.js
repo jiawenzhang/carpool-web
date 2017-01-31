@@ -121,10 +121,6 @@ export default class Application extends Component {
                 toast: this.handleToast,
               })}
             </div>
-            <div className="col-xs-6">
-              <pre>
-              </pre>
-            </div>
           </div>
         </div>
       </div>

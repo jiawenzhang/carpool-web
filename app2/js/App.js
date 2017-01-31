@@ -19,21 +19,9 @@ import {
   Application,
 } from "./containers";
 
-import {
-  GettingStartedExample,
-} from "./pages";
-
-import {
-  PageWithIframeEntry,
-} from "./pages/async";
-
-import {
-  SimpleMapExample
-} from "./pages/basics";
-
-import {
-  SearchBoxExample,
-} from "./pages/places";
+import RoutePage from "./pages/RoutePage";
+import DriverRiderPage from "./pages/DriverRiderPage";
+import TimePage from "./pages/TimePage/TimePage";
 
 const history = useRouterHistory(createHistory)({
   basename: `/react-google-maps`,
@@ -41,21 +29,15 @@ const history = useRouterHistory(createHistory)({
 
 export default class App extends Component {
   render() {
-    console.log("App render")
     return (
       <Router history={history}>
         <Route path="/" component={Application}>
-          <IndexRoute component={GettingStartedExample} />
-          <Route path="basics">
-            <Route path="simple-map" component={SimpleMapExample} />
-          </Route>
-          <Route path="places">
-            <Route path="search-box" component={SearchBoxExample} />
-          </Route>
+          <IndexRoute component={DriverRiderPage} />
+          <Route path="route" component={RoutePage} />
+          <Route path="time" component={TimePage} />
           <Redirect path="*" to="/" />
         </Route>
       </Router>
     );
   }
 }
-          //<Route path="async" component={PageWithIframeEntry} />
