@@ -14,6 +14,13 @@ import App from './components/App'
 import Login from './components/login/Login'
 import WishBoard from './components/WishBoard'
 import DriverPage from './components/DriverPage'
+import MapPage from './components/MapPage'
+import SimpleMapPage from './components/SimpleMapPage'
+import GettingStartedExample from './components/GettingStartedExample'
+
+import {
+  Application,
+} from "./containers";
 
 const loginRequired = (nextState, replace) => {
   if (!Parse.User.current()) {
@@ -21,12 +28,27 @@ const loginRequired = (nextState, replace) => {
   }
 }
 
+import "../index.css";
+  // <Router history={browserHistory}>
+  //   <Route component={App} path='/'>
+  //     <Route path='login' component={Login}/>
+  //     <IndexRoute onEnter={loginRequired} component={WishBoard}/>
+  //     <Route path='driver' component={DriverPage}/>
+  //     <Route path='map' component={GettingStartedExample}/>
+  //   </Route>
+  // </Router>
+
 ReactDOM.render((
-  <Router history={browserHistory}>
-    <Route component={App} path='/'>
-      <Route path='login' component={Login}/>
-      <IndexRoute onEnter={loginRequired} component={WishBoard}/>
-      <Route path='driver' component={DriverPage}/>
-    </Route>
-  </Router>
+   <Router history={browserHistory}>
+        <Route path="/" component={Application}>
+          <IndexRoute component={GettingStartedExample} />
+        </Route>
+   </Router>
 ), document.getElementById('app'))
+          // <Route path="basics">
+          //   <Route path="simple-map" component={SimpleMapExample} />
+          // </Route>
+          // <Route path="places">
+          //   <Route path="search-box" component={SearchBoxExample} />
+          // </Route>
+          //<Redirect path="*" to="/" />

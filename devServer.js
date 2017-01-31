@@ -17,7 +17,7 @@ app.use(require('webpack-hot-middleware')(compiler));
 app.use("/",router);
 
 app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'index2.html'));
 });
 
 router.get('/load/', function(req, res) {

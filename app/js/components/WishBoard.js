@@ -55,6 +55,18 @@ class WishBoard extends React.Component {
           block>
           Rider
         </Button>
+        <Button
+          bsSize="large"
+          onClick={this.mapClick.bind(this)}
+          block>
+          Map
+        </Button>
+        <Button
+          bsSize="large"
+          onClick={this.simpleMapClick.bind(this)}
+          block>
+          SimpleMap
+        </Button>
       </div>
     );
   }
@@ -66,6 +78,16 @@ class WishBoard extends React.Component {
 
   riderClick() {
     console.log("rider click")
+  }
+
+  mapClick() {
+    console.log("map click")
+    this.context.router.replace('/map');
+  }
+
+  simpleMapClick() {
+    console.log("simple map click")
+    this.context.router.replace('/simplemap');
   }
 }
 
