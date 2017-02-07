@@ -51,9 +51,11 @@ class Login extends React.Component {
     return (
       <div id='login'>
         <div className='pinterest-widget--pin pin-widget--login'>
-          <div className='title'>
+          <div className="col-xs-12" style={{height: 60, fontSize: 32, textAlign: "center"}}>
             {"Carpool"}
           </div>
+
+          <div className="col-xs-12">
           <FormGroup bsSize="large">
           <FormControl
             type="text"
@@ -62,7 +64,9 @@ class Login extends React.Component {
             onChange={this.emailChange}
           />
           </FormGroup>
+        </div>
 
+          <div className="col-xs-12">
           <FormGroup bsSize="large">
           <FormControl
             type="text"
@@ -71,8 +75,10 @@ class Login extends React.Component {
             onChange={this.passwordChange}
           />
           </FormGroup>
+        </div>
 
           {this.state.signup &&
+          <div className="col-xs-12">
               <FormGroup bsSize="large">
                 <FormControl
                   type="text"
@@ -81,9 +87,11 @@ class Login extends React.Component {
                   onChange={this.reenterPasswordChange}
                   />
               </FormGroup>
+            </div>
           }
 
           {this.state.signup &&
+          <div className="col-xs-12">
               <FormGroup bsSize="large">
                 <FormControl
                   type="text"
@@ -92,31 +100,53 @@ class Login extends React.Component {
                   onChange={this.nameChange}
                   />
               </FormGroup>
+            </div>
           }
 
+          <div className="col-xs-12" style={{height: 40}}>
+          </div>
+
+          <div className="col-xs-12">
           <Button
             bsSize="large"
             onClick={this.onLogin}
             block>
             Login
           </Button>
+        </div>
+
+          <div className="col-xs-12" style={{height: 20}}>
+          </div>
+
+          <div className="col-xs-12">
           <Button
             bsSize="large"
             onClick={this.onSignup}
             block>
             Signup
           </Button>
+        </div>
+
+          <div className="col-xs-12" style={{height: 20}}>
+          </div>
+
+          <div className="col-xs-12">
           <Button
             bsSize="large"
             onClick={this.onFacebook}
             block>
             Login with Facebook
           </Button>
+        </div>
 
-          {this .state.signup && <input type='text' ref='nameInput' placeholder='Name'/>}
-          {this.state.error && <div className='error'>
-            {this.state.error}
-          </div>}
+          <div className="col-xs-12" style={{height: 20}}>
+          </div>
+
+          {this.state.error &&
+             <div className='error'>
+               {this.state.error}
+             </div>
+          }
         </div>
       </div>
     )
