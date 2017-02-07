@@ -42,7 +42,7 @@ class DriverRiderPage extends React.Component {
 
   driverClick() {
     console.log("driver click")
-    this.context.router.replace('/route');
+    this.context.router.replace('/time');
   }
 
   riderClick() {

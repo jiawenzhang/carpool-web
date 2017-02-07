@@ -99,7 +99,8 @@ class TimePage extends React.Component<any, any> {
             />
         );
 
-        return (<div style={{ margin: '10px 30px' }}>
+        return (
+          <div style={{ margin: '10px 30px' }}>
                 <div>
                 <PopupDatePicker
                 datePicker={datePicker}
@@ -112,10 +113,16 @@ class TimePage extends React.Component<any, any> {
                 onChange={this.onEarliestTimeChange}
                 >
                 <Button
-                  bsSize="large" onClick={this.show} block>
+                  bsSize="large"
+                  onClick={this.show}
+                  block>
                   {earliestTime && format(earliestTime) || "Earliest time"}
                 </Button>
+
                 </PopupDatePicker>
+                </div>
+
+                <div className="col-xs-12" style={{height: 20}}>
                 </div>
 
                 <div>
@@ -130,18 +137,22 @@ class TimePage extends React.Component<any, any> {
                 onChange={this.onLatestTimeChange}
                 >
                 <Button
-                  bsSize="large" onClick={this.show} block>
+                  bsSize="large"
+                  onClick={this.show}
+                  block>
                   {latestTime && format(latestTime) || "Latest time"}
                 </Button>
                 </PopupDatePicker>
+                </div>
+
+                <div className="col-xs-12" style={{height: 20}}>
                 </div>
 
                 <Button
                   bsSize="large" onClick={this.ok} block>
                   {"OK"}
                 </Button>
-
-                </div>);
+          </div>);
     }
 }
 
