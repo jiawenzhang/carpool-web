@@ -28,6 +28,14 @@ const history = useRouterHistory(createHistory)({
   basename: `/react-google-maps`,
 });
 
+import Parse from 'parse'
+
+const PARSE_APP_ID = 'myAppId'
+const PARSE_JS_KEY = 'foo'
+
+Parse.initialize(PARSE_APP_ID, PARSE_JS_KEY)
+Parse.serverURL = 'http://192.168.1.68:1337/parse'
+
 export default class App extends Component {
   render() {
     return (
