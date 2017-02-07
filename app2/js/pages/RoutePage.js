@@ -107,12 +107,18 @@ export default class RoutePage extends Component {
           center={this.state.origin}
           directions={this.state.directions}
         />
+
+      <div className="col-xs-12" style={{height: 20}}>
+      </div>
+
+      <div className="col-xs-12">
         <Button
           bsSize="large"
           onClick={this.ok}
           block>
           OK
         </Button>
+      </div>
       </div>
     );
   }
