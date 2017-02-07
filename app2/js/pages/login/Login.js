@@ -109,11 +109,27 @@ class Login extends React.Component {
           <div className="col-xs-12">
           <Button
             bsSize="large"
+            bsStyle={this.state.signup ? "default" : "primary"}
             onClick={this.onLogin}
             block>
             Login
           </Button>
         </div>
+
+          <div className="col-xs-12" style={{marginTop: 15, marginBottom: 15, fontSize: 16, textAlign: "center"}}>
+            OR
+          </div>
+
+          <div className="col-xs-12">
+          <Button
+            bsSize="large"
+            bsStyle="info"
+            onClick={this.onFacebook}
+            block>
+            Login with Facebook
+          </Button>
+        </div>
+
 
           <div className="col-xs-12" style={{height: 20}}>
           </div>
@@ -121,6 +137,7 @@ class Login extends React.Component {
           <div className="col-xs-12">
           <Button
             bsSize="large"
+            bsStyle={this.state.signup ? "primary" : "default"}
             onClick={this.onSignup}
             block>
             Signup
@@ -130,17 +147,6 @@ class Login extends React.Component {
           <div className="col-xs-12" style={{height: 20}}>
           </div>
 
-          <div className="col-xs-12">
-          <Button
-            bsSize="large"
-            onClick={this.onFacebook}
-            block>
-            Login with Facebook
-          </Button>
-        </div>
-
-          <div className="col-xs-12" style={{height: 20}}>
-          </div>
 
           {this.state.error &&
              <div className='error'>
