@@ -149,7 +149,7 @@ class Login extends React.Component {
 
 
           {this.state.error &&
-             <div className='error'>
+             <div className='col-xs-12' style={{textAlign: "center", color: "red"}}>
                {this.state.error}
              </div>
           }
