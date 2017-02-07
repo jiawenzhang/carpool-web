@@ -19,9 +19,10 @@ import {
   Application,
 } from "./containers";
 
-import RoutePage from "./pages/RoutePage";
+import Login from "./pages/login/Login";
 import DriverRiderPage from "./pages/DriverRiderPage";
 import TimePage from "./pages/TimePage/TimePage";
+import RoutePage from "./pages/RoutePage";
 
 const history = useRouterHistory(createHistory)({
   basename: `/react-google-maps`,
@@ -32,7 +33,8 @@ export default class App extends Component {
     return (
       <Router history={history}>
         <Route path="/" component={Application}>
-          <IndexRoute component={DriverRiderPage} />
+          <IndexRoute component={Login} />
+          <Route component={DriverRiderPage} />
           <Route path="route" component={RoutePage} />
           <Route path="time" component={TimePage} />
           <Redirect path="*" to="/" />
