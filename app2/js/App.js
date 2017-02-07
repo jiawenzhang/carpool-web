@@ -42,7 +42,7 @@ export default class App extends Component {
       <Router history={history}>
         <Route path="/" component={Application}>
           <IndexRoute component={Login} />
-          <Route component={DriverRiderPage} />
+          <Route path="driverrider" component={DriverRiderPage} />
           <Route path="route" component={RoutePage} />
           <Route path="time" component={TimePage} />
           <Redirect path="*" to="/" />

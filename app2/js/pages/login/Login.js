@@ -161,7 +161,7 @@ class Login extends React.Component {
       }
 
       Parse.User.logIn(email, password).then(() => {
-        this.context.router.replace('/');
+        this.context.router.replace('/driverrider');
       }, (error) => {
         console.log(error)
         this.setState({error: error.message});
@@ -204,7 +204,7 @@ class Login extends React.Component {
 
       user.signUp(null).then(() => {
         console.log("signup success");
-        this.context.router.replace('/');
+        this.context.router.replace('/driverrider');
       }, (error) => {
         console.log(error);
         this.setState({error: error.message});
@@ -227,7 +227,7 @@ class Login extends React.Component {
         } else {
           console.log("User logged in through Facebook!");
         }
-        this.context.router.replace('/');
+        this.context.router.replace('/driverrider');
       },
       error: (user, error) => {
         console.error("User cancelled the Facebook login or did not fully authorize.");
