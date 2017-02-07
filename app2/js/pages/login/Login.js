@@ -47,6 +47,12 @@ class Login extends React.Component {
   }
 
   render() {
+    if (Parse.User.current()) {
+      console.log("already login")
+      this.context.router.replace('/driverrider');
+      return null 
+    }
+
     console.log("state " + this.state);
     return (
       <div id='login'>

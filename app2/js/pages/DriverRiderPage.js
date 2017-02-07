@@ -1,8 +1,6 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 
-const wellStyles = {maxWidth: 400, margin: '0 auto 10px'};
-
 class DriverRiderPage extends React.Component {
 
   constructor(props) {
@@ -14,19 +12,30 @@ class DriverRiderPage extends React.Component {
 
   render() {
     return (
-      <div className="well" style={wellStyles}>
-        <Button
-          bsSize="large"
-          onClick={this.driverClick.bind(this)}
-          block>
-          Driver
-        </Button>
-        <Button
-          bsSize="large"
-          onClick={this.riderClick.bind(this)}
-          block>
-          Rider
-        </Button>
+      <div style={{maxWidth: 400, position: "relative", height: "auto", margin: "0 auto 10px"}}>
+        <div className="col-xs-12" style={{marginBottom: 50, fontSize: 26, textAlign: "center"}}>
+          I am a
+        </div>
+        <div className="col-xs-12">
+          <Button
+            bsSize="large"
+            onClick={this.driverClick.bind(this)}
+            block>
+            Driver
+          </Button>
+        </div>
+
+        <div className="col-xs-12" style={{height: 20}}>
+        </div>
+
+        <div className="col-xs-12">
+          <Button
+            bsSize="large"
+            onClick={this.riderClick.bind(this)}
+            block>
+            Rider
+          </Button>
+        </div>
       </div>
     );
   }
