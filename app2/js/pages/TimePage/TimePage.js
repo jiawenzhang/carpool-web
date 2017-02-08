@@ -49,6 +49,8 @@ class TimePage extends React.Component<any, any> {
         this.state = {
             date: null,
         };
+        this.isDriver = this.props.location.query.isDriver;
+        console.log("driver: " + this.isDriver);
     }
 
     onDateChange = (date) => {
@@ -82,7 +84,7 @@ class TimePage extends React.Component<any, any> {
 
     ok = () => {
       console.log("ok");
-      this.context.router.replace('/route');
+      this.context.router.replace({ pathname: '/route', query: { isDriver : this.isDriver }})
     }
 
     render() {
@@ -101,6 +103,9 @@ class TimePage extends React.Component<any, any> {
 
         return (
           <div style={{ margin: '10px 30px' }}>
+                <div className="col-xs-12" style={{marginBottom: 50, fontSize: 26, textAlign: "center"}}>
+                  Pick up time
+                </div>
                 <div>
                 <PopupDatePicker
                 datePicker={datePicker}

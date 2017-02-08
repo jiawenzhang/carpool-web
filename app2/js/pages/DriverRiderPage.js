@@ -42,12 +42,12 @@ class DriverRiderPage extends React.Component {
 
   driverClick() {
     console.log("driver click")
-    this.context.router.replace('/time');
+    this.context.router.replace({ pathname: '/time', query: { isDriver : true }})
   }
 
   riderClick() {
     console.log("rider click")
-    this.context.router.replace('/time');
+    this.context.router.replace({ pathname: '/time', query: { isDriver : false }})
   }
 }
 

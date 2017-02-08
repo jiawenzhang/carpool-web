@@ -32,10 +32,14 @@ export default class RoutePage extends Component {
     directions: null,
   };
 
-  onStartLocationSelect = this.onStartLocationSelect.bind(this);
-  onDestinationSelect = this.onDestinationSelect.bind(this);
+  constructor(props) {
+    super(props);
 
-  onStartLocationSelect(place) {
+    this.isDriver = this.props.location.query.isDriver;
+    console.log("driver: " + this.isDriver)
+  }
+
+  onStartLocationSelect = (place) => {
     console.log("start place" + JSON.stringify(place, null, 2))
     const startLatLng = new google.maps.LatLng(place.location.lat, place.location.lng)
     this.setState({
@@ -45,7 +49,7 @@ export default class RoutePage extends Component {
     this.updateRoute()
   }
 
-  onDestinationSelect(place) {
+  onDestinationSelect = (place) => {
     console.log("destination" + JSON.stringify(place, null, 2))
     const destinationLatLng = new google.maps.LatLng(place.location.lat, place.location.lng)
     this.setState({
