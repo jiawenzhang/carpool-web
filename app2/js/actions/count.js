@@ -1,23 +1,7 @@
 import {
-  INCREASE,
-  DECREASE,
   IS_DRIVER,
   START_TIME,
   END_TIME } from '../constants'
-
-export function increase(n) {
-    return {
-        type: INCREASE,
-        amount: n
-    }
-}
-
-export function decrease(n) {
-    return {
-        type: DECREASE,
-        amount: n
-    }
-}
 
 export function isDriver(value) {
     return {
