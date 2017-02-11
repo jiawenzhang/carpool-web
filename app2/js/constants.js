@@ -1,3 +1,5 @@
 export const INCREASE = 'INCREASE'
 export const DECREASE = 'DECREASE'
 export const IS_DRIVER = 'IS_DRIVER'
+export const START_TIME = 'START_TIME'
+export const END_TIME = 'END_TIME'

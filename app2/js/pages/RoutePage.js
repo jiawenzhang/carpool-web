@@ -8,6 +8,7 @@ import {
 } from "react";
 
 import Geosuggest from 'react-geosuggest';
+import { connect } from 'react-redux'
 
 import {
   withGoogleMap,
@@ -24,7 +25,7 @@ const DirectionsExampleGoogleMap = withGoogleMap(props => (
   </GoogleMap>
 ));
 
-export default class RoutePage extends Component {
+class RoutePage extends Component {
 
   state = {
     origin: new google.maps.LatLng(41.8507300, -87.6512600),
@@ -81,8 +82,11 @@ export default class RoutePage extends Component {
   }
 
   ok = () => {
+    let {isDriver, startTime, endTime} = this.props;
     console.log("route ok");
-    console.log("isDriver: " + this.isDriver)
+    console.log("isDriver: " + isDriver)
+    console.log("startTime: " + startTime)
+    console.log("endTime: " + endTime)
     console.log("origin: " + this.state.origin)
     console.log("destination: " + this.state.origin)
   }
@@ -130,3 +134,10 @@ export default class RoutePage extends Component {
     );
   }
 }
+
+export default connect(
+  state => (
+  { isDriver: state.count.isDriver,
+    startTime: state.count.startTime,
+    endTime: state.count.endTime}),
+)(RoutePage)

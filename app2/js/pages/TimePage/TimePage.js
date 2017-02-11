@@ -18,6 +18,7 @@ import moment from 'moment';
 import 'moment/locale/zh-cn';
 import 'moment/locale/en-gb';
 import { connect } from 'react-redux'
+import { setStartTime, setEndTime } from '../../actions/count'
 
 const cn = location.search.indexOf('cn') !== -1;
 
@@ -50,8 +51,8 @@ class TimePage extends React.Component<any, any> {
         this.state = {
             date: null,
         };
-        this.isDriver = this.props.location.query.isDriver;
-        console.log("driver: " + this.isDriver);
+        //this.isDriver = this.props.location.query.isDriver;
+        //console.log("driver: " + this.isDriver);
     }
 
     onDateChange = (date) => {
@@ -64,14 +65,14 @@ class TimePage extends React.Component<any, any> {
     onEarliestTimeChange = (date) => {
         console.log('onEarliestTimeChange', format(date));
         this.setState({
-            earliestTime: date
+            startTime: date
         });
     }
 
     onLatestTimeChange = (date) => {
         console.log('onLatestTimeChange', format(date));
         this.setState({
-            latestTime: date
+            endTime: date
         });
     }
 
@@ -85,15 +86,19 @@ class TimePage extends React.Component<any, any> {
 
     ok = () => {
       console.log("ok");
-      this.context.router.replace({ pathname: '/route', query: { isDriver : this.isDriver }})
+      //this.context.router.replace({ pathname: '/route', query: { isDriver : this.isDriver }})
+      this.context.router.replace('/route')
+      let {setStartTime, setEndTime} = this.props;
+      setStartTime(this.state.startTime)
+      setEndTime(this.state.endTime)
     }
 
     render() {
         console.log("TimePage render, number: " + this.props.number);
         console.log("TimePage render, isDriver: " + this.props.isDriver);
         const props = this.props;
-        const earliestTime = this.state.earliestTime
-        const latestTime = this.state.latestTime
+        const startTime = this.state.startTime
+        const endTime = this.state.endTime
         const datePicker = (
             <DatePicker
             rootNativeProps={{'data-xx':'yy'}}
@@ -115,7 +120,7 @@ class TimePage extends React.Component<any, any> {
                 transitionName="rmc-picker-popup-slide-fade"
                 maskTransitionName="rmc-picker-popup-fade"
                 title=""
-                date={earliestTime}
+                date={startTime}
                 mode={"datetime"}
                 onDismiss={this.onDismiss}
                 onChange={this.onEarliestTimeChange}
@@ -124,7 +129,7 @@ class TimePage extends React.Component<any, any> {
                   bsSize="large"
                   onClick={this.show}
                   block>
-                  {earliestTime && format(earliestTime) || "Earliest time"}
+                  {startTime && format(startTime) || "Earliest time"}
                 </Button>
 
                 </PopupDatePicker>
@@ -139,7 +144,7 @@ class TimePage extends React.Component<any, any> {
                 transitionName="rmc-picker-popup-slide-fade"
                 maskTransitionName="rmc-picker-popup-fade"
                 title=""
-                date={latestTime}
+                date={endTime}
                 mode={"datetime"}
                 onDismiss={this.onDismiss}
                 onChange={this.onLatestTimeChange}
@@ -148,7 +153,7 @@ class TimePage extends React.Component<any, any> {
                   bsSize="large"
                   onClick={this.show}
                   block>
-                  {latestTime && format(latestTime) || "Latest time"}
+                  {endTime && format(endTime) || "Latest time"}
                 </Button>
                 </PopupDatePicker>
                 </div>
@@ -172,4 +177,6 @@ export default connect(
   state => (
   { number: state.count.number,
     isDriver: state.count.isDriver}),
+  { setStartTime,
+    setEndTime }
 )(TimePage)
