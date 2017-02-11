@@ -17,6 +17,7 @@ import moment from 'moment';
 //import enUs from '../src/locale/en_US';
 import 'moment/locale/zh-cn';
 import 'moment/locale/en-gb';
+import { connect } from 'react-redux'
 
 const cn = location.search.indexOf('cn') !== -1;
 
@@ -88,6 +89,7 @@ class TimePage extends React.Component<any, any> {
     }
 
     render() {
+        console.log("TimePage render, number: " + this.props.number);
         const props = this.props;
         const earliestTime = this.state.earliestTime
         const latestTime = this.state.latestTime
@@ -165,4 +167,7 @@ TimePage.contextTypes = {
   router: React.PropTypes.func.isRequired
 };
 
-export default TimePage
+export default connect(
+  state => (
+  { number: state.count.number }),
+)(TimePage)

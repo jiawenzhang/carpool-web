@@ -1,5 +1,7 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { increase, decrease } from '../actions/count'
 
 class DriverRiderPage extends React.Component {
 
@@ -42,7 +44,10 @@ class DriverRiderPage extends React.Component {
 
   driverClick() {
     console.log("driver click")
-    this.context.router.replace({ pathname: '/time', query: { isDriver : true }})
+    let {increase} = this.props
+    increase(2)
+    //this.context.router.replace({ pathname: '/time', query: { isDriver : true }})
+    this.context.router.push('/time')
   }
 
   riderClick() {
@@ -55,4 +60,19 @@ DriverRiderPage.contextTypes = {
   router: React.PropTypes.func.isRequired
 };
 
-export default DriverRiderPage
+//number: state.count.number
+// const mapStateToProps = (state) => (
+// {
+//   state: state
+// });
+//
+// const mapDispatchToProps = (dispatch) => ({
+//   actions: bindActionCreators(Actions, dispatch)
+// })
+
+export default connect(
+  state => (
+  { number: state.count.number }),
+  { increase,
+    decrease }
+)(DriverRiderPage)

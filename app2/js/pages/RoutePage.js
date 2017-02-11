@@ -82,6 +82,9 @@ export default class RoutePage extends Component {
 
   ok = () => {
     console.log("route ok");
+    console.log("isDriver: " + this.isDriver)
+    console.log("origin: " + this.state.origin)
+    console.log("destination: " + this.state.origin)
   }
 
   render() {
