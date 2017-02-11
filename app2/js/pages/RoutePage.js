@@ -96,6 +96,7 @@ class RoutePage extends Component {
       offer = new RiderOffer();
     }
 
+    offer.set("userId", Parse.User.current().id)
     offer.set("startTime", startTime.toDate());
     offer.set("endTime", endTime.toDate());
     offer.set("origin", this.state.origin);
