@@ -90,6 +90,7 @@ class TimePage extends React.Component<any, any> {
 
     render() {
         console.log("TimePage render, number: " + this.props.number);
+        console.log("TimePage render, isDriver: " + this.props.isDriver);
         const props = this.props;
         const earliestTime = this.state.earliestTime
         const latestTime = this.state.latestTime
@@ -169,5 +170,6 @@ TimePage.contextTypes = {
 
 export default connect(
   state => (
-  { number: state.count.number }),
+  { number: state.count.number,
+    isDriver: state.count.isDriver}),
 )(TimePage)

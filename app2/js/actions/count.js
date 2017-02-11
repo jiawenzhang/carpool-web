@@ -1,4 +1,4 @@
-import { INCREASE, DECREASE } from '../constants'
+import { INCREASE, DECREASE, IS_DRIVER } from '../constants'
 
 export function increase(n) {
     return {
@@ -11,5 +11,12 @@ export function decrease(n) {
     return {
         type: DECREASE,
         amount: n
+    }
+}
+
+export function isDriver(value) {
+    return {
+        type: IS_DRIVER,
+        isDriver: value
     }
 }
