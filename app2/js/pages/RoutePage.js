@@ -1,12 +1,7 @@
 /* global google */
 import _ from "lodash";
 import { Button } from 'react-bootstrap'
-
-import {
-  default as React,
-  Component,
-} from "react";
-
+import { default as React, Component, } from "react";
 import Geosuggest from 'react-geosuggest';
 import { connect } from 'react-redux'
 
@@ -15,6 +10,8 @@ import {
   GoogleMap,
   DirectionsRenderer
 } from "react-google-maps";
+
+import Parse from 'parse'
 
 const DirectionsExampleGoogleMap = withGoogleMap(props => (
   <GoogleMap
@@ -88,7 +85,33 @@ class RoutePage extends Component {
     console.log("startTime: " + startTime)
     console.log("endTime: " + endTime)
     console.log("origin: " + this.state.origin)
-    console.log("destination: " + this.state.origin)
+    console.log("destination: " + this.state.destination)
+
+    var offer;
+    if (isDriver) {
+      var DriverOffer = Parse.Object.extend("DriverOffer");
+      offer = new DriverOffer();
+    } else {
+      var RiderOffer = Parse.Object.extend("RiderOffer");
+      offer = new RiderOffer();
+    }
+
+    offer.set("startTime", startTime.toDate());
+    offer.set("endTime", endTime.toDate());
+    offer.set("origin", this.state.origin);
+    offer.set("destination", this.state.destination);
+
+    offer.save(null, {
+      success: function(offer) {
+        // Execute any logic that should take place after the object is saved.
+        console.log('New object created with objectId: ' + offer.id);
+      },
+      error: function(offer, error) {
+        // Execute any logic that should take place if the save fails.
+        // error is a Parse.Error with an error code and message.
+        console.log('Failed to create new object, with error code: ' + error.message);
+      }
+    });
   }
 
   render() {
