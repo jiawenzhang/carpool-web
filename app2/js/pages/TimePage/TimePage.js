@@ -86,8 +86,7 @@ class TimePage extends React.Component<any, any> {
 
     ok = () => {
       console.log("ok");
-      //this.context.router.replace({ pathname: '/route', query: { isDriver : this.isDriver }})
-      this.context.router.replace('/route')
+      this.context.router.push('/route')
       let {setStartTime, setEndTime} = this.props;
       setStartTime(this.state.startTime)
       setEndTime(this.state.endTime)

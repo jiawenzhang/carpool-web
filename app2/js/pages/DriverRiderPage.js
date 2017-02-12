@@ -53,7 +53,7 @@ class DriverRiderPage extends React.Component {
     let {isDriver} = this.props
     isDriver(false)
     console.log("rider click")
-    this.context.router.replace('/time')
+    this.context.router.push('/time')
   }
 }
 
