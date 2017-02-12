@@ -32,9 +32,6 @@ class RoutePage extends Component {
 
   constructor(props) {
     super(props);
-
-    this.isDriver = this.props.location.query.isDriver;
-    console.log("driver: " + this.isDriver)
   }
 
   onStartLocationSelect = (place) => {
@@ -55,9 +52,6 @@ class RoutePage extends Component {
     });
 
     this.updateRoute()
-  }
-
-  componentDidMount() {
   }
 
   updateRoute() {
@@ -104,12 +98,9 @@ class RoutePage extends Component {
 
     offer.save(null, {
       success: function(offer) {
-        // Execute any logic that should take place after the object is saved.
         console.log('New offer created with objectId: ' + offer.id);
       },
       error: function(offer, error) {
-        // Execute any logic that should take place if the save fails.
-        // error is a Parse.Error with an error code and message.
         console.log('Failed to create new offer, with error code: ' + error.message);
       }
     });
