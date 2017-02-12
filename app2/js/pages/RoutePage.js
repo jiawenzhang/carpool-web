@@ -105,19 +105,19 @@ class RoutePage extends Component {
     offer.save(null, {
       success: function(offer) {
         // Execute any logic that should take place after the object is saved.
-        console.log('New object created with objectId: ' + offer.id);
+        console.log('New offer created with objectId: ' + offer.id);
       },
       error: function(offer, error) {
         // Execute any logic that should take place if the save fails.
         // error is a Parse.Error with an error code and message.
-        console.log('Failed to create new object, with error code: ' + error.message);
+        console.log('Failed to create new offer, with error code: ' + error.message);
       }
     });
   }
 
   render() {
     return (
-      <div style={{height: `100%`}}>
+      <div style={{maxWidth: 800, width: "80%", height: "100%", margin: "0 auto 10px"}}>
         <Geosuggest
           ref={el=>this._geoSuggest=el}
           placeholder="Start location"
@@ -125,6 +125,7 @@ class RoutePage extends Component {
           location={new google.maps.LatLng(53.558572, 9.9278215)}
           radius="20"
         />
+
         <Geosuggest
           ref={el=>this._geoSuggest=el}
           placeholder="Destination"
@@ -132,21 +133,25 @@ class RoutePage extends Component {
           location={new google.maps.LatLng(53.558572, 9.9278215)}
           radius="20"
         />
+
+      <div className="col-xs-12" style={{height: 5}}>
+      </div>
+
         <DirectionsExampleGoogleMap
           containerElement={
             <div style={{ height: `50%` }} />
           }
           mapElement={
-            <div style={{ width: "80%", height: `100%`, margin: "0 auto" }} />
+            <div style={{ width: "100%", height: `100%`, margin: "0 auto" }} />
           }
           center={this.state.origin}
           directions={this.state.directions}
         />
 
-      <div className="col-xs-12" style={{height: 20}}>
+      <div className="col-xs-12" style={{height: 30}}>
       </div>
 
-      <div className="col-xs-12">
+      <div style={{margin: "0 auto"}}>
         <Button
           bsSize="large"
           onClick={this.ok}
