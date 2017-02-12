@@ -22,19 +22,18 @@ import { setStartTime, setEndTime } from '../../actions/count'
 
 const cn = location.search.indexOf('cn') !== -1;
 
-const minDate = moment([2015, 8, 1, 0, 0, 0]);
-const maxDate = moment([2018, 1, 1, 22, 0, 0]);
 const now = moment();
+const maxDate = moment(now).add(10, 'day');
 
-if (cn) {
-  minDate.locale('zh-cn').utcOffset(8);
-  maxDate.locale('zh-cn').utcOffset(8);
-  now.locale('zh-cn').utcOffset(8);
-} else {
-  minDate.locale('en-gb').utcOffset(0);
-  maxDate.locale('en-gb').utcOffset(0);
-  now.locale('en-gb').utcOffset(0);
-}
+// if (cn) {
+//   minDate.locale('zh-cn').utcOffset(8);
+//   maxDate.locale('zh-cn').utcOffset(8);
+//   now.locale('zh-cn').utcOffset(8);
+// } else {
+//   minDate.locale('en-gb').utcOffset(0);
+//   maxDate.locale('en-gb').utcOffset(0);
+//   now.locale('en-gb').utcOffset(0);
+// }
 
 function format(date) {
     return date.format('lll');
@@ -93,7 +92,7 @@ class TimePage extends React.Component {
         const datePicker = (
             <DatePicker
             rootNativeProps={{'data-xx':'yy'}}
-            minDate={minDate}
+            minDate={now}
             maxDate={maxDate}
             defaultDate={now}
             mode={'datetime'}
