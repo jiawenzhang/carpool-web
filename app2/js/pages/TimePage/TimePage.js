@@ -109,7 +109,7 @@ class TimePage extends React.Component<any, any> {
         );
 
         return (
-          <div style={{maxWidth: 600, margin: '10px 30px' }}>
+          <div style={{maxWidth: 600, width: "80%", margin: "0 auto 10px"}}>
                 <div className="col-xs-12" style={{marginBottom: 50, fontSize: 26, textAlign: "center"}}>
                   Pick up time
                 </div>
