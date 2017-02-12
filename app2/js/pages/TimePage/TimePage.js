@@ -37,10 +37,10 @@ if (cn) {
 }
 
 function format(date) {
-    return date.format('YYYY-MM-DD HH:mm');
+    return date.format('lll');
 }
 
-class TimePage extends React.Component<any, any> {
+class TimePage extends React.Component {
     // static defaultProps = {
     //     mode: 'datetime',
     //     locale: cn ? zhCn : enUs,
