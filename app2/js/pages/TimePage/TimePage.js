@@ -48,29 +48,21 @@ class TimePage extends React.Component<any, any> {
 
     constructor(props) {
         super(props);
+
         this.state = {
-            date: null,
+          date: null,
         };
-        //this.isDriver = this.props.location.query.isDriver;
-        //console.log("driver: " + this.isDriver);
     }
 
-    onDateChange = (date) => {
-        console.log('onDateChange', format(date));
-        this.setState({
-            date,
-        });
-    }
-
-    onEarliestTimeChange = (date) => {
-        console.log('onEarliestTimeChange', format(date));
+    onStartTimeChange = (date) => {
+        console.log('onStartTimeChange', format(date));
         this.setState({
             startTime: date
         });
     }
 
-    onLatestTimeChange = (date) => {
-        console.log('onLatestTimeChange', format(date));
+    onEndTimeChange = (date) => {
+        console.log('onEndTimeChange', format(date));
         this.setState({
             endTime: date
         });
@@ -122,7 +114,7 @@ class TimePage extends React.Component<any, any> {
                 date={startTime}
                 mode={"datetime"}
                 onDismiss={this.onDismiss}
-                onChange={this.onEarliestTimeChange}
+                onChange={this.onStartTimeChange}
                 >
                 <Button
                   bsSize="large"
@@ -146,7 +138,7 @@ class TimePage extends React.Component<any, any> {
                 date={endTime}
                 mode={"datetime"}
                 onDismiss={this.onDismiss}
-                onChange={this.onLatestTimeChange}
+                onChange={this.onEndTimeChange}
                 >
                 <Button
                   bsSize="large"
