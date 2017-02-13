@@ -73,6 +73,10 @@ class RoutePage extends Component {
   }
 
   ok = () => {
+    // this.context.router.push('/match')
+    //
+    // return
+
     let {isDriver, startTime, endTime} = this.props;
     console.log("route ok");
     console.log("isDriver: " + isDriver)
@@ -93,17 +97,34 @@ class RoutePage extends Component {
     offer.set("userId", Parse.User.current().id)
     offer.set("startTime", startTime.toDate());
     offer.set("endTime", endTime.toDate());
-    offer.set("origin", this.state.origin);
-    offer.set("destination", this.state.destination);
 
-    offer.save(null, {
-      success: function(offer) {
+    offer.save().then((offer) => {
         console.log('New offer created with objectId: ' + offer.id);
-      },
-      error: function(offer, error) {
+
+        var Location = Parse.Object.extend("Location");
+        var originLocation = new Location();
+        var originGeoPoint = new Parse.GeoPoint({latitude: this.state.origin.lat(), longitude: this.state.origin.lng()});
+        originLocation.set("geo", originGeoPoint);
+        originLocation.set("for", isDriver ? "driver" : "rider");
+        originLocation.set("type", "origin");
+        originLocation.set("offer_id", offer.id);
+        return originLocation.save();
+      }).then((originLocation) => {
+        console.log('New originLocation created with objectId: ' + originLocation.id);
+
+        var Location = Parse.Object.extend("Location");
+        var destLocation = new Location();
+        var destGeoPoint = new Parse.GeoPoint({latitude: this.state.destination.lat(), longitude: this.state.destination.lng()});
+        destLocation.set("geo", destGeoPoint);
+        destLocation.set("for", isDriver ? "driver" : "rider");
+        originLocation.set("type", "dest");
+        destLocation.set("offer_id", offer.id);
+        return destLocation.save();
+      }).then((destLocation) => {
+        console.log('New destLocation created with objectId: ' + destLocation.id);
+      }, (error) => {
         console.log('Failed to create new offer, with error code: ' + error.message);
-      }
-    });
+      });
   }
 
   render() {
@@ -154,6 +175,11 @@ class RoutePage extends Component {
     );
   }
 }
+
+RoutePage.contextTypes = {
+  router: React.PropTypes.func.isRequired
+};
+
 
 export default connect(
   state => (
