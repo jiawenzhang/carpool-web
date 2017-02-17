@@ -9,16 +9,23 @@ class OfferDetailPage extends React.Component {
     super(props)
   }
 
+  fromClick = () => {
+    console.log("fromClick")
+  }
+
   render() {
 
+    //borderStyle: "solid", borderWidth: 2
+    const titleStyle = {fontSize: 14, color: "grey"}
+    const msgStyle = {fontSize: 16}
     const TimeComponent = React.createClass({
       render() {
         return (
-        <div style={{paddingBottom: 20}}>
-          <div style={{fontSize: 14}}>
+        <div style={{paddingBottom: 20 }}>
+          <div style={titleStyle}>
             {"Time:"}
           </div>
-          <div style={{fontSize: 16}}>
+          <div style={msgStyle}>
             {this.props.time}
           </div>
         </div>
@@ -29,11 +36,12 @@ class OfferDetailPage extends React.Component {
     const LocationComponent = React.createClass({
       render() {
         return (
-        <div style={{paddingBottom: 20}}>
-          <div style={{fontSize: 14}}>
+        <div style={{paddingBottom: 20}}
+          onClick={this.props.onClick}>
+          <div style={titleStyle}>
             {this.props.prefix}
           </div>
-          <div style={{fontSize: 16}}>
+          <div style={msgStyle}>
             {this.props.location}
           </div>
         </div>
@@ -44,13 +52,15 @@ class OfferDetailPage extends React.Component {
     const FieldComponent = React.createClass({
       render() {
         return (
-        <div style={{paddingBottom: 20}}>
-          <div style={{fontSize: 14}}>
+        <div style={{paddingBottom: 20}}
+          onClick={this.props.onClick}>
+          <div style={titleStyle}>
             {this.props.title}
           </div>
-          <div style={{fontSize: 16}}>
+          <div style={msgStyle}>
             {this.props.message}
           </div>
+
         </div>
         );
       }
@@ -103,7 +113,8 @@ class OfferDetailPage extends React.Component {
         </TimeComponent>
         <LocationComponent
           prefix="From:"
-          location={"148 Roywood, Dr. Toronto ON"}>
+          location={"148 Roywood, Dr. Toronto ON"}
+          onClick={this.fromClick}>
         </LocationComponent>
         <LocationComponent
           prefix="To:"
