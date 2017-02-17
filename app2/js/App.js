@@ -24,6 +24,7 @@ import DriverRiderPage from "./pages/DriverRiderPage";
 import TimePage from "./pages/TimePage/TimePage";
 import RoutePage from "./pages/RoutePage";
 import MatchPage from "./pages/MatchPage";
+import OfferDetailPage from "./pages/OfferDetailPage";
 
 import Parse from 'parse'
 
@@ -55,6 +56,7 @@ export default class App extends Component {
             <Route path="driverrider" component={DriverRiderPage} />
             <Route path="time" component={TimePage} />
             <Route path="route" component={RoutePage} />
+            <Route path="offer" component={OfferDetailPage} />
             <Route path="match" component={MatchPage} />
             <Redirect path="*" to="/" />
           </Route>
