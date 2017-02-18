@@ -6,6 +6,7 @@ import { isDriver } from '../actions/count'
 import Parse from 'parse'
 import ParseReact from 'parse-react'
 const ParseComponent = ParseReact.Component(React)
+import moment from 'moment';
 
 class OfferDetailPage extends ParseComponent {
 
@@ -34,6 +35,7 @@ class OfferDetailPage extends ParseComponent {
     }).then(user => {
       console.log("got user " + JSON.stringify(user));
       this.offerData.name = user.get("name");
+      this.offerData.email = user.get("email");
 
       const query = new Parse.Query("Location")
       const originId = this.offer.get("originId")
@@ -156,19 +158,13 @@ class OfferDetailPage extends ParseComponent {
       }
     });
 
-          // <CustomComponent
-          //   time = "Jan 17, 12:00"
-          //   from="148 Roywood, Dr. Toronto ON"
-          //   to="1445, Whatever location, London ON"
-          //   contact="Mr. Lv, 647-262-3141">
-          // </CustomComponent>
     return (
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <div className="col-xs-12" style={{marginTop:20, marginBottom: 20, fontSize: 26, textAlign: "center"}}>
           Offer Ride
         </div>
         <TimeComponent
-          time={this.state.data.startTime.toLocaleDateString("en-US")}>
+          time={moment(this.state.data.startTime).format("ddd MMM Do H:MM")}>
         </TimeComponent>
         <LocationComponent
           prefix="From:"
@@ -181,7 +177,7 @@ class OfferDetailPage extends ParseComponent {
         </LocationComponent>
         <FieldComponent
           title={"Contact:"}
-          message={this.state.data.name}>
+          message={this.state.data.name + (this.state.data.email ? ", email: " + this.state.data.email : "")}>
         </FieldComponent>
         <FieldComponent
           title={"Note:"}
