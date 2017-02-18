@@ -7,6 +7,7 @@ import Parse from 'parse'
 import ParseReact from 'parse-react'
 const ParseComponent = ParseReact.Component(React)
 import moment from 'moment';
+import Helmet from "react-helmet"
 
 class OfferDetailPage extends ParseComponent {
 
@@ -54,7 +55,13 @@ class OfferDetailPage extends ParseComponent {
       this.offerData.destLabel = dest.get("label")
 
       console.log("offerData: " + JSON.stringify(this.offerData));
-      this.setState({data: this.offerData});
+      const time = moment(this.offerData.startTime).format("ddd H:MM")
+      const route = " " + this.offerData.originLabel + " to " + this.offerData.destLabel
+      const title = time + " " + route;
+      this.setState(
+        { data: this.offerData,
+          title: title
+        });
     }, (error) => {
       console.log('Failed to query offer, with error code: ' + error.message);
     });
@@ -160,6 +167,7 @@ class OfferDetailPage extends ParseComponent {
 
     return (
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
+        <Helmet title={this.state.title}/>
         <div className="col-xs-12" style={{marginTop:20, marginBottom: 20, fontSize: 26, textAlign: "center"}}>
           Offer Ride
         </div>
