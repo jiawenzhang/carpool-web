@@ -149,7 +149,8 @@ class TimePage extends React.Component {
                 </PopupDatePicker>
                 </div>
 
-                <div className="col-xs-12" style={{height: 20}}>
+                <div className="col-xs-12" style={{marginTop: 40, marginBottom: 10, fontSize: 20, color: "grey", textAlign: "left"}}>
+                  between
                 </div>
 
                 <div>
@@ -173,7 +174,8 @@ class TimePage extends React.Component {
                 </PopupDatePicker>
                 </div>
 
-                <div className="col-xs-12" style={{height: 20}}>
+                <div className="col-xs-12" style={{marginTop: 10, marginBottom: 10, fontSize: 20, color: "grey", textAlign: "left"}}>
+                  and
                 </div>
 
                 <div>
@@ -196,7 +198,7 @@ class TimePage extends React.Component {
                 </PopupDatePicker>
                 </div>
 
-                <div className="col-xs-12" style={{height: 20}}>
+                <div className="col-xs-12" style={{height: 70}}>
                 </div>
 
                 <Button
