@@ -23,7 +23,13 @@ import { setStartTime, setEndTime } from '../../actions/count'
 const cn = location.search.indexOf('cn') !== -1;
 
 const now = moment();
+var minTime = moment();
+var maxTime = moment();
+minTime.hour(0).minute(0);
+maxTime.hour(23).minute(59);
 const maxDate = moment(now).add(10, 'day');
+
+
 
 // if (cn) {
 //   minDate.locale('zh-cn').utcOffset(8);
@@ -51,6 +57,13 @@ class TimePage extends React.Component {
         this.state = {
           date: null,
         };
+    }
+
+    onDateChange = (date) => {
+        console.log('onDateChange', format(date));
+        this.setState({
+            date: date
+        });
     }
 
     onStartTimeChange = (date) => {
@@ -87,15 +100,26 @@ class TimePage extends React.Component {
         console.log("TimePage render, number: " + this.props.number);
         console.log("TimePage render, isDriver: " + this.props.isDriver);
         const props = this.props;
+        const date = this.state.date
         const startTime = this.state.startTime
         const endTime = this.state.endTime
+
         const datePicker = (
             <DatePicker
             rootNativeProps={{'data-xx':'yy'}}
             minDate={now}
             maxDate={maxDate}
             defaultDate={now}
-            mode={'datetime'}
+            mode={'date'}
+            />
+        );
+        const timePicker = (
+            <DatePicker
+            rootNativeProps={{'data-xx':'yy'}}
+            minDate={minTime}
+            maxDate={maxTime}
+            defaultDate={now}
+            mode={'time'}
             />
         );
 
@@ -104,14 +128,38 @@ class TimePage extends React.Component {
                 <div className="col-xs-12" style={{marginBottom: 50, fontSize: 26, textAlign: "center"}}>
                   Pick up time
                 </div>
+
                 <div>
                 <PopupDatePicker
                 datePicker={datePicker}
                 transitionName="rmc-picker-popup-slide-fade"
                 maskTransitionName="rmc-picker-popup-fade"
                 title=""
+                date={date}
+                mode={"date"}
+                onDismiss={this.onDismiss}
+                onChange={this.onDateChange}
+                >
+                <Button
+                  bsSize="large"
+                  onClick={this.show}
+                  block>
+                  {date && date.format("ddd MMM Do") || "Date"}
+                </Button>
+                </PopupDatePicker>
+                </div>
+
+                <div className="col-xs-12" style={{height: 20}}>
+                </div>
+
+                <div>
+                <PopupDatePicker
+                datePicker={timePicker}
+                transitionName="rmc-picker-popup-slide-fade"
+                maskTransitionName="rmc-picker-popup-fade"
+                title=""
                 date={startTime}
-                mode={"datetime"}
+                mode={"time"}
                 onDismiss={this.onDismiss}
                 onChange={this.onStartTimeChange}
                 >
@@ -119,7 +167,7 @@ class TimePage extends React.Component {
                   bsSize="large"
                   onClick={this.show}
                   block>
-                  {startTime && format(startTime) || "Earliest time"}
+                  {startTime && startTime.format("H:MM") || "Earliest time"}
                 </Button>
 
                 </PopupDatePicker>
@@ -130,12 +178,12 @@ class TimePage extends React.Component {
 
                 <div>
                 <PopupDatePicker
-                datePicker={datePicker}
+                datePicker={timePicker}
                 transitionName="rmc-picker-popup-slide-fade"
                 maskTransitionName="rmc-picker-popup-fade"
                 title=""
                 date={endTime}
-                mode={"datetime"}
+                mode={"time"}
                 onDismiss={this.onDismiss}
                 onChange={this.onEndTimeChange}
                 >
@@ -143,7 +191,7 @@ class TimePage extends React.Component {
                   bsSize="large"
                   onClick={this.show}
                   block>
-                  {endTime && format(endTime) || "Latest time"}
+                  {endTime && endTime.format("H:MM") || "Latest time"}
                 </Button>
                 </PopupDatePicker>
                 </div>
