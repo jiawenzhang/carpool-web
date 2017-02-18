@@ -108,7 +108,7 @@ class RoutePage extends Component {
         this.originLocation.set("geo", originGeoPoint);
         this.originLocation.set("for", isDriver ? "driver" : "rider");
         this.originLocation.set("type", "origin");
-        this.originLocation.set("offer_id", offer.id);
+        this.originLocation.set("offerId", offer.id);
         return this.originLocation.save();
       }).then((originLocation) => {
         console.log('New originLocation created with objectId: ' + originLocation.id);
@@ -120,13 +120,13 @@ class RoutePage extends Component {
         destLocation.set("geo", destGeoPoint);
         destLocation.set("for", isDriver ? "driver" : "rider");
         destLocation.set("type", "dest");
-        destLocation.set("offer_id", this.offer.id);
+        destLocation.set("offerId", this.offer.id);
         return destLocation.save();
       }).then((destLocation) => {
-        console.log('New destLocation created with objectId: ' + destLocation.id);
+        console.log('New destLocation created with id: ' + destLocation.id);
 
-        this.offer.set("origin_id", this.originLocation.id)
-        this.offer.set("dest_id", destLocation.id)
+        this.offer.set("originId", this.originLocation.id)
+        this.offer.set("destId", destLocation.id)
         //console.log("offer " + JSON.stringify(this.offer))
         return this.offer.save()
       }).then((offer) => {

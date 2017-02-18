@@ -13,17 +13,17 @@ class OfferDetailPage extends ParseComponent {
   }
 
   componentDidMount() {
-    const offer_id = this.props.location.query.id
-    if (!offer_id) {
-      console.log("observing no offer_id, return")
+    const offerId = this.props.location.query.id
+    if (!offerId) {
+      console.log("observing no offerId, return")
       return
     }
 
     const query = new Parse.Query('DriverOffer');
-    console.log("observing offer_id: " + offer_id);
+    console.log("observing offerId: " + offerId);
     this.offerData = {};
 
-    query.get(offer_id).then(offer => {
+    query.get(offerId).then(offer => {
       offer && console.log(offer.toJSON());
       this.offer = offer
       this.offerData.startTime = offer.get("startTime")
@@ -36,7 +36,7 @@ class OfferDetailPage extends ParseComponent {
       this.offerData.name = user.get("name");
 
       const query = new Parse.Query("Location")
-      const originId = this.offer.get("origin_id")
+      const originId = this.offer.get("originId")
       console.log("getting originId: " + originId)
       return query.get(originId)
     }).then(origin => {
@@ -44,7 +44,7 @@ class OfferDetailPage extends ParseComponent {
       this.offerData.origin = origin.get("geo").latitude
 
       const query = new Parse.Query("Location")
-      const destId = this.offer.get("dest_id")
+      const destId = this.offer.get("destId")
       console.log("getting destId: " + destId)
       return query.get(destId)
     }).then(dest => {
