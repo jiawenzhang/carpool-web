@@ -3,7 +3,29 @@ import { Button, ListGroup, ListGroupItem } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { isDriver } from '../actions/count'
 
-class OfferDetailPage extends React.Component {
+import Parse from 'parse'
+import ParseReact from 'parse-react'
+const ParseComponent = ParseReact.Component(React)
+
+class OfferDetailPage extends ParseComponent {
+
+  observe() {
+    const offer_id = this.props.location.query.id
+    if (!offer_id) {
+      console.log("observing no offer_id, return")
+      return
+    }
+
+    const query = new Parse.Query('DriverOffer');
+    console.log("observing offer_id: " + offer_id);
+    query.get(offer_id).then(offer => {
+      offer && console.log(offer.toJSON());
+    });
+
+    return {
+      offer: query
+    };
+  }
 
   constructor(props) {
     super(props)
@@ -14,6 +36,8 @@ class OfferDetailPage extends React.Component {
   }
 
   render() {
+    console.log("offer_id: " + JSON.stringify(this.props.location.query.id));
+    console.log("got offer: " + JSON.stringify(this.data.offer));
 
     //borderStyle: "solid", borderWidth: 2
     const titleStyle = {fontSize: 14, color: "grey"}

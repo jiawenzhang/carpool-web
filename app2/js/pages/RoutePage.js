@@ -131,6 +131,7 @@ class RoutePage extends Component {
         return this.offer.save()
       }).then((offer) => {
         console.log('offer updated with objectId: ' + offer.id);
+        this.context.router.replace({ pathname: '/offer', query: { id : offer.id}})
       }, (error) => {
         console.log('Failed to create new offer, with error code: ' + error.message);
       });
