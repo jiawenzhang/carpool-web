@@ -25,8 +25,8 @@ const DirectionsExampleGoogleMap = withGoogleMap(props => (
 class RoutePage extends Component {
 
   state = {
-    origin: new google.maps.LatLng(41.8507300, -87.6512600),
-    destination: new google.maps.LatLng(41.8525800, -87.6514100),
+    originGeo: new google.maps.LatLng(41.8507300, -87.6512600),
+    destGeo: new google.maps.LatLng(41.8525800, -87.6514100),
     directions: null,
   };
 
@@ -38,17 +38,19 @@ class RoutePage extends Component {
     console.log("start place" + JSON.stringify(place, null, 2))
     const startLatLng = new google.maps.LatLng(place.location.lat, place.location.lng)
     this.setState({
-      origin: startLatLng
+      originGeo: startLatLng,
+      originLabel: place.label
     });
 
     this.updateRoute()
   }
 
   onDestinationSelect = (place) => {
-    console.log("destination" + JSON.stringify(place, null, 2))
+    console.log("destPlace" + JSON.stringify(place, null, 2))
     const destinationLatLng = new google.maps.LatLng(place.location.lat, place.location.lng)
     this.setState({
-      destination: destinationLatLng
+      destGeo: destinationLatLng,
+      destLabel: place.label
     });
 
     this.updateRoute()
@@ -58,8 +60,8 @@ class RoutePage extends Component {
     const DirectionsService = new google.maps.DirectionsService();
 
     DirectionsService.route({
-      origin: this.state.origin,
-      destination: this.state.destination,
+      origin: this.state.originGeo,
+      destination: this.state.destGeo,
       travelMode: google.maps.TravelMode.DRIVING,
     }, (result, status) => {
       if (status === google.maps.DirectionsStatus.OK) {
@@ -82,8 +84,9 @@ class RoutePage extends Component {
     console.log("isDriver: " + isDriver)
     console.log("startTime: " + startTime)
     console.log("endTime: " + endTime)
-    console.log("origin: " + this.state.origin)
-    console.log("destination: " + this.state.destination)
+    console.log("originGeo: " + this.state.originGeo)
+    console.log("originLabel: " + this.state.originLabel)
+    console.log("destLabel: " + this.state.destLabel)
 
     this.offer;
     if (isDriver) {
@@ -104,8 +107,9 @@ class RoutePage extends Component {
         console.log('New offer created with objectId: ' + offer.id);
         this.offer = offer;
 
-        var originGeoPoint = new Parse.GeoPoint({latitude: this.state.origin.lat(), longitude: this.state.origin.lng()});
+        var originGeoPoint = new Parse.GeoPoint({latitude: this.state.originGeo.lat(), longitude: this.state.originGeo.lng()});
         this.originLocation.set("geo", originGeoPoint);
+        this.originLocation.set("label", this.state.originLabel);
         this.originLocation.set("for", isDriver ? "driver" : "rider");
         this.originLocation.set("type", "origin");
         this.originLocation.set("offerId", offer.id);
@@ -116,8 +120,9 @@ class RoutePage extends Component {
 
         var Location = Parse.Object.extend("Location");
         var destLocation = new Location();
-        var destGeoPoint = new Parse.GeoPoint({latitude: this.state.destination.lat(), longitude: this.state.destination.lng()});
+        var destGeoPoint = new Parse.GeoPoint({latitude: this.state.destGeo.lat(), longitude: this.state.destGeo.lng()});
         destLocation.set("geo", destGeoPoint);
+        destLocation.set("label", this.state.destLabel)
         destLocation.set("for", isDriver ? "driver" : "rider");
         destLocation.set("type", "dest");
         destLocation.set("offerId", this.offer.id);
@@ -166,7 +171,7 @@ class RoutePage extends Component {
           mapElement={
             <div style={{ width: "100%", height: `100%`, margin: "0 auto" }} />
           }
-          center={this.state.origin}
+          center={this.state.originGeo}
           directions={this.state.directions}
         />
 

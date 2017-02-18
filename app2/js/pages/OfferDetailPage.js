@@ -41,7 +41,7 @@ class OfferDetailPage extends ParseComponent {
       return query.get(originId)
     }).then(origin => {
       console.log("got origin " + JSON.stringify(origin));
-      this.offerData.origin = origin.get("geo").latitude
+      this.offerData.originLabel = origin.get("label")
 
       const query = new Parse.Query("Location")
       const destId = this.offer.get("destId")
@@ -49,7 +49,7 @@ class OfferDetailPage extends ParseComponent {
       return query.get(destId)
     }).then(dest => {
       console.log("got dest " + JSON.stringify(dest));
-      this.offerData.dest = dest.get("geo").latitude
+      this.offerData.destLabel = dest.get("label")
 
       console.log("offerData: " + JSON.stringify(this.offerData));
       this.setState({data: this.offerData});
@@ -172,12 +172,12 @@ class OfferDetailPage extends ParseComponent {
         </TimeComponent>
         <LocationComponent
           prefix="From:"
-          location={this.state.data.origin.toString()}
+          location={this.state.data.originLabel}
           onClick={this.fromClick}>
         </LocationComponent>
         <LocationComponent
           prefix="To:"
-          location={this.state.data.dest.toString()}>
+          location={this.state.data.destLabel}>
         </LocationComponent>
         <FieldComponent
           title={"Contact:"}
