@@ -10,6 +10,9 @@ const ParseComponent = ParseReact.Component(React)
 class OfferDetailPage extends ParseComponent {
 
   observe() {
+  }
+
+  componentDidMount() {
     const offer_id = this.props.location.query.id
     if (!offer_id) {
       console.log("observing no offer_id, return")
@@ -18,13 +21,41 @@ class OfferDetailPage extends ParseComponent {
 
     const query = new Parse.Query('DriverOffer');
     console.log("observing offer_id: " + offer_id);
+    this.offerData = {};
+
     query.get(offer_id).then(offer => {
       offer && console.log(offer.toJSON());
-    });
+      this.offer = offer
+      this.offerData.startTime = offer.get("startTime")
 
-    return {
-      offer: query
-    };
+      const query = new Parse.Query(Parse.User);
+      const user_id = offer.get("userId")
+      return query.get(user_id)
+    }).then(user => {
+      console.log("got user " + JSON.stringify(user));
+      this.offerData.name = user.get("name");
+
+      const query = new Parse.Query("Location")
+      const originId = this.offer.get("origin_id")
+      console.log("getting originId: " + originId)
+      return query.get(originId)
+    }).then(origin => {
+      console.log("got origin " + JSON.stringify(origin));
+      this.offerData.origin = origin.get("geo").latitude
+
+      const query = new Parse.Query("Location")
+      const destId = this.offer.get("dest_id")
+      console.log("getting destId: " + destId)
+      return query.get(destId)
+    }).then(dest => {
+      console.log("got dest " + JSON.stringify(dest));
+      this.offerData.dest = dest.get("geo").latitude
+
+      console.log("offerData: " + JSON.stringify(this.offerData));
+      this.setState({data: this.offerData});
+    }, (error) => {
+      console.log('Failed to query offer, with error code: ' + error.message);
+    });
   }
 
   constructor(props) {
@@ -36,8 +67,12 @@ class OfferDetailPage extends ParseComponent {
   }
 
   render() {
-    console.log("offer_id: " + JSON.stringify(this.props.location.query.id));
-    console.log("got offer: " + JSON.stringify(this.data.offer));
+    //console.log("got offer: " + JSON.stringify(this.data.offer));
+    if (!this.state || !this.state.data) {
+      return null
+    }
+
+    console.log("got data: " + JSON.stringify(this.state.data));
 
     //borderStyle: "solid", borderWidth: 2
     const titleStyle = {fontSize: 14, color: "grey"}
@@ -133,20 +168,20 @@ class OfferDetailPage extends ParseComponent {
           Offer Ride
         </div>
         <TimeComponent
-          time={"Jan 17, 12:00"}>
+          time={this.state.data.startTime.toLocaleDateString("en-US")}>
         </TimeComponent>
         <LocationComponent
           prefix="From:"
-          location={"148 Roywood, Dr. Toronto ON"}
+          location={this.state.data.origin.toString()}
           onClick={this.fromClick}>
         </LocationComponent>
         <LocationComponent
           prefix="To:"
-          location={"1445, Whatever location, London ON"}>
+          location={this.state.data.dest.toString()}>
         </LocationComponent>
         <FieldComponent
           title={"Contact:"}
-          message={"Mr. Lv, 647-262-3141"}>
+          message={this.state.data.name}>
         </FieldComponent>
         <FieldComponent
           title={"Note:"}
