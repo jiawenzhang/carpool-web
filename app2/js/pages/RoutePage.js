@@ -85,43 +85,52 @@ class RoutePage extends Component {
     console.log("origin: " + this.state.origin)
     console.log("destination: " + this.state.destination)
 
-    var offer;
+    this.offer;
     if (isDriver) {
       var DriverOffer = Parse.Object.extend("DriverOffer");
-      offer = new DriverOffer();
+      this.offer = new DriverOffer();
     } else {
       var RiderOffer = Parse.Object.extend("RiderOffer");
-      offer = new RiderOffer();
+      this.offer = new RiderOffer();
     }
 
-    offer.set("userId", Parse.User.current().id)
-    offer.set("startTime", startTime.toDate());
-    offer.set("endTime", endTime.toDate());
+    this.offer.set("userId", Parse.User.current().id)
+    this.offer.set("startTime", startTime.toDate());
+    this.offer.set("endTime", endTime.toDate());
 
-    offer.save().then((offer) => {
+    var Location = Parse.Object.extend("Location");
+    this.originLocation = new Location();
+    this.offer.save().then((offer) => {
         console.log('New offer created with objectId: ' + offer.id);
+        this.offer = offer;
 
-        var Location = Parse.Object.extend("Location");
-        var originLocation = new Location();
         var originGeoPoint = new Parse.GeoPoint({latitude: this.state.origin.lat(), longitude: this.state.origin.lng()});
-        originLocation.set("geo", originGeoPoint);
-        originLocation.set("for", isDriver ? "driver" : "rider");
-        originLocation.set("type", "origin");
-        originLocation.set("offer_id", offer.id);
-        return originLocation.save();
+        this.originLocation.set("geo", originGeoPoint);
+        this.originLocation.set("for", isDriver ? "driver" : "rider");
+        this.originLocation.set("type", "origin");
+        this.originLocation.set("offer_id", offer.id);
+        return this.originLocation.save();
       }).then((originLocation) => {
         console.log('New originLocation created with objectId: ' + originLocation.id);
+        this.originLocation = originLocation
 
         var Location = Parse.Object.extend("Location");
         var destLocation = new Location();
         var destGeoPoint = new Parse.GeoPoint({latitude: this.state.destination.lat(), longitude: this.state.destination.lng()});
         destLocation.set("geo", destGeoPoint);
         destLocation.set("for", isDriver ? "driver" : "rider");
-        originLocation.set("type", "dest");
-        destLocation.set("offer_id", offer.id);
+        destLocation.set("type", "dest");
+        destLocation.set("offer_id", this.offer.id);
         return destLocation.save();
       }).then((destLocation) => {
         console.log('New destLocation created with objectId: ' + destLocation.id);
+
+        this.offer.set("origin_id", this.originLocation.id)
+        this.offer.set("dest_id", destLocation.id)
+        //console.log("offer " + JSON.stringify(this.offer))
+        return this.offer.save()
+      }).then((offer) => {
+        console.log('offer updated with objectId: ' + offer.id);
       }, (error) => {
         console.log('Failed to create new offer, with error code: ' + error.message);
       });
