@@ -45,6 +45,8 @@ class OfferDetailPage extends ParseComponent {
     }).then(origin => {
       console.log("got origin " + JSON.stringify(origin));
       this.offerData.originLabel = origin.get("label")
+      this.offerData.originPlaceId = origin.get("placeId")
+      this.offerData.originLocality = origin.get("locality")
 
       const query = new Parse.Query("Location")
       const destId = this.offer.get("destId")
@@ -53,10 +55,16 @@ class OfferDetailPage extends ParseComponent {
     }).then(dest => {
       console.log("got dest " + JSON.stringify(dest));
       this.offerData.destLabel = dest.get("label")
+      this.offerData.destPlaceId = dest.get("placeId")
+      this.offerData.destLocality = dest.get("locality")
 
       console.log("offerData: " + JSON.stringify(this.offerData));
       const time = moment(this.offerData.startTime).format("ddd H:MM")
-      const route = " " + this.offerData.originLabel + " to " + this.offerData.destLabel
+      var route = " " + this.offerData.originLabel + " to " + this.offerData.destLabel
+      if (route.length > 35) {
+        route = " " + this.offerData.originLocality + " to " + this.offerData.destLocality
+      }
+      console.log("route: " + route)
       const title = time + " " + route;
       this.setState(
         { data: this.offerData,

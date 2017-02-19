@@ -37,9 +37,12 @@ class RoutePage extends Component {
   onStartLocationSelect = (place) => {
     console.log("start place" + JSON.stringify(place, null, 2))
     const startLatLng = new google.maps.LatLng(place.location.lat, place.location.lng)
+    let locality = this.getLocality(place)
     this.setState({
+      originPlaceId: place.placeId,
       originGeo: startLatLng,
-      originLabel: place.label
+      originLabel: place.label,
+      originLocality: locality
     });
 
     this.updateRoute()
@@ -48,9 +51,12 @@ class RoutePage extends Component {
   onDestinationSelect = (place) => {
     console.log("destPlace" + JSON.stringify(place, null, 2))
     const destinationLatLng = new google.maps.LatLng(place.location.lat, place.location.lng)
+    let locality = this.getLocality(place)
     this.setState({
+      destPlaceId: place.placeId,
       destGeo: destinationLatLng,
-      destLabel: place.label
+      destLabel: place.label,
+      destLocality: locality
     });
 
     this.updateRoute()
@@ -108,7 +114,9 @@ class RoutePage extends Component {
         this.offer = offer;
 
         var originGeoPoint = new Parse.GeoPoint({latitude: this.state.originGeo.lat(), longitude: this.state.originGeo.lng()});
+        this.originLocation.set("placeId", this.state.originPlaceId)
         this.originLocation.set("geo", originGeoPoint);
+        this.originLocation.set("locality", this.state.originLocality)
         this.originLocation.set("label", this.state.originLabel);
         this.originLocation.set("for", isDriver ? "driver" : "rider");
         this.originLocation.set("type", "origin");
@@ -122,7 +130,9 @@ class RoutePage extends Component {
         var destLocation = new Location();
         var destGeoPoint = new Parse.GeoPoint({latitude: this.state.destGeo.lat(), longitude: this.state.destGeo.lng()});
         destLocation.set("geo", destGeoPoint);
+        destLocation.set("placeId", this.state.destPlaceId)
         destLocation.set("label", this.state.destLabel)
+        destLocation.set("locality", this.state.destLocality)
         destLocation.set("for", isDriver ? "driver" : "rider");
         destLocation.set("type", "dest");
         destLocation.set("offerId", this.offer.id);
@@ -140,6 +150,15 @@ class RoutePage extends Component {
       }, (error) => {
         console.log('Failed to create new offer, with error code: ' + error.message);
       });
+  }
+
+  getLocality = (place) => {
+    for (let component of place.gmaps.address_components) {
+      if (component.types.indexOf('locality') > -1) {
+        console.log("locality " + component.long_name)
+        return component.long_name
+      }
+    }
   }
 
   render() {
