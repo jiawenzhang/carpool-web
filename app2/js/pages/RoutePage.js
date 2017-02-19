@@ -13,11 +13,10 @@ import {
 
 import Parse from 'parse'
 
-const DirectionsExampleGoogleMap = withGoogleMap(props => (
+const DirectionsGoogleMap = withGoogleMap(props => (
   <GoogleMap
     defaultZoom={7}
-    defaultCenter={props.center}
-  >
+    defaultCenter={props.center}>
     {props.directions && <DirectionsRenderer directions={props.directions} />}
   </GoogleMap>
 ));
@@ -25,8 +24,8 @@ const DirectionsExampleGoogleMap = withGoogleMap(props => (
 class RoutePage extends Component {
 
   state = {
-    originGeo: new google.maps.LatLng(41.8507300, -87.6512600),
-    destGeo: new google.maps.LatLng(41.8525800, -87.6514100),
+    originGeo: null,
+    destGeo: null,
     directions: null,
   };
 
@@ -35,21 +34,22 @@ class RoutePage extends Component {
   }
 
   onStartLocationSelect = (place) => {
-    console.log("start place" + JSON.stringify(place, null, 2))
+    //console.log("start place" + JSON.stringify(place, null, 2))
     const startLatLng = new google.maps.LatLng(place.location.lat, place.location.lng)
     let locality = this.getLocality(place)
+
     this.setState({
       originPlaceId: place.placeId,
       originGeo: startLatLng,
       originLabel: place.label,
-      originLocality: locality
+      originLocality: locality,
     });
 
     this.updateRoute()
   }
 
   onDestinationSelect = (place) => {
-    console.log("destPlace" + JSON.stringify(place, null, 2))
+    //console.log("destPlace" + JSON.stringify(place, null, 2))
     const destinationLatLng = new google.maps.LatLng(place.location.lat, place.location.lng)
     let locality = this.getLocality(place)
     this.setState({
@@ -63,6 +63,10 @@ class RoutePage extends Component {
   }
 
   updateRoute() {
+    if (!this.state.originGeo || !this.state.destGeo) {
+      return;
+    }
+
     const DirectionsService = new google.maps.DirectionsService();
 
     DirectionsService.route({
@@ -183,20 +187,22 @@ class RoutePage extends Component {
       <div className="col-xs-12" style={{height: 5}}>
       </div>
 
-        <DirectionsExampleGoogleMap
-          containerElement={
-            <div style={{ height: `50%` }} />
-          }
-          mapElement={
-            <div style={{ width: "100%", height: `100%`, margin: "0 auto" }} />
-          }
-          center={this.state.originGeo}
-          directions={this.state.directions}
-        />
+      {this.state.originGeo &&
+      <DirectionsGoogleMap
+        containerElement={
+          <div style={{ height: `50%` }} />
+        }
+        mapElement={
+          <div style={{ width: "100%", height: `100%`, margin: "0 auto" }} />
+        }
+        center={this.state.originGeo}
+        directions={this.state.directions}
+      />}
 
       <div className="col-xs-12" style={{height: 30}}>
       </div>
 
+      {this.state.originGeo && this.state.destGeo &&
       <div style={{margin: "0 auto"}}>
         <Button
           bsSize="large"
@@ -204,7 +210,7 @@ class RoutePage extends Component {
           block>
           OK
         </Button>
-      </div>
+      </div>}
       </div>
     );
   }
