@@ -16,14 +16,15 @@ class DriverRiderPage extends React.Component {
     return (
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <div className="col-xs-12" style={{marginTop:50, marginBottom: 50, fontSize: 26, textAlign: "center"}}>
-          I am a
+          I want to
         </div>
+
         <div style={{margin: "0 auto"}}>
           <Button
             bsSize="large"
-            onClick={this.driverClick.bind(this)}
+            onClick={this.riderClick.bind(this)}
             block>
-            Driver
+            Find a ride
           </Button>
         </div>
 
@@ -33,11 +34,12 @@ class DriverRiderPage extends React.Component {
         <div style={{margin: "0 auto"}}>
           <Button
             bsSize="large"
-            onClick={this.riderClick.bind(this)}
+            onClick={this.driverClick.bind(this)}
             block>
-            Rider
+            Offer a ride
           </Button>
         </div>
+
       </div>
     );
   }
