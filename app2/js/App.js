@@ -23,6 +23,7 @@ import Login from "./pages/login/Login";
 import DriverRiderPage from "./pages/DriverRiderPage";
 import TimePage from "./pages/TimePage/TimePage";
 import RoutePage from "./pages/RoutePage";
+import NotePage from "./pages/NotePage";
 import MatchPage from "./pages/MatchPage";
 import OfferDetailPage from "./pages/OfferDetailPage";
 
@@ -57,6 +58,7 @@ export default class App extends Component {
             <Route path="time" component={TimePage} />
             <Route path="route" component={RoutePage} />
             <Route path="offer" component={OfferDetailPage} />
+            <Route path="note" component={NotePage} />
             <Route path="match" component={MatchPage} />
             <Redirect path="*" to="/" />
           </Route>
