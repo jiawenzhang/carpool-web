@@ -1,15 +1,12 @@
-/* tslint:disable:no-console */
-
 import 'rmc-picker/assets/index.css';
-//import 'rmc-date-picker/assets/index.css';
 import '../../../../../m-date-picker/assets/index.css';
 import 'rmc-picker/assets/popup.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import PopupDatePicker from '../../../../../m-date-picker/lib/popup';
-//import PopupDatePicker from 'rmc-date-picker';
-//import DatePicker from 'rmc-date-picker';
 import DatePicker from '../../../../../m-date-picker/lib';
+import MultiPicker from 'rmc-picker/lib/MultiPicker'
+import PopupPicker from 'rmc-picker/lib/Popup'
 import { Button } from 'react-bootstrap'
 
 import moment from 'moment';
@@ -66,19 +63,50 @@ class TimePage extends React.Component {
         });
     }
 
-    onStartTimeChange = (startTime) => {
-        console.log('onStartTimeChange', format(startTime));
+    onTimeChange = (time) => {
+        console.log('onTimeChange', format(time));
         this.setState({
-            startTime: startTime,
-            endTime: null
+            time: time
         });
     }
 
-    onEndTimeChange = (endTime) => {
-        console.log('onEndTimeChange', format(endTime));
-        this.setState({
-            endTime: endTime
-        });
+    onTimeWindowOk = (value) => {
+      let timeWindowMin = parseInt(value)
+      console.log("timeWindow: " + timeWindowMin);
+      var startTime = this.state.time.clone()
+      var endTime = this.state.time.clone()
+      startTime.subtract(timeWindowMin/2, 'minutes')
+      endTime.add(timeWindowMin/2, 'minutes');
+      console.log("startTime " + format(startTime))
+      console.log("endTime " + format(endTime))
+
+      var timeWindowStr;
+      switch (timeWindowMin) {
+        case 0 :
+          timeWindowStr = "On time";
+          break;
+        case 10:
+          timeWindowStr = "10 min window";
+          break;
+        case 20:
+          timeWindowStr = "20 min window";
+          break;
+        case 30:
+          timeWindowStr = "30 min window";
+          break;
+        case 60:
+          timeWindowStr = "1 hour window";
+          break;
+        case 120:
+          timeWindowStr = "2 hour window";
+          break;
+      }
+
+      this.setState({
+        startTime: startTime,
+        endTime: endTime,
+        timeWindowStr: timeWindowStr
+      });
     }
 
     onDismiss = () => {
@@ -113,8 +141,7 @@ class TimePage extends React.Component {
         console.log("TimePage render, isDriver: " + this.props.isDriver);
         const props = this.props;
         let date = this.state.date
-        let startTime = this.state.startTime
-        let endTime = this.state.endTime
+        let time = this.state.time
 
         const datePicker = (
             <DatePicker
@@ -126,7 +153,7 @@ class TimePage extends React.Component {
             />
         );
 
-        const startTimePicker = (
+        const timePicker = (
             <DatePicker
             rootNativeProps={{'data-xx':'yy'}}
             minDate={minTime}
@@ -136,15 +163,14 @@ class TimePage extends React.Component {
             />
         );
 
-        const endTimePicker = (
-            <DatePicker
-            rootNativeProps={{'data-xx':'yy'}}
-            minDate={startTime}
-            maxDate={maxTime}
-            defaultDate={startTime}
-            mode={'time'}
-            />
-        );
+        const timeWindow = [
+          { label: 'On time', value: '0' },
+          { label: '10 min window', value: '10' },
+          { label: '20 min window', value: '20' },
+          { label: '30 min window', value: '30' },
+          { label: '1 hour window', value: '60' },
+          { label: '2 hour window', value: '120' }
+        ];
                 // <div className="col-xs-12" style={{marginTop: 40, marginBottom: 10, fontSize: 20, color: "grey", textAlign: "left"}}>
                 //   between
                 // </div>
@@ -179,22 +205,26 @@ class TimePage extends React.Component {
                 </div>
 
                 <div>
+
+                </div>
+
+                <div>
                 <PopupDatePicker
-                datePicker={startTimePicker}
+                datePicker={timePicker}
                 transitionName="rmc-picker-popup-slide-fade"
                 maskTransitionName="rmc-picker-popup-fade"
                 title=""
-                date={startTime}
+                date={time}
                 mode={"time"}
                 onDismiss={this.onDismiss}
-                onChange={this.onStartTimeChange}
+                onChange={this.onTimeChange}
                 >
                 <Button
                   bsSize="large"
                   onClick={this.show}
                   disabled={date ? false : true}
                   block>
-                  {startTime && startTime.format("HH:mm") || "Earliest time"}
+                  {time && time.format("HH:mm") || "Time"}
                 </Button>
 
                 </PopupDatePicker>
@@ -203,25 +233,38 @@ class TimePage extends React.Component {
                 <div className="col-xs-12" style={{marginTop: 10, marginBottom: 10, fontSize: 20, color: "grey", textAlign: "left"}}>
                 </div>
 
-                <div>
-                <PopupDatePicker
-                datePicker={endTimePicker}
+                <PopupPicker
+
+                picker={
+                  <MultiPicker>
+                  {
+                    [{props: {
+                      children: timeWindow,
+                      selectedValue: this.state.timeWindow,
+                      }
+                    }]
+                  }
+                  </MultiPicker>
+                }
+
+                className="fortest"
                 transitionName="rmc-picker-popup-slide-fade"
                 maskTransitionName="rmc-picker-popup-fade"
                 title=""
-                date={endTime}
-                mode={"time"}
                 onDismiss={this.onDismiss}
-                onChange={this.onEndTimeChange}
+                onOk={this.onTimeWindowOk}
+                value={this.state.timeWindow}
                 >
                 <Button
                   bsSize="large"
                   onClick={this.show}
-                  disabled={startTime ? false : true}
+                  disabled={time ? false : true}
                   block>
-                  {endTime && endTime.format("HH:mm") || "Latest time"}
+                  {this.state.timeWindowStr && this.state.timeWindowStr || "Time flexibility"}
                 </Button>
-                </PopupDatePicker>
+                </PopupPicker>
+
+                <div className="col-xs-12" style={{marginTop: 10, marginBottom: 10, fontSize: 20, color: "grey", textAlign: "left"}}>
                 </div>
 
                 <div className="col-xs-12" style={{height: 70}}>
@@ -230,7 +273,7 @@ class TimePage extends React.Component {
                 <Button
                   bsSize="large"
                   onClick={this.ok}
-                  disabled={endTime ? false : true}
+                  disabled={this.state.timeWindowStr ? false : true}
                   block>
                   {"OK"}
                 </Button>
