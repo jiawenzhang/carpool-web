@@ -108,7 +108,7 @@ class TimePage extends React.Component {
         console.log('show');
     }
 
-    ok = () => {
+    next = () => {
       let timeWindow = this.state.timeWindow
       console.log("timeWindow: " + timeWindow);
       var startTime = this.state.time.clone()
@@ -265,10 +265,10 @@ class TimePage extends React.Component {
 
                 <Button
                   bsSize="large"
-                  onClick={this.ok}
+                  onClick={this.next}
                   disabled={this.state.timeWindowStr ? false : true}
                   block>
-                  {"OK"}
+                  {"Next"}
                 </Button>
           </div>);
     }
