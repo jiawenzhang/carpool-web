@@ -126,7 +126,7 @@ class TimePage extends React.Component {
       let {setStartTime, setEndTime} = this.props;
       setStartTime(startTime)
       setEndTime(endTime)
-      
+
       this.context.router.push('/route')
     }
 
@@ -234,7 +234,6 @@ class TimePage extends React.Component {
                   {
                     [{props: {
                       children: timeWindow,
-                      selectedValue: this.state.timeWindow,
                       }
                     }]
                   }
