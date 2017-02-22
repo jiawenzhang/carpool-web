@@ -71,17 +71,9 @@ class TimePage extends React.Component {
     }
 
     onTimeWindowOk = (value) => {
-      let timeWindowMin = parseInt(value)
-      console.log("timeWindow: " + timeWindowMin);
-      var startTime = this.state.time.clone()
-      var endTime = this.state.time.clone()
-      startTime.subtract(timeWindowMin/2, 'minutes')
-      endTime.add(timeWindowMin/2, 'minutes');
-      console.log("startTime " + format(startTime))
-      console.log("endTime " + format(endTime))
-
+      let timeWindow = parseInt(value); // time window in minutes
       var timeWindowStr;
-      switch (timeWindowMin) {
+      switch (timeWindow) {
         case 0 :
           timeWindowStr = "On time";
           break;
@@ -103,8 +95,7 @@ class TimePage extends React.Component {
       }
 
       this.setState({
-        startTime: startTime,
-        endTime: endTime,
+        timeWindow: timeWindow,
         timeWindowStr: timeWindowStr
       });
     }
@@ -118,13 +109,15 @@ class TimePage extends React.Component {
     }
 
     ok = () => {
-      console.log("ok");
+      let timeWindow = this.state.timeWindow
+      console.log("timeWindow: " + timeWindow);
+      var startTime = this.state.time.clone()
+      var endTime = this.state.time.clone()
+      startTime.subtract(timeWindow/2, 'minutes')
+      endTime.add(timeWindow/2, 'minutes');
 
       let date = this.state.date
-      var startTime = this.state.startTime.clone();
       startTime.year(date.year()).month(date.month()).date(date.date());
-
-      var endTime = this.state.endTime.clone();
       endTime.year(date.year()).month(date.month()).date(date.date());
 
       console.log("startTime " + startTime.format('lll'))
@@ -133,6 +126,7 @@ class TimePage extends React.Component {
       let {setStartTime, setEndTime} = this.props;
       setStartTime(startTime)
       setEndTime(endTime)
+      
       this.context.router.push('/route')
     }
 
