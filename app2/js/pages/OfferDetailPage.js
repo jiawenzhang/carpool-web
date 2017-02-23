@@ -1,7 +1,5 @@
 import React from 'react'
 import { Button, ListGroup, ListGroupItem } from 'react-bootstrap'
-import { connect } from 'react-redux'
-import { isDriver } from '../actions/count'
 
 import Parse from 'parse'
 import ParseReact from 'parse-react'
@@ -10,7 +8,6 @@ import moment from 'moment';
 import Helmet from "react-helmet"
 
 class OfferDetailPage extends ParseComponent {
-
   observe() {
   }
 
@@ -28,7 +25,13 @@ class OfferDetailPage extends ParseComponent {
     query.get(offerId).then(offer => {
       offer && console.log(offer.toJSON());
       this.offer = offer
-      this.offerData.startTime = offer.get("startTime")
+      let startTime = moment(offer.get("startTime"))
+      let endTime = moment(offer.get("endTime"))
+      console.log("startTime ", startTime.format('lll'))
+      console.log("endTime ", endTime.format('lll'))
+      this.offerData.timeDiff = endTime.diff(startTime, 'minutes');
+      this.offerData.time = startTime.add(this.offerData.timeDiff/2, 'minutes');
+      this.offerData.note = offer.get("note")
 
       const query = new Parse.Query(Parse.User);
       const user_id = offer.get("userId")
@@ -59,7 +62,7 @@ class OfferDetailPage extends ParseComponent {
       this.offerData.destLocality = dest.get("locality")
 
       console.log("offerData: " + JSON.stringify(this.offerData));
-      const time = moment(this.offerData.startTime).format("ddd H:MM")
+      const time = moment(this.offerData.time).format("ddd H:MM")
       var route = " " + this.offerData.originLabel + " to " + this.offerData.destLabel
       if (route.length > 35) {
         route = " " + this.offerData.originLocality + " to " + this.offerData.destLocality
@@ -96,13 +99,22 @@ class OfferDetailPage extends ParseComponent {
     const msgStyle = {fontSize: 16}
     const TimeComponent = React.createClass({
       render() {
+        var diffStr;
+        if (this.props.timeDiff == 0) {
+          diffStr = "On time"
+        } else {
+          diffStr = "flexible by " + this.props.timeDiff + " minutes";
+        }
         return (
         <div style={{paddingBottom: 20 }}>
           <div style={titleStyle}>
             {"Time:"}
           </div>
           <div style={msgStyle}>
-            {this.props.time}
+            {this.props.time.format("ddd MMM Do H:MM")}
+          </div>
+          <div style={msgStyle}>
+            {diffStr}
           </div>
         </div>
         );
@@ -142,37 +154,6 @@ class OfferDetailPage extends ParseComponent {
       }
     });
 
-    const CustomComponent = React.createClass({
-      render() {
-        console.log("this.props " + this.props)
-        return (
-          <li
-            className="list-group-item"
-            onClick={() => {}}>
-            <TimeComponent
-              time={this.props.time}>
-            </TimeComponent>
-            <LocationComponent
-              prefix="From:"
-              location={this.props.from}>
-            </LocationComponent>
-            <LocationComponent
-              prefix="To:"
-              location={this.props.to}>
-            </LocationComponent>
-            <FieldComponent
-              title={"Contact:"}
-              message={this.props.contact}>
-            </FieldComponent>
-            <FieldComponent
-              title={"Note:"}
-              message={"Please be on time"}>
-            </FieldComponent>
-          </li>
-        );
-      }
-    });
-
     return (
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <Helmet title={this.state.title}/>
@@ -180,7 +161,8 @@ class OfferDetailPage extends ParseComponent {
           Offer Ride
         </div>
         <TimeComponent
-          time={moment(this.state.data.startTime).format("ddd MMM Do H:MM")}>
+          time={this.state.data.time}
+          timeDiff={this.state.data.timeDiff}>
         </TimeComponent>
         <LocationComponent
           prefix="From:"
@@ -195,10 +177,12 @@ class OfferDetailPage extends ParseComponent {
           title={"Contact:"}
           message={this.state.data.name + (this.state.data.email ? ", email: " + this.state.data.email : "")}>
         </FieldComponent>
-        <FieldComponent
-          title={"Note:"}
-          message={"Please be on time"}>
-        </FieldComponent>
+        {this.state.data.note &&
+          <FieldComponent
+            title={"Note:"}
+            message={this.state.data.note}>
+          </FieldComponent>
+        }
       </div>
     );
   }

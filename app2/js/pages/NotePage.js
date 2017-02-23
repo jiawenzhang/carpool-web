@@ -76,6 +76,7 @@ class NotePage extends React.Component {
     this.offer.set("userId", Parse.User.current().id)
     this.offer.set("startTime", startTime.toDate());
     this.offer.set("endTime", endTime.toDate());
+    this.offer.set("note", this.note);
 
     var Location = Parse.Object.extend("Location");
     this.origin = new Location();
