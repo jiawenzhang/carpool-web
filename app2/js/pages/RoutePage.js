@@ -4,6 +4,7 @@ import { Button } from 'react-bootstrap'
 import { default as React, Component, } from "react";
 import Geosuggest from 'react-geosuggest';
 import { connect } from 'react-redux'
+import { setOriginLocation, setDestLocation} from '../actions/count'
 
 import {
   withGoogleMap,
@@ -84,10 +85,24 @@ class RoutePage extends Component {
     });
   }
 
-  ok = () => {
-    // this.context.router.push('/match')
-    //
-    // return
+  next = () => {
+    let {setOriginLocation, setDestLocation} = this.props;
+    setOriginLocation({
+      placeId: this.state.originPlaceId,
+      geo: this.state.originGeo,
+      locality: this.state.originLocality,
+      label: this.state.originLabel
+    })
+    setDestLocation({
+      placeId: this.state.destPlaceId,
+      geo: this.state.destGeo,
+      locality: this.state.destLocality,
+      label: this.state.destLabel,
+    })
+
+    this.context.router.push('/note')
+
+    return
 
     let {isDriver, startTime, endTime} = this.props;
     console.log("route ok");
@@ -97,6 +112,7 @@ class RoutePage extends Component {
     console.log("originGeo: " + this.state.originGeo)
     console.log("originLabel: " + this.state.originLabel)
     console.log("destLabel: " + this.state.destLabel)
+    console.log("destGeo: " + this.state.destGeo)
 
     this.offer;
     if (isDriver) {
@@ -206,9 +222,9 @@ class RoutePage extends Component {
       <div style={{margin: "0 auto"}}>
         <Button
           bsSize="large"
-          onClick={this.ok}
+          onClick={this.next}
           block>
-          OK
+          Next
         </Button>
       </div>}
       </div>
@@ -220,10 +236,13 @@ RoutePage.contextTypes = {
   router: React.PropTypes.func.isRequired
 };
 
-
 export default connect(
   state => (
   { isDriver: state.count.isDriver,
     startTime: state.count.startTime,
     endTime: state.count.endTime}),
+  {
+    setOriginLocation,
+    setDestLocation,
+  }
 )(RoutePage)

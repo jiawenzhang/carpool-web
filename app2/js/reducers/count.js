@@ -1,7 +1,10 @@
 import {
   IS_DRIVER,
   START_TIME,
-  END_TIME } from '../constants'
+  END_TIME,
+  ORIGIN_LOCATION,
+  DEST_LOCATION
+  } from '../constants'
 
 const initialState = {
   number: 1,
@@ -15,6 +18,10 @@ export default function update(state = initialState, action) {
     state.startTime = action.startTime
   } else if (action.type === END_TIME) {
     state.endTime = action.endTime
+  } else if (action.type === ORIGIN_LOCATION) {
+    state.originLocation = action.originLocation
+  } else if (action.type === DEST_LOCATION) {
+    state.destLocation = action.destLocation
   }
   return state
 }
