@@ -167,7 +167,7 @@ class OfferDetailPage extends ParseComponent {
     return (
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <Helmet title={this.state.title}/>
-        <div className="col-xs-12" style={{marginTop:50, marginBottom: 20, fontSize: 26, textAlign: "center"}}>
+        <div className="col-xs-12" style={{marginTop:50, marginBottom: 60, fontSize: 26, textAlign: "center"}}>
           {this.isDriver === "true" ? "Offer Ride" : "Request Ride"}
         </div>
         <TimeComponent
