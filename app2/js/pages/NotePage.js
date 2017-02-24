@@ -19,6 +19,9 @@ class NotePage extends React.Component {
   }
 
   render() {
+    let {isDriver} = this.props;
+    let toWho = isDriver ? "rider" : "driver";
+
     return (
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <div className="col-xs-12" style={{marginTop:50, marginBottom: 50, fontSize: 26, textAlign: "center"}}>
@@ -29,7 +32,7 @@ class NotePage extends React.Component {
           <ControlLabel></ControlLabel>
           <FormControl
             componentClass="textarea"
-            placeholder="Max 200 characters"
+            placeholder={"Message to the " + toWho + " (max 200 characters)"}
             maxLength="200"
             onChange={this.noteChange}
             style={{height: 100, maxHeight:100}}
