@@ -12,14 +12,24 @@ class OfferDetailPage extends ParseComponent {
   }
 
   componentDidMount() {
-    const offerId = this.props.location.query.id
+    let offerId = this.props.location.query.id
+    this.isDriver = this.props.location.query.driver
     if (!offerId) {
       console.log("observing no offerId, return")
       return
     }
 
-    const query = new Parse.Query('DriverOffer');
-    console.log("observing offerId: " + offerId);
+    console.log("isDriver " + this.isDriver)
+
+    var query
+    if (this.isDriver === true) {
+      console.log("getting Driver Offer offerId: " + offerId);
+      query = new Parse.Query('DriverOffer');
+    } else {
+      console.log("getting Rider Offer offerId: " + offerId);
+      query = new Parse.Query('RiderOffer');
+    }
+
     this.offerData = {};
 
     query.get(offerId).then(offer => {
@@ -157,8 +167,8 @@ class OfferDetailPage extends ParseComponent {
     return (
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <Helmet title={this.state.title}/>
-        <div className="col-xs-12" style={{marginTop:20, marginBottom: 20, fontSize: 26, textAlign: "center"}}>
-          Offer Ride
+        <div className="col-xs-12" style={{marginTop:50, marginBottom: 20, fontSize: 26, textAlign: "center"}}>
+          {this.isDriver === true ? "Offer Ride" : "Request Ride"}
         </div>
         <TimeComponent
           time={this.state.data.time}

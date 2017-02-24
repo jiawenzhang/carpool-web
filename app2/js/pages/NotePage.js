@@ -59,6 +59,7 @@ class NotePage extends React.Component {
     console.log("next click")
     console.log("note: " + this.note);
     let {isDriver, startTime, endTime, originLocation, destLocation} = this.props;
+    this.isDriver = isDriver;
 
     console.log("isDriver: " + isDriver)
     console.log("startTime: " + startTime)
@@ -69,9 +70,11 @@ class NotePage extends React.Component {
     this.destLocation = destLocation;
 
     if (isDriver) {
+      console.log("Saving DriverOffer")
       var DriverOffer = Parse.Object.extend("DriverOffer");
       this.offer = new DriverOffer();
     } else {
+      console.log("Saving RiderOffer")
       var RiderOffer = Parse.Object.extend("RiderOffer");
       this.offer = new RiderOffer();
     }
@@ -92,7 +95,7 @@ class NotePage extends React.Component {
         this.origin.set("geo", originGeoPoint);
         this.origin.set("locality", originLocation.locality)
         this.origin.set("label", originLocation.label);
-        this.origin.set("for", isDriver ? "driver" : "rider");
+        this.origin.set("for", this.isDriver ? "driver" : "rider");
         this.origin.set("type", "origin");
         this.origin.set("offerId", offer.id);
         return this.origin.save();
@@ -107,7 +110,7 @@ class NotePage extends React.Component {
         dest.set("placeId", this.destLocation.placeId)
         dest.set("label", this.destLocation.label)
         dest.set("locality", this.destLocation.locality)
-        dest.set("for", isDriver ? "driver" : "rider");
+        dest.set("for", this.isDriver ? "driver" : "rider");
         dest.set("type", "dest");
         dest.set("offerId", this.offer.id);
         return dest.save();
@@ -120,7 +123,7 @@ class NotePage extends React.Component {
         return this.offer.save()
       }).then((offer) => {
         console.log('offer updated with objectId: ' + offer.id);
-        this.context.router.replace({ pathname: '/offer', query: { id : offer.id}})
+        this.context.router.replace({ pathname: '/offer', query: { id : offer.id, driver: this.isDriver }})
       }, (error) => {
         console.log('Failed to create new offer, with error code: ' + error.message);
       });
