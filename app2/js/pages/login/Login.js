@@ -57,8 +57,8 @@ class Login extends React.Component {
     return (
       <div id='login'>
         <div className='pinterest-widget--pin pin-widget--login'>
-          <div className="col-xs-12" style={{height: 60, fontSize: 32, textAlign: "center"}}>
-            {"Carpool"}
+          <div className="col-xs-12" style={{marginTop: 20, height: 100, fontSize: 32, textAlign: "center"}}>
+            {"Wheels to Town"}
           </div>
 
           <div className="col-xs-12">
@@ -126,19 +126,21 @@ class Login extends React.Component {
             OR
           </div>
 
-          <div className="col-xs-12">
-          <Button
-            bsSize="large"
-            bsStyle="info"
-            onClick={this.onFacebook}
-            block>
-            Login with Facebook
-          </Button>
-        </div>
-
-
-          <div className="col-xs-12" style={{height: 20}}>
+          {false && <div className="col-xs-12">
+            <Button
+              bsSize="large"
+              bsStyle="info"
+              onClick={this.onFacebook}
+              block>
+              Login with Facebook
+            </Button>
           </div>
+          }
+
+          {false &&
+            <div className="col-xs-12" style={{height: 20}}>
+            </div>
+          }
 
           <div className="col-xs-12">
           <Button
