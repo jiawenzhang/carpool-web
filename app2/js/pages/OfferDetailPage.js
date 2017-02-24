@@ -22,7 +22,7 @@ class OfferDetailPage extends ParseComponent {
     console.log("isDriver " + this.isDriver)
 
     var query
-    if (this.isDriver === true) {
+    if (this.isDriver === "true") {
       console.log("getting Driver Offer offerId: " + offerId);
       query = new Parse.Query('DriverOffer');
     } else {
@@ -168,7 +168,7 @@ class OfferDetailPage extends ParseComponent {
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <Helmet title={this.state.title}/>
         <div className="col-xs-12" style={{marginTop:50, marginBottom: 20, fontSize: 26, textAlign: "center"}}>
-          {this.isDriver === true ? "Offer Ride" : "Request Ride"}
+          {this.isDriver === "true" ? "Offer Ride" : "Request Ride"}
         </div>
         <TimeComponent
           time={this.state.data.time}
