@@ -176,7 +176,7 @@ class TimePage extends React.Component {
 
         return (
           <div style={{maxWidth: 600, width: "80%", margin: "0 auto 10px"}}>
-                <div className="col-xs-12" style={{marginBottom: 30, fontSize: 26, textAlign: "center"}}>
+                <div className="col-xs-12" style={{marginTop: 50, marginBottom: 30, fontSize: 26, textAlign: "center"}}>
                   When to leave?
                 </div>
 
