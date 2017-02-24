@@ -118,7 +118,12 @@ class TimePage extends React.Component {
 
       let date = this.state.date
       startTime.year(date.year()).month(date.month()).date(date.date());
-      endTime.year(date.year()).month(date.month()).date(date.date());
+      if (endTime.dayOfYear() != startTime.dayOfYear()) {
+        // the endTime is on the next day of startTime
+        endTime.year(date.year()).month(date.month()).date(date.date() + 1);
+      } else {
+        endTime.year(date.year()).month(date.month()).date(date.date());
+      }
 
       console.log("startTime " + startTime.format('lll'))
       console.log("endTime " + endTime.format('lll'))
