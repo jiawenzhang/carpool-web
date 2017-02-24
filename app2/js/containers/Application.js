@@ -44,6 +44,7 @@ export default class Application extends Component {
   render() {
     return (
       <div className="full-height">
+        {false &&
         <Navbar fluid>
           <Nav>
             <NavDropdown id="examples-dropdown" title="Examples">
@@ -53,6 +54,7 @@ export default class Application extends Component {
             </NavDropdown>
           </Nav>
         </Navbar>
+       }
 
         <div className="container-fluid full-height">
           <div className="row full-height">
