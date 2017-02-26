@@ -175,6 +175,7 @@ class TimePage extends React.Component {
             maxDate={maxTime}
             defaultDate={now}
             mode={'time'}
+            minuteStep={10}
             />
         );
 
