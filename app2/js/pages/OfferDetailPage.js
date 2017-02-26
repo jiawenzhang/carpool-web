@@ -11,7 +11,14 @@ class OfferDetailPage extends ParseComponent {
   observe() {
   }
 
+  onBackButtonEvent = (e) => {
+    e.preventDefault()
+    this.context.router.replace({ pathname: '/'})
+  }
+
   componentDidMount() {
+    window.onpopstate = this.onBackButtonEvent;
+
     let offerId = this.props.location.query.id
     this.isDriver = this.props.location.query.driver
     if (!offerId) {

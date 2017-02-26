@@ -10,9 +10,6 @@ class NotePage extends React.Component {
     super(props)
   }
 
-  componentDidMount() {
-  }
-
   noteChange = (e) => {
     //console.log("note change " + e.target.value)
     this.note = e.target.value;
