@@ -87,7 +87,7 @@ class TimePage extends React.Component {
       if (!timeWindow) {
         return null
       }
-      
+
       var timeWindowStr;
       switch (timeWindow) {
         case 0 :
@@ -137,13 +137,13 @@ class TimePage extends React.Component {
       endTime.add(timeWindow/2, 'minutes');
 
       let date = this.state.date
-      startTime.year(date.year()).month(date.month()).date(date.date());
       if (endTime.dayOfYear() != startTime.dayOfYear()) {
         // the endTime is on the next day of startTime
         endTime.year(date.year()).month(date.month()).date(date.date() + 1);
       } else {
         endTime.year(date.year()).month(date.month()).date(date.date());
       }
+      startTime.year(date.year()).month(date.month()).date(date.date());
 
       console.log("startTime " + startTime.format('lll'))
       console.log("endTime " + endTime.format('lll'))
