@@ -1,4 +1,5 @@
 import React from 'react'
+import Parse from 'parse'
 import { Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { isDriver } from '../actions/count'
@@ -40,6 +41,18 @@ class DriverRiderPage extends React.Component {
           </Button>
         </div>
 
+        <div className="col-xs-12" style={{height: 20}}>
+        </div>
+
+        <div style={{margin: "0 auto"}}>
+          <Button
+            bsSize="large"
+            onClick={this.logoutClick.bind(this)}
+            block>
+            Logout
+          </Button>
+        </div>
+
       </div>
     );
   }
@@ -56,6 +69,10 @@ class DriverRiderPage extends React.Component {
     isDriver(false)
     console.log("rider click")
     this.context.router.push('/time')
+  }
+
+  logoutClick() {
+    Parse.User.logOut()
   }
 }
 
