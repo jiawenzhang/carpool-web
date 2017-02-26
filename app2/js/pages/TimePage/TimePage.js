@@ -52,7 +52,7 @@ class TimePage extends React.Component {
 
         let {startTime, endTime} = this.props
         var date = null
-        var timeWindow = 0
+        var timeWindow = null
         var time = null
         if (startTime && endTime) {
           date = startTime
@@ -84,6 +84,10 @@ class TimePage extends React.Component {
     }
 
     timeWindowStr = (timeWindow) => {
+      if (!timeWindow) {
+        return null
+      }
+      
       var timeWindowStr;
       switch (timeWindow) {
         case 0 :
