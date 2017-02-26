@@ -33,7 +33,7 @@ class NotePage extends React.Component {
           <FormControl
             componentClass="textarea"
             placeholder={"Message to the " + toWho + " (max 200 characters)"}
-            maxLength="200"
+            maxLength={200}
             onChange={this.noteChange}
             style={{height: 100, maxHeight:100}}
           />
