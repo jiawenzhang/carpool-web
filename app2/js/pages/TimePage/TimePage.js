@@ -1,10 +1,10 @@
 import 'rmc-picker/assets/index.css';
-import '../../../../../m-date-picker/assets/index.css';
+import 'rmc-date-picker/assets/index.css';
 import 'rmc-picker/assets/popup.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import PopupDatePicker from '../../../../../m-date-picker/lib/popup';
-import DatePicker from '../../../../../m-date-picker/lib';
+import PopupDatePicker from 'rmc-date-picker/lib/popup';
+import DatePicker from 'rmc-date-picker/lib';
 import MultiPicker from 'rmc-picker/lib/MultiPicker'
 import PopupPicker from 'rmc-picker/lib/Popup'
 import { Button } from 'react-bootstrap'
