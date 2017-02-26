@@ -50,8 +50,21 @@ class TimePage extends React.Component {
     constructor(props) {
         super(props);
 
+        let {startTime, endTime} = this.props
+        var date = null
+        var timeWindow = 0
+        var time = null
+        if (startTime && endTime) {
+          date = startTime
+          timeWindow = endTime.diff(startTime, 'minutes');
+          time = startTime.clone().add(timeWindow/2, 'minutes');
+        }
+
         this.state = {
-          date: null,
+          date: date,
+          time: time,
+          timeWindow: timeWindow,
+          timeWindowStr: this.timeWindowStr(timeWindow)
         };
     }
 
@@ -70,8 +83,7 @@ class TimePage extends React.Component {
         });
     }
 
-    onTimeWindowOk = (value) => {
-      let timeWindow = parseInt(value); // time window in minutes
+    timeWindowStr = (timeWindow) => {
       var timeWindowStr;
       switch (timeWindow) {
         case 0 :
@@ -93,10 +105,14 @@ class TimePage extends React.Component {
           timeWindowStr = "2 hour window";
           break;
       }
+      return timeWindowStr
+    }
 
+    onTimeWindowOk = (value) => {
+      let timeWindow = parseInt(value); // time window in minutes
       this.setState({
         timeWindow: timeWindow,
-        timeWindowStr: timeWindowStr
+        timeWindowStr: this.timeWindowStr(timeWindow)
       });
     }
 
@@ -286,6 +302,8 @@ TimePage.contextTypes = {
 export default connect(
   state => (
   { number: state.count.number,
+    startTime: state.count.startTime,
+    endTime: state.count.endTime,
     isDriver: state.count.isDriver}),
   { setStartTime,
     setEndTime }
