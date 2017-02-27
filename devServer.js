@@ -26,8 +26,7 @@ router.get('/load/', function(req, res) {
     console.log("link: " + link);
 });
 
-var port = 3000;
 var httpServer = require('http').createServer(app);
-httpServer.listen(port, function() {
+httpServer.listen(process.env.PORT || 3000, function() {
     console.log('Listening at http://localhost:3000');
 });
