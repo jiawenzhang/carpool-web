@@ -3,6 +3,7 @@ import Parse from 'parse'
 import { Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { isDriver } from '../actions/count'
+import wx from 'weixin-js-sdk'
 
 class DriverRiderPage extends React.Component {
 
