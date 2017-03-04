@@ -5,6 +5,8 @@ var webpack = require('webpack');
 var config = require('./webpack.config.dev');
 var crypto = require("crypto");
 var url = require("url");
+var signature = require('./signature');
+var wechatConfig = require('./wechatConfig');
 
 var app = express();
 var compiler = webpack(config);
@@ -46,16 +48,26 @@ router.get('/validate/', function(req, res) {
   console.log("Original str : " + original);
   console.log("Signature : " + signature );
   var scyptoString = sha1(original);
-  if(signature == scyptoString){
+  if (signature == scyptoString){
     res.end(echostr);
     console.log("Confirm and send echo back");
-  }else {
+  } else {
     res.end("false");
     console.log("Failed!");
   }
 });
 
-function sha1(str){
+router.get("/signature/", function(req, res) {
+    let url = req.protocol + '://' + req.get('host') + req.originalUrl;
+    console.log("url " + url);
+    // const url = req.query.url.split('#')[0];
+    signature.sign(url, function(signatureMap){
+        signatureMap.appId = wechatConfig.appid;
+        res.send(signatureMap);
+    });
+});
+
+function sha1(str) {
   var md5sum = crypto.createHash("sha1");
   md5sum.update(str);
   str = md5sum.digest("hex");
