@@ -72,8 +72,65 @@ class DriverRiderPage extends React.Component {
     this.context.router.push('/time')
   }
 
+  gotSignatureMap = (signatureMap) => {
+    console.log("gotSignatureMap");
+    console.log("appId: " + signatureMap.appId);
+
+    let weChatState = {
+      debug: true,
+      appId: signatureMap.appId,
+      timestamp: signatureMap.timestamp,
+      nonceStr: signatureMap.noncestr,
+      signature: signatureMap.signature,
+      jsApiList: [
+        'onMenuShareAppMessage'
+      ]
+    }
+
+    console.log("wechatState " + JSON.stringify(weChatState));
+
+    window.wx.config(weChatState);
+    console.log("wx.config");
+
+    window.wx.ready(() => {
+      console.log("ready back");
+      console.log(window.wx.ready());
+      this.ready = true;
+    });
+    console.log("ready setup");
+
+    window.wx.error((err) => {
+      this.ready = false;
+      console.error('upload/UploadContainer/wx/wxError');
+      console.error(JSON.stringify(err));
+    });
+
+    // wx.checkJsApi({
+    //   jsApiList: ['chooseImage'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+    //   success: function(res) {
+    //     console.log("success, " +res)
+    //     // 以键值对的形式返回，可用的api值true，不可用为false
+    //     // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+    //   }
+    // });
+  }
+
   logoutClick() {
-    Parse.User.logOut()
+    //Parse.User.logOut()
+    console.log("fetch data")
+    var xmlHttp = new XMLHttpRequest()
+    xmlHttp.onreadystatechange = function() {
+      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        console.log("readyState");
+        console.log("response: " + xmlHttp.responseText);
+        var signatureMap = JSON.parse(xmlHttp.responseText);
+        this.gotSignatureMap(signatureMap);
+      }
+    }.bind(this);
+
+    let url = "signature/"
+    xmlHttp.open("GET", url, true); // false for synchronous request
+    xmlHttp.send();
   }
 }
 

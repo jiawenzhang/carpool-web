@@ -58,9 +58,12 @@ router.get('/validate/', function(req, res) {
 });
 
 router.get("/signature/", function(req, res) {
-    let url = req.protocol + '://' + req.get('host') + req.originalUrl;
+    //let originalUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+    var params = req.query;
+    //let originalUrl = req.protocol + '://' + req.get('host') + "/offer?driver=false&id=PH6Ujz5V1W"
+    let originalUrl = req.protocol + '://' + req.get('host') + "/offer?driver=" + params.driver + "&id=" + params.id;
+    let url = originalUrl.split('#')[0];
     console.log("url " + url);
-    // const url = req.query.url.split('#')[0];
     signature.sign(url, function(signatureMap){
         signatureMap.appId = wechatConfig.appid;
         res.send(signatureMap);

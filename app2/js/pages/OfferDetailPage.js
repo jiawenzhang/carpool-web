@@ -6,6 +6,7 @@ import ParseReact from 'parse-react'
 const ParseComponent = ParseReact.Component(React)
 import moment from 'moment';
 import Helmet from "react-helmet"
+import Util from "../util"
 
 class OfferDetailPage extends ParseComponent {
   observe() {
@@ -16,12 +17,10 @@ class OfferDetailPage extends ParseComponent {
     this.context.router.replace({ pathname: '/'})
   }
 
-  componentDidMount() {
-    window.onpopstate = this.onBackButtonEvent;
-
-    let offerId = this.props.location.query.id
+  loadOffer = () => {
+    this.offerId = this.props.location.query.id
     this.isDriver = this.props.location.query.driver
-    if (!offerId) {
+    if (!this.offerId) {
       console.log("observing no offerId, return")
       return
     }
@@ -30,16 +29,16 @@ class OfferDetailPage extends ParseComponent {
 
     var query
     if (this.isDriver === "true") {
-      console.log("getting Driver Offer offerId: " + offerId);
+      console.log("getting Driver Offer offerId: " + this.offerId);
       query = new Parse.Query('DriverOffer');
     } else {
-      console.log("getting Rider Offer offerId: " + offerId);
+      console.log("getting Rider Offer offerId: " + this.offerId);
       query = new Parse.Query('RiderOffer');
     }
 
     this.offerData = {};
 
-    query.get(offerId).then(offer => {
+    query.get(this.offerId).then(offer => {
       offer && console.log(offer.toJSON());
       this.offer = offer
       let startTime = moment(offer.get("startTime"))
@@ -80,18 +79,103 @@ class OfferDetailPage extends ParseComponent {
 
       console.log("offerData: " + JSON.stringify(this.offerData));
       const time = moment(this.offerData.time).format("ddd H:MM")
-      var route = " " + this.offerData.originLabel + " to " + this.offerData.destLabel
-      if (route.length > 35) {
-        route = " " + this.offerData.originLocality + " to " + this.offerData.destLocality
-      }
+      // if (route.length > 35) {
+      var route = " " + this.offerData.originLocality + " to " + this.offerData.destLocality
+      // }
       console.log("route: " + route)
       const title = time + " " + route;
       this.setState(
         { data: this.offerData,
           title: title
         });
+
+      this.getSignatureMap();
     }, (error) => {
       console.log('Failed to query offer, with error code: ' + error.message);
+    });
+  }
+
+  getSignatureMap = () => {
+    // get wx signatureMap
+    var xmlHttp = new XMLHttpRequest()
+    xmlHttp.onreadystatechange = function() {
+      if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+        console.log("readyState");
+        console.log("response: " + xmlHttp.responseText);
+        var signatureMap = JSON.parse(xmlHttp.responseText);
+        this.gotSignatureMap(signatureMap);
+      }
+    }.bind(this);
+
+    var params = {
+      driver: this.isDriver,
+      id: this.offerId
+    }
+
+    console.log("params " + JSON.stringify(params));
+    let url = "signature"
+    xmlHttp.open("GET", url + '?' + Util.urlEncode(params), true);
+    //xmlHttp.open("GET", url, true); // false for synchronous request
+    xmlHttp.send();
+  }
+
+  componentDidMount() {
+    window.onpopstate = this.onBackButtonEvent;
+    this.loadOffer();
+  }
+
+  gotSignatureMap = (signatureMap) => {
+    console.log("gotSignatureMap");
+    console.log("appId: " + signatureMap.appId);
+
+    let weChatState = {
+      debug: true,
+      appId: signatureMap.appId,
+      timestamp: signatureMap.timestamp,
+      nonceStr: signatureMap.noncestr,
+      signature: signatureMap.signature,
+      jsApiList: [
+        'onMenuShareAppMessage'
+      ]
+    }
+
+    console.log("wechatState " + JSON.stringify(weChatState));
+
+    window.wx.config(weChatState);
+    window.wx.ready(() => {
+      console.log("ready back");
+      this.ready = true;
+
+      let note = this.offerData.note ? ", " + this.offerData.note : "";
+      let desc = this.offerData.originLabel + " to " + this.offerData.destLabel + note;
+
+      var params = {
+        driver: this.isDriver,
+        id: this.offerId
+      }
+
+      let link = location.protocol + '//' + location.host + this.props.location.pathname +
+      "?" + Util.urlEncode(params);
+      console.log("link " + link);
+      window.wx.onMenuShareAppMessage({
+        title: this.state.title,
+        desc: desc,
+        link: link, // 分享链接
+        imgUrl: '', // 分享图标
+        type: '', // 分享类型,music、video或link，不填默认为link
+        dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+        success: function () {
+          console.log("share success")
+        },
+        cancel: function () {
+          console.log("share cancel")
+        }
+      });
+    });
+
+    window.wx.error((err) => {
+      this.ready = false;
+      console.error(JSON.stringify(err));
     });
   }
 
