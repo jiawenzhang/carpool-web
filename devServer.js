@@ -8,6 +8,7 @@ var url = require("url");
 var signature = require('./signature');
 var wechatConfig = require('./wechatConfig');
 
+
 var app = express();
 var compiler = webpack(config);
 
@@ -60,11 +61,9 @@ router.get('/validate/', function(req, res) {
 router.get("/signature/", function(req, res) {
     //let originalUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
     var params = req.query;
-    //let originalUrl = req.protocol + '://' + req.get('host') + "/offer?driver=false&id=PH6Ujz5V1W"
-    let originalUrl = req.protocol + '://' + req.get('host') + "/offer?driver=" + params.driver + "&id=" + params.id;
-    let url = originalUrl.split('#')[0];
-    console.log("url " + url);
-    signature.sign(url, function(signatureMap){
+    let targetUrl = decodeURIComponent(params.targetUrl);
+    console.log("link to verify: " + targetUrl);
+    signature.sign(targetUrl, function(signatureMap){
         signatureMap.appId = wechatConfig.appid;
         res.send(signatureMap);
     });

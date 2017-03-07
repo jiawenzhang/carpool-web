@@ -19,16 +19,16 @@ class OfferDetailPage extends ParseComponent {
 
   loadOffer = () => {
     this.offerId = this.props.location.query.id
-    this.isDriver = this.props.location.query.driver
+    this.driver = this.props.location.query.driver
     if (!this.offerId) {
       console.log("observing no offerId, return")
       return
     }
 
-    console.log("isDriver " + this.isDriver)
+    console.log("driver " + this.driver)
 
     var query
-    if (this.isDriver === "true") {
+    if (this.driver === "true") {
       console.log("getting Driver Offer offerId: " + this.offerId);
       query = new Parse.Query('DriverOffer');
     } else {
@@ -107,15 +107,10 @@ class OfferDetailPage extends ParseComponent {
       }
     }.bind(this);
 
-    var params = {
-      driver: this.isDriver,
-      id: this.offerId
-    }
-
-    console.log("params " + JSON.stringify(params));
-    let url = "signature"
-    xmlHttp.open("GET", url + '?' + Util.urlEncode(params), true);
-    //xmlHttp.open("GET", url, true); // false for synchronous request
+    let targetUrl = location.href.split("#")[0];
+    console.log("location.href " + targetUrl);
+    let url = "signature?targetUrl=" + encodeURIComponent(targetUrl);
+    xmlHttp.open("GET", url, true); // false for synchronous request
     xmlHttp.send();
   }
 
@@ -150,7 +145,7 @@ class OfferDetailPage extends ParseComponent {
       let desc = this.offerData.originLabel + " to " + this.offerData.destLabel + note;
 
       var params = {
-        driver: this.isDriver,
+        driver: this.driver,
         id: this.offerId
       }
 
@@ -259,7 +254,7 @@ class OfferDetailPage extends ParseComponent {
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <Helmet title={this.state.title}/>
         <div className="col-xs-12" style={{marginTop:50, marginBottom: 60, fontSize: 26, textAlign: "center"}}>
-          {this.isDriver === "true" ? "Offer Ride" : "Request Ride"}
+          {this.driver === "true" ? "Offer Ride" : "Request Ride"}
         </div>
         <TimeComponent
           time={this.state.data.time}
