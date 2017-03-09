@@ -7,6 +7,8 @@ var crypto = require("crypto");
 var url = require("url");
 var signature = require('./signature');
 var wechatConfig = require('./wechatConfig');
+var URI = require('urijs');
+var https = require('https');
 
 
 var app = express();
@@ -66,6 +68,33 @@ router.get("/signature/", function(req, res) {
     signature.sign(targetUrl, function(signatureMap){
         signatureMap.appId = wechatConfig.appid;
         res.send(signatureMap);
+    });
+});
+
+router.get("/access_token/", function(req, res) {
+    var params = req.query;
+    console.log("access_token params " + JSON.stringify(params));
+    var code = params.code;
+    console.log("code: " + code);
+
+    var url = "https://api.weixin.qq.com/sns/oauth2/access_token"
+    + "?appid=" + wechatConfig.appid
+    + "&secret=" + wechatConfig.secret
+    + "&code=" + code
+    + "&grant_type=authorization_code";
+
+    https.get(url, function (reply) {
+      var data = '';
+      reply.on('data', function (chunk) {
+        data += chunk;
+      });
+      reply.on('end', function () {
+        console.log("end, data " + data);
+        res.send(data);
+      });
+    }).on('error', function () {
+      console.error("error getting access_token");
+      res.send("error");
     });
 });
 

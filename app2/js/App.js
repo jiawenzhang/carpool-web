@@ -76,9 +76,23 @@ class App extends Component {
     const {code} = query;
 
     if (code) {
-      console.log("got code: " + code)
       //WechatUserStore.fetchUserInfo(code);
-      next();
+
+      console.log("got code: " + code)
+      var xmlHttp = new XMLHttpRequest()
+      xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+          console.log("readyState");
+          console.log("response: " + xmlHttp.responseText);
+          var data = JSON.parse(xmlHttp.responseText);
+
+          next();
+        }
+      }.bind(this);
+
+      let url = "access_token?code=" + code;
+      xmlHttp.open("GET", url, true); // false for synchronous request
+      xmlHttp.send();
     } else {
       var redirectURL = document.location.href + "login";
       var authUrl = this.generateGetCodeUrl(redirectURL);
