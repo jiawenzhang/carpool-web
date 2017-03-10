@@ -1,13 +1,22 @@
 import React from 'react'
 import Parse from 'parse'
 import {FormGroup, FormControl, Button} from 'react-bootstrap'
+
+//import weui styles
+import 'weui';
+import 'react-weui/lib/react-weui.min.css';
+
+import {Toast} from 'react-weui'
 import URI from "urijs";
 
 class Login extends React.Component {
 
   constructor(props) {
     super(props)
-    this.state = { error : null, signup : false };
+    this.state = {
+      error : null,
+      signup : false,
+      showLoading: true};
   }
 
   initializeFacebook() {
@@ -45,9 +54,6 @@ class Login extends React.Component {
       js.src = "//connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-  }
-
-  loginWeChat() {
   }
 
   componentDidMount() {
@@ -115,17 +121,10 @@ class Login extends React.Component {
     }
   }
 
-  render() {
-    if (Parse.User.current()) {
-      console.log("already login")
-      this.context.router.push('/driverrider');
-      return null
-    }
-
-    console.log("state " + this.state);
-    return (
-      <div id='login'>
+  renderLoginButtons() {
+      return (
         <div className='pinterest-widget--pin pin-widget--login'>
+
           <div className="col-xs-12" style={{marginTop: 20, height: 100, fontSize: 32, textAlign: "center"}}>
             {"Wheels to Town"}
           </div>
@@ -231,6 +230,25 @@ class Login extends React.Component {
              </div>
           }
         </div>
+      );
+  }
+
+  render() {
+    if (Parse.User.current()) {
+      console.log("already login")
+      this.context.router.push('/driverrider');
+      return null
+    }
+
+    console.log("state " + this.state);
+    return (
+      <div id='login'>
+        <Toast
+          icon="loading"
+          show={this.state.showLoading}>
+          Loading...
+        </Toast>
+        {false && this.renderLoginButtons()}
       </div>
     )
   }

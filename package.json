@@ -33,6 +33,8 @@
     "react-helmet": "^3.1.0",
     "react-prism": "^4.0.0",
     "react-router-bootstrap": "^0.23.1",
+    "react-weui": "1.0.3",
+    "weui": "1.1.0",
     "react-github-fork-ribbon": "^0.4.4",
     "react-toastr": "^2.8.1",
     "react-geosuggest": "2.1.0",
