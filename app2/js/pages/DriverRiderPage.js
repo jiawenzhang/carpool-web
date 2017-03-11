@@ -1,8 +1,13 @@
 import React from 'react'
 import Parse from 'parse'
-import { Button } from 'react-bootstrap'
+//import { Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { isDriver } from '../actions/count'
+import {Button, ButtonArea} from 'react-weui';
+
+//import weui styles
+import 'weui';
+import 'react-weui/lib/react-weui.min.css';
 
 class DriverRiderPage extends React.Component {
 
@@ -22,6 +27,7 @@ class DriverRiderPage extends React.Component {
 
         <div style={{margin: "0 auto"}}>
           <Button
+            type="default"
             bsSize="large"
             onClick={this.riderClick.bind(this)}
             block>
@@ -34,6 +40,7 @@ class DriverRiderPage extends React.Component {
 
         <div style={{margin: "0 auto"}}>
           <Button
+            type="default"
             bsSize="large"
             onClick={this.driverClick.bind(this)}
             block>
@@ -46,12 +53,22 @@ class DriverRiderPage extends React.Component {
 
         <div style={{margin: "0 auto"}}>
           <Button
+            type="default"
             bsSize="large"
             onClick={this.logoutClick.bind(this)}
             block>
             Logout
           </Button>
         </div>
+
+        <div className="col-xs-12" style={{height: 20}}>
+        </div>
+
+        <Button
+          type="default"
+          onClick={this.seeMyOffers.bind(this)}>
+          See my offers
+        </Button>
 
       </div>
     );
@@ -69,6 +86,10 @@ class DriverRiderPage extends React.Component {
     isDriver(false)
     console.log("rider click")
     this.context.router.push('/time')
+  }
+
+  seeMyOffers() {
+
   }
 
   logoutClick() {
