@@ -228,7 +228,7 @@ class OfferDetailPage extends ParseComponent {
         <Panel>
           <PanelHeader>
             <div style={{fontSize: 14}}>
-              {this.driver ? "Driver offers" : "Rider offers"}
+              {this.driver === "true" ? "Driver offers" : "Rider offers"}
             </div>
           </PanelHeader>
           <PanelBody>
