@@ -63,7 +63,8 @@ class OfferDetailPage extends ParseComponent {
       console.log("endTime ", endTime.format('lll'))
       this.offerData.timeDiff = endTime.diff(startTime, 'minutes');
       this.offerData.time = startTime.add(this.offerData.timeDiff/2, 'minutes');
-      this.offerData.note = offer.get("note")
+      this.offerData.note = offer.get("note");
+      this.offerData.price = offer.get("price");
 
       const query = new Parse.Query(Parse.User);
       const user_id = offer.get("userId")
@@ -221,14 +222,16 @@ class OfferDetailPage extends ParseComponent {
 
     console.log("got data: " + JSON.stringify(this.state.data));
 
+    const priceStr = this.state.data.price ? "$" + this.state.data.price : "";
+    const header = (this.driver === "true" ? "Driver offer" : "Rider offer") + "\u00a0\u00a0" /* whitespace */ + priceStr;
+
     return (
       <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 10px", paddingTop: 40, paddingBottom: 20, backgroundColor: "whitesmoke"}}>
         <Helmet title={this.state.title}/>
-
         <Panel>
           <PanelHeader>
-            <div style={{fontSize: 14}}>
-              {this.driver === "true" ? "Driver offers" : "Rider offers"}
+            <div style={{fontSize: 16}}>
+              {header}
             </div>
           </PanelHeader>
           <PanelBody>

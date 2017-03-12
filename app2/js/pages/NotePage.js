@@ -111,6 +111,9 @@ class NotePage extends React.Component {
     this.offer.set("startTime", startTime.toDate());
     this.offer.set("endTime", endTime.toDate());
     this.offer.set("note", this.note);
+    if (this.price && !isNaN(this.price)) {
+      this.offer.set("price", this.price);
+    }
 
     var Location = Parse.Object.extend("Location");
     this.origin = new Location();
