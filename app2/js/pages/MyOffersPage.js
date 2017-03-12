@@ -32,6 +32,7 @@ class MyOffersPage extends React.Component {
     var offerJSONs = [];
     var queryOffer = new Parse.Query(objectName);
     queryOffer.equalTo("userId", Parse.User.current().id);
+    queryOffer.notEqualTo("cancelled", true);
     var results =[];
     queryOffer.find().then(offerObjects => {
       if (!offerObjects || offerObjects.length == 0) {

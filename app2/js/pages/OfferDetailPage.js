@@ -199,7 +199,19 @@ class OfferDetailPage extends ParseComponent {
   }
 
   cancelClick = () => {
-    console.log("cancelOffer")
+    console.log("cancelOffer");
+    if (!this.offer) {
+      console.error("no offer, cannot cancel");
+      return;
+    }
+
+    this.offer.set("cancelled", true);
+    this.offer.save().then(offer => {
+      console.log("offer cancel success");
+      this.context.router.replace({pathname: '/myoffers'});
+    }, (error) => {
+      console.error('failed to cancel offer, with error code: ' + error.message);
+    });
   }
 
   render() {
