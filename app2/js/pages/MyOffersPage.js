@@ -28,65 +28,74 @@ class MyOffersPage extends React.Component {
     }
   }
 
-  fetchOffer = (objectName, callback) => {
+  fetchOffers = (objectName, callback) => {
     var offerJSONs = [];
     var queryOffer = new Parse.Query(objectName);
     queryOffer.equalTo("userId", Parse.User.current().id);
     var results =[];
     queryOffer.find().then(offerObjects => {
-      if (offerObjects && offerObjects.length > 0) {
-        for (var i=0; i<offerObjects.length; i++) {
-          //console.log(offers[i].toJSON());
-          offerJSONs.push(offerObjects[i].toJSON());
-        }
+      if (!offerObjects || offerObjects.length == 0) {
+        callback(null, []);
+        return;
+      }
 
-        var promise = Parse.Promise.as();
-        offerJSONs.forEach(function(offerJSON) {
-          promise = promise.then(function() {
+      for (var i=0; i<offerObjects.length; i++) {
+        //console.log(offers[i].toJSON());
+        offerJSONs.push(offerObjects[i].toJSON());
+      }
+
+      var promise = Parse.Promise.as();
+      offerJSONs.forEach(function(offerJSON) {
+        promise = promise.then(function() {
+          const query = new Parse.Query("Location")
+          const originId = offerJSON.originId;
+          console.log("getting originId: " + originId)
+          // Return a promise that will be resolved when the delete is finished.
+          return query.get(originId).then(origin => {
+            offerJSON["originLabel"] = origin.get("label")
+            offerJSON["originPlaceId"] = origin.get("placeId")
+            offerJSON["originLocality"] = origin.get("locality")
             const query = new Parse.Query("Location")
-            const originId = offerJSON.originId;
-            console.log("getting originId: " + originId)
-            // Return a promise that will be resolved when the delete is finished.
-            return query.get(originId).then(origin => {
-              offerJSON["originLabel"] = origin.get("label")
-              offerJSON["originPlaceId"] = origin.get("placeId")
-              offerJSON["originLocality"] = origin.get("locality")
-              const query = new Parse.Query("Location")
-              const destId = offerJSON.destId;
-              console.log("getting destId: " + destId)
-              return query.get(destId)
-            }).then(dest => {
-              offerJSON["destLabel"] = dest.get("label");
-              offerJSON["destPlaceId"] = dest.get("placeId");
-              offerJSON["destLocality"] = dest.get("locality");
-              results.push(offerJSON);
-            }, (error) => {
-            });
+            const destId = offerJSON.destId;
+            console.log("getting destId: " + destId)
+            return query.get(destId)
+          }).then(dest => {
+            offerJSON["destLabel"] = dest.get("label");
+            offerJSON["destPlaceId"] = dest.get("placeId");
+            offerJSON["destLocality"] = dest.get("locality");
+            results.push(offerJSON);
+          }, (error) => {
           });
         });
-        return promise;
-      }
-    }).then(() => {
-      // Every geo was retrieved
-      console.log("results length " + results.length);
-      for (var i=0; i<results.length; i++) {
-        console.log("result: " + JSON.stringify(results[i]));
-      }
-      callback(null, results);
-    }, (error) => {
-      console.log('Failed to query rider offer, with error code: ' + error.message);
-      callback(error.message, null);
-    });
-  }
+      });
+      return promise;
+  }).then(() => {
+    // Every geo was retrieved
+    console.log("results length " + results.length);
+    for (var i=0; i<results.length; i++) {
+      console.log("result: " + JSON.stringify(results[i]));
+    }
+    callback(null, results);
+  }, (error) => {
+    console.log('Failed to query rider offer, with error code: ' + error.message);
+    callback(error.message, null);
+  });
+}
 
   componentDidMount() {
-    this.fetchOffer("RiderOffer", (error, offers) => {
+    this.fetchOffers("RiderOffer", (error, offers) => {
+      if (error) {
+        return;
+      }
       this.setState({
         riderOffers: offers
       })
     });
 
-    this.fetchOffer("DriverOffer", (error, offers) => {
+    this.fetchOffers("DriverOffer", (error, offers) => {
+      if (error) {
+        return;
+      }
       this.setState({
         driverOffers: offers
       })
