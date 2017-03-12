@@ -1,12 +1,25 @@
 import React from 'react'
-import { Button, ListGroup, ListGroupItem } from 'react-bootstrap'
-
 import Parse from 'parse'
 import ParseReact from 'parse-react'
 const ParseComponent = ParseReact.Component(React)
 import moment from 'moment';
 import Helmet from "react-helmet"
 import Util from "../util"
+
+import {
+  Panel,
+  PanelHeader,
+  PanelBody,
+  MediaBox,
+  MediaBoxBody,
+  MediaBoxTitle,
+  MediaBoxDescription
+ }
+from 'react-weui';
+
+//import weui styles
+import 'weui';
+import 'react-weui/lib/react-weui.min.css';
 
 class OfferDetailPage extends ParseComponent {
   observe() {
@@ -183,104 +196,91 @@ class OfferDetailPage extends ParseComponent {
   }
 
   render() {
-    //console.log("got offer: " + JSON.stringify(this.data.offer));
     if (!this.state || !this.state.data) {
       return null
     }
 
     console.log("got data: " + JSON.stringify(this.state.data));
 
-    //borderStyle: "solid", borderWidth: 2
-    const titleStyle = {fontSize: 14, color: "grey"}
-    const msgStyle = {fontSize: 16}
-    const TimeComponent = React.createClass({
-      render() {
-        var diffStr;
-        if (this.props.timeDiff == 0) {
-          diffStr = "On time"
-        } else {
-          diffStr = "flexible by " + this.props.timeDiff + " minutes";
-        }
-        return (
-        <div style={{paddingBottom: 20 }}>
-          <div style={titleStyle}>
-            {"Time:"}
-          </div>
-          <div style={msgStyle}>
-            {this.props.time.format("ddd MMM Do H:MM")}
-          </div>
-          <div style={msgStyle}>
-            {diffStr}
-          </div>
-        </div>
-        );
-      }
-    });
+    return (
+      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 10px", paddingTop: 40, paddingBottom: 20, backgroundColor: "whitesmoke"}}>
+        <Helmet title={this.state.title}/>
 
-    const LocationComponent = React.createClass({
-      render() {
-        return (
-        <div style={{paddingBottom: 20}}
-          onClick={this.props.onClick}>
-          <div style={titleStyle}>
-            {this.props.prefix}
-          </div>
-          <div style={msgStyle}>
-            {this.props.location}
-          </div>
-        </div>
-        );
-      }
-    });
+        <Panel>
+          <PanelHeader>
+            <div style={{fontSize: 14}}>
+              {this.driver ? "Driver offers" : "Rider offers"}
+            </div>
+          </PanelHeader>
+          <PanelBody>
+            {this.renderTime()}
+            {this.renderFrom()}
+            {this.renderTo()}
+            {this.renderContact()}
+            {this.renderNote()}
+          </PanelBody>
+        </Panel>
+      </div>
 
-    const FieldComponent = React.createClass({
-      render() {
-        return (
-        <div style={{paddingBottom: 20}}
-          onClick={this.props.onClick}>
-          <div style={titleStyle}>
-            {this.props.title}
-          </div>
-          <div style={msgStyle}>
-            {this.props.message}
-          </div>
+    )
+  }
 
-        </div>
-        );
-      }
-    });
+  renderFrom = () => {
+    return this.renderPanel("From", this.state.data.originLabel);
+  }
+
+  renderTo = () => {
+    return this.renderPanel("To", this.state.data.destLabel);
+  }
+
+  renderContact = () => {
+    return this.renderPanel(
+      "Contact",
+      this.state.data.name + (this.state.data.email ? ", email: " + this.state.data.email : "")
+    );
+  }
+
+  renderNote = () => {
+    var note = this.state.data.note;
+    return note && note.length > 0 ? this.renderPanel("Note", this.state.data.note) : null;
+  }
+
+  renderPanel = (header, description) => {
+    return (
+      <MediaBox
+        type="appmsg">
+        <MediaBoxBody>
+          <MediaBoxTitle>{header}</MediaBoxTitle>
+          <MediaBoxDescription>
+            {description}
+          </MediaBoxDescription>
+        </MediaBoxBody>
+      </MediaBox>
+    )
+  }
+
+  renderTime = () => {
+    var diffStr;
+    if (this.state.data.timeDiff == 0) {
+      diffStr = "On time"
+    } else {
+      diffStr = "flexible by " + this.state.data.timeDiff + " minutes";
+    }
 
     return (
-      <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
-        <Helmet title={this.state.title}/>
-        <div className="col-xs-12" style={{marginTop:50, marginBottom: 60, fontSize: 26, textAlign: "center"}}>
-          {this.driver === "true" ? "Offer Ride" : "Request Ride"}
-        </div>
-        <TimeComponent
-          time={this.state.data.time}
-          timeDiff={this.state.data.timeDiff}>
-        </TimeComponent>
-        <LocationComponent
-          prefix="From:"
-          location={this.state.data.originLabel}
-          onClick={this.fromClick}>
-        </LocationComponent>
-        <LocationComponent
-          prefix="To:"
-          location={this.state.data.destLabel}>
-        </LocationComponent>
-        <FieldComponent
-          title={"Contact:"}
-          message={this.state.data.name + (this.state.data.email ? ", email: " + this.state.data.email : "")}>
-        </FieldComponent>
-        {this.state.data.note &&
-          <FieldComponent
-            title={"Note:"}
-            message={this.state.data.note}>
-          </FieldComponent>
-        }
-      </div>
-    );
+      <MediaBox
+        type="appmsg">
+        <MediaBoxBody>
+          <MediaBoxTitle>{"Time"}</MediaBoxTitle>
+          <MediaBoxDescription>
+            {this.state.data.time.format("ddd MMM Do H:MM")}
+          </MediaBoxDescription>
+          <MediaBoxDescription>
+            {diffStr}
+          </MediaBoxDescription>
+        </MediaBoxBody>
+      </MediaBox>
+    )
   }
 }
 
