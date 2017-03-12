@@ -9,11 +9,14 @@ import Util from "../util"
 import {
   Panel,
   PanelHeader,
+  PanelFooter,
   PanelBody,
   MediaBox,
   MediaBoxBody,
   MediaBoxTitle,
-  MediaBoxDescription
+  MediaBoxDescription,
+  PreviewFooter,
+  PreviewButton
  }
 from 'react-weui';
 
@@ -195,6 +198,10 @@ class OfferDetailPage extends ParseComponent {
     console.log("fromClick")
   }
 
+  cancelClick = () => {
+    console.log("cancelOffer")
+  }
+
   render() {
     if (!this.state || !this.state.data) {
       return null
@@ -219,9 +226,15 @@ class OfferDetailPage extends ParseComponent {
             {this.renderContact()}
             {this.renderNote()}
           </PanelBody>
+          <PreviewFooter>
+            <PreviewButton
+              primary
+              onClick={() => this.cancelClick()}>
+              Cancel offer
+            </PreviewButton>
+          </PreviewFooter>
         </Panel>
       </div>
-
     )
   }
 
