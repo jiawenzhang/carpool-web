@@ -4,13 +4,14 @@ import { connect } from 'react-redux'
 import { isDriver } from '../actions/count'
 import moment from 'moment';
 import {
-    Panel,
-    PanelHeader,
-    PanelBody,
-    MediaBox,
-    MediaBoxBody,
-    MediaBoxTitle,
-    MediaBoxDescription,
+  Label,
+  Panel,
+  PanelHeader,
+  PanelBody,
+  MediaBox,
+  MediaBoxBody,
+  MediaBoxTitle,
+  MediaBoxDescription,
 } from 'react-weui';
 
 //import weui styles
@@ -24,8 +25,12 @@ class MyOffersPage extends React.Component {
 
     this.state = {
       riderOffers: [],
-      driverOffers: []
+      driverOffers: [],
+      loadState: "loading"
     }
+
+    this.loadRiderOffersDone = false;
+    this.loadDriverOffersDone = false;
   }
 
   fetchOffers = (objectName, callback) => {
@@ -84,8 +89,28 @@ class MyOffersPage extends React.Component {
   });
 }
 
+  updateLoadState = () => {
+    const loadState = this.loadRiderOffersDone && this.loadDriverOffersDone ? "done" : "loading";
+    this.setState({
+      loadState: loadState
+    });
+  }
+
   componentDidMount() {
+    if (!Parse.User.current()) {
+      console.log("not logged in!");
+      this.emptyMsg = "Not logged in";
+      this.setState({
+        loadState: "done"
+      });
+      return;
+    }
+
+    this.emptyMsg = "No offer yet";
+
     this.fetchOffers("RiderOffer", (error, offers) => {
+      this.loadRiderOffersDone = true;
+      this.updateLoadState();
       if (error) {
         return;
       }
@@ -95,6 +120,8 @@ class MyOffersPage extends React.Component {
     });
 
     this.fetchOffers("DriverOffer", (error, offers) => {
+      this.loadDriverOffersDone = true;
+      this.updateLoadState();
       if (error) {
         return;
       }
@@ -122,6 +149,22 @@ class MyOffersPage extends React.Component {
   offerClick = (offer, isDriver) => {
     console.log("click");
     location.href="offer?driver=" + isDriver + "&id=" + offer.objectId;
+  }
+
+  renderNoOfferMsg(msg) {
+    if (this.state.loadState == "loading") {
+      return null;
+    }
+
+    if (this.state.driverOffers.length > 0 || this.state.riderOffers.length > 0) {
+      return null;
+    }
+
+    return (
+      <div style={{textAlign: "center"}}>
+        {msg}
+      </div>
+    )
   }
 
   renderOffersPanel(isDriver) {
@@ -167,6 +210,7 @@ class MyOffersPage extends React.Component {
   render() {
     return (
       <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 0px", paddingTop: 40, paddingBottom: 20, backgroundColor: "whitesmoke"}}>
+          {this.renderNoOfferMsg(this.emptyMsg)}
           {this.renderOffersPanel(true)}
           {this.renderOffersPanel(false)}
       </div>
