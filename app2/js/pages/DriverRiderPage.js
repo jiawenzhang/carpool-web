@@ -89,7 +89,7 @@ class DriverRiderPage extends React.Component {
   }
 
   seeMyOffers() {
-
+    this.context.router.push('/myoffers')
   }
 
   logoutClick() {
