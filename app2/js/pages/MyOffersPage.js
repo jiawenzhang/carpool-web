@@ -33,6 +33,7 @@ class MyOffersPage extends React.Component {
     var queryOffer = new Parse.Query(objectName);
     queryOffer.equalTo("userId", Parse.User.current().id);
     queryOffer.notEqualTo("cancelled", true);
+    queryOffer.descending('updatedAt');
     var results =[];
     queryOffer.find().then(offerObjects => {
       if (!offerObjects || offerObjects.length == 0) {
