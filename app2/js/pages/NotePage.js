@@ -7,7 +7,10 @@ import Parse from 'parse'
 import {
   Button,
   CellsTitle,
+  CellHeader,
   CellBody,
+  Label,
+  Input,
   Form,
   FormCell,
   TextArea,
@@ -27,16 +30,34 @@ class NotePage extends React.Component {
     this.note = e.target.value;
   }
 
+  priceChange = (e) => {
+    this.price = parseFloat(e.target.value, 10);
+    console.log("price " + this.price);
+  }
+
   render() {
     var {isDriver} = this.props;
     var toWho = isDriver ? "rider" : "driver";
 
     return (
-      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 10px"}}>
-        <div className="col-xs-12" style={{marginTop:50, marginBottom: 50, fontSize: 26, textAlign: "center"}}>
-
-            <div style={{paddingTop: 30}}>
+      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 10px", backgroundColor: "whitesmoke"}}>
+        <div style={{paddingTop:60, paddingBottom: 0}}>
               <Form>
+                <FormCell>
+                   <CellHeader>
+                       <Label>Price</Label>
+                   </CellHeader>
+                   <CellBody>
+                       <Input
+                         type="number"
+                         placeholder="Enter price"
+                         onChange={this.priceChange}>
+                       </Input>
+                   </CellBody>
+               </FormCell>
+             </Form>
+
+             <Form>
                 <FormCell>
                   <CellBody>
                     <TextArea
@@ -48,7 +69,7 @@ class NotePage extends React.Component {
                   </CellBody>
                 </FormCell>
               </Form>
-            </div>
+
         </div>
 
         <div style={{paddingTop: 30, paddingLeft: 20, paddingRight: 20}}>
