@@ -65,10 +65,11 @@ class OfferDetailPage extends ParseComponent {
       this.offerData.time = startTime.add(this.offerData.timeDiff/2, 'minutes');
       this.offerData.note = offer.get("note");
       this.offerData.price = offer.get("price");
+      const userId = offer.get("userId");
+      this.offerData.userId = userId;
 
       const query = new Parse.Query(Parse.User);
-      const user_id = offer.get("userId")
-      return query.get(user_id)
+      return query.get(userId)
     }).then(user => {
       console.log("got user " + JSON.stringify(user));
       this.offerData.name = user.get("name");
@@ -241,16 +242,32 @@ class OfferDetailPage extends ParseComponent {
             {this.renderContact()}
             {this.renderNote()}
           </PanelBody>
-          <PreviewFooter>
-            <PreviewButton
-              primary
-              onClick={() => this.cancelClick()}>
-              Cancel offer
-            </PreviewButton>
-          </PreviewFooter>
+          {this.renderCancel()}
         </Panel>
       </div>
     )
+  }
+
+  renderCancel = () => {
+    if (!Parse.User.current()) {
+      console.log("user not login, disable cancel offer");
+      return null;
+    }
+
+    if (Parse.User.current().id != this.offerData.userId) {
+      console.log("logged in user is not owner of the offer, disable cancel offer");
+      return null;
+    }
+
+    return (
+      <PreviewFooter>
+        <PreviewButton
+          primary
+          onClick={() => this.cancelClick()}>
+          Cancel offer
+        </PreviewButton>
+      </PreviewFooter>
+    );
   }
 
   renderFrom = () => {
