@@ -226,7 +226,7 @@ class OfferDetailPage extends ParseComponent {
     const header = (this.driver === "true" ? "Driver offer" : "Rider offer") + "\u00a0\u00a0" /* whitespace */ + priceStr;
 
     return (
-      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 10px", paddingTop: 40, paddingBottom: 20, backgroundColor: "whitesmoke"}}>
+      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 0px", paddingTop: 40, paddingBottom: 40, backgroundColor: "whitesmoke"}}>
         <Helmet title={this.state.title}/>
         <Panel>
           <PanelHeader>

@@ -166,7 +166,7 @@ class MyOffersPage extends React.Component {
 
   render() {
     return (
-      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 10px", paddingTop: 40, paddingBottom: 20, backgroundColor: "whitesmoke"}}>
+      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 0px", paddingTop: 40, paddingBottom: 20, backgroundColor: "whitesmoke"}}>
           {this.renderOffersPanel(true)}
           {this.renderOffersPanel(false)}
       </div>
