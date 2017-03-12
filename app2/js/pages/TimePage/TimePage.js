@@ -7,7 +7,14 @@ import PopupDatePicker from 'rmc-date-picker/lib/Popup';
 import DatePicker from 'rmc-date-picker/lib';
 import MultiPicker from 'rmc-picker/lib/MultiPicker'
 import PopupPicker from 'rmc-picker/lib/Popup'
-import { Button } from 'react-bootstrap'
+import {
+  Button,
+  ButtonArea,
+} from 'react-weui';
+
+//import weui styles
+import 'weui';
+import 'react-weui/lib/react-weui.min.css';
 
 import moment from 'moment';
 //import zhCn from '../src/locale/zh_CN';
@@ -191,9 +198,6 @@ class TimePage extends React.Component {
           { label: '1 hour window', value: '60' },
           { label: '2 hour window', value: '120' }
         ];
-                // <div className="col-xs-12" style={{marginTop: 40, marginBottom: 10, fontSize: 20, color: "grey", textAlign: "left"}}>
-                //   between
-                // </div>
 
         return (
           <div style={{maxWidth: 600, width: "80%", margin: "0 auto 10px"}}>
@@ -212,10 +216,10 @@ class TimePage extends React.Component {
                 onDismiss={this.onDismiss}
                 onChange={this.onDateChange}
                 >
+
                 <Button
-                  bsSize="large"
-                  onClick={this.show}
-                  block>
+                  type="default"
+                  onClick={this.show}>
                   {date && date.format("ddd MMM Do") || "Date"}
                 </Button>
                 </PopupDatePicker>
@@ -240,10 +244,9 @@ class TimePage extends React.Component {
                 onChange={this.onTimeChange}
                 >
                 <Button
-                  bsSize="large"
+                  type="default"
                   onClick={this.show}
-                  disabled={date ? false : true}
-                  block>
+                  disabled={date ? false : true}>
                   {time && time.format("HH:mm") || "Time"}
                 </Button>
 
@@ -275,10 +278,9 @@ class TimePage extends React.Component {
                 value={this.state.timeWindow}
                 >
                 <Button
-                  bsSize="large"
+                  type="default"
                   onClick={this.show}
-                  disabled={time ? false : true}
-                  block>
+                  disabled={time ? false : true}>
                   {this.state.timeWindowStr && this.state.timeWindowStr || "Time flexibility"}
                 </Button>
                 </PopupPicker>
@@ -290,10 +292,9 @@ class TimePage extends React.Component {
                 </div>
 
                 <Button
-                  bsSize="large"
+                  type="default"
                   onClick={this.next}
-                  disabled={this.state.timeWindowStr ? false : true}
-                  block>
+                  disabled={this.state.timeWindowStr ? false : true}>
                   {"Next"}
                 </Button>
           </div>);
