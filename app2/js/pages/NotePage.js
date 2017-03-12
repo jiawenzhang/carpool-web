@@ -1,8 +1,21 @@
 import React from 'react'
-import { Button, FormGroup, ControlLabel, FormControl } from 'react-bootstrap'
+import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { isDriver } from '../actions/count'
 import Parse from 'parse'
+
+import {
+  Button,
+  CellsTitle,
+  CellBody,
+  Form,
+  FormCell,
+  TextArea,
+} from 'react-weui';
+
+//import weui styles
+import 'weui';
+import 'react-weui/lib/react-weui.min.css';
 
 class NotePage extends React.Component {
 
@@ -11,43 +24,40 @@ class NotePage extends React.Component {
   }
 
   noteChange = (e) => {
-    //console.log("note change " + e.target.value)
     this.note = e.target.value;
   }
 
   render() {
-    let {isDriver} = this.props;
-    let toWho = isDriver ? "rider" : "driver";
+    var {isDriver} = this.props;
+    var toWho = isDriver ? "rider" : "driver";
 
     return (
-      <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
+      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 10px"}}>
         <div className="col-xs-12" style={{marginTop:50, marginBottom: 50, fontSize: 26, textAlign: "center"}}>
-            Leave a note
+
+            <div style={{paddingTop: 30}}>
+              <Form>
+                <FormCell>
+                  <CellBody>
+                    <TextArea
+                      placeholder={"Leave a note to " + toWho}
+                      rows="4"
+                      maxlength="200"
+                      onChange={this.noteChange}>
+                    </TextArea>
+                  </CellBody>
+                </FormCell>
+              </Form>
+            </div>
         </div>
 
-        <FormGroup controlId="formControlsTextarea">
-          <ControlLabel></ControlLabel>
-          <FormControl
-            componentClass="textarea"
-            placeholder={"Message to the " + toWho + " (max 200 characters)"}
-            maxLength={200}
-            onChange={this.noteChange}
-            style={{height: 100, maxHeight:100}}
-          />
-        </FormGroup>
-
-        <div style={{margin: "0 auto"}}>
+        <div style={{paddingTop: 30, paddingLeft: 20, paddingRight: 20}}>
           <Button
-            bsSize="large"
-            onClick={this.nextClick.bind(this)}
-            block>
+            type="default"
+            onClick={this.nextClick.bind(this)}>
             Next
           </Button>
         </div>
-
-        <div className="col-xs-12" style={{height: 20}}>
-        </div>
-
       </div>
     );
   }
@@ -121,7 +131,7 @@ class NotePage extends React.Component {
       }).then((offer) => {
         console.log('offer updated with objectId: ' + offer.id);
         //this.context.router.replace({ pathname: '/offer', query: { id : offer.id, driver: this.isDriver }})
-        // 由 router 跳转的页面无法在微信网页环境下验证 url signautre 
+        // 由 router 跳转的页面无法在微信网页环境下验证 url signautre
         location.href="offer?driver=" + this.isDriver + "&id=" + offer.id;
       }, (error) => {
         console.log('Failed to create new offer, with error code: ' + error.message);
@@ -144,3 +154,14 @@ export default connect(
     }),
   {}
 )(NotePage)
+
+// <FormGroup controlId="formControlsTextarea">
+//   <ControlLabel></ControlLabel>
+//   <FormControl
+//     componentClass="textarea"
+//     placeholder={"Message to the " + toWho + " (max 200 characters)"}
+//     maxLength={200}
+//     onChange={this.noteChange}
+//     style={{height: 100, maxHeight:100}}
+//     />
+// </FormGroup>

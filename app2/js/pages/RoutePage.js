@@ -1,10 +1,17 @@
 /* global google */
 import _ from "lodash";
-import { Button } from 'react-bootstrap'
 import { default as React, Component, } from "react";
 import Geosuggest from 'react-geosuggest';
 import { connect } from 'react-redux'
 import { setOriginLocation, setDestLocation} from '../actions/count'
+
+import {
+  Button
+} from 'react-weui';
+
+//import weui styles
+import 'weui';
+import 'react-weui/lib/react-weui.min.css';
 
 import {
   withGoogleMap,
@@ -184,9 +191,8 @@ class RoutePage extends Component {
       {this.state.originGeo && this.state.destGeo &&
       <div style={{margin: "0 auto"}}>
         <Button
-          bsSize="large"
-          onClick={this.next}
-          block>
+          type="default"
+          onClick={this.next}>
           Next
         </Button>
       </div>}
