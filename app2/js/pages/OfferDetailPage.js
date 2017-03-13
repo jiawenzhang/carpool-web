@@ -227,7 +227,7 @@ class OfferDetailPage extends ParseComponent {
     const header = (this.driver === "true" ? "Driver offer" : "Rider offer") + "\u00a0\u00a0" /* whitespace */ + priceStr;
 
     return (
-      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 0px", paddingTop: 40, paddingBottom: 40, backgroundColor: "whitesmoke"}}>
+      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 0px", paddingTop: 0, paddingBottom: 0, backgroundColor: "white"}}>
         <Helmet title={this.state.title}/>
         <Panel>
           <PanelHeader>
@@ -279,6 +279,11 @@ class OfferDetailPage extends ParseComponent {
   }
 
   renderContact = () => {
+    // when logged in with wechat, we don't have user's name and email
+    if (!this.state.data.name || !this.state.data.email) {
+      return null;
+    }
+
     return this.renderPanel(
       "Contact",
       this.state.data.name + (this.state.data.email ? ", email: " + this.state.data.email : "")
