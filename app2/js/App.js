@@ -23,6 +23,7 @@ import * as reducers from './reducers'
 
 import Login from "./pages/login/Login";
 import DriverRiderPage from "./pages/DriverRiderPage";
+import MyOffersPage from "./pages/MyOffersPage";
 import TimePage from "./pages/TimePage/TimePage";
 import RoutePage from "./pages/RoutePage";
 import NotePage from "./pages/NotePage";
@@ -36,6 +37,7 @@ const PARSE_JS_KEY = 'foo'
 
 Parse.initialize(PARSE_APP_ID, PARSE_JS_KEY)
 Parse.serverURL = 'http://192.168.1.68:1337/parse'
+//Parse.serverURL = 'http://10.0.9.133:1337/parse'
 
 const reducer = combineReducers({
   ...reducers,
@@ -54,9 +56,10 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router history={history}>
-          <Route path="/" onEnter={this.wechatAuth.bind(this)}>
+          <Route path="/" onEnter={this.checkLogin.bind(this)}>
+            <IndexRoute path="driverrider" component={DriverRiderPage} />
             <Route path="login" component={Login} />
-            <Route path="driverrider" component={DriverRiderPage} />
+            <Route path="myoffers" component={MyOffersPage} />
             <Route path="time" component={TimePage} />
             <Route path="route" component={RoutePage} />
             <Route path="offer" component={OfferDetailPage} />
@@ -69,18 +72,30 @@ class App extends Component {
     );
   }
 
-  wechatAuth(nextState, replace, next) {
-    console.log("wechatAuth " + document.location.href);
+  checkLogin(nextState, replace) {
+    console.log("checkLogin " + document.location.href);
     const uri = new URI(document.location.href);
     const query = uri.query(true);
     const {code} = query;
 
-    if (code) {
+    if (!Parse.User.current()) {
+      console.log("path: " + uri.path());
+      console.log("not login, location.href: " + location.href);
+
+      if (!code) {
+        var redirectURL = document.location.href + "login";
+        var authUrl = this.generateGetCodeUrl(redirectURL);
+        console.log("opening authUrl " + authUrl);
+        document.location = authUrl;
+        return;
+      }
+
+      if (uri.path() !== '/login') {
+        console.log("replace to /login");
+        replace('/login');
+      }
     } else {
-      var redirectURL = document.location.href + "login";
-      var authUrl = this.generateGetCodeUrl(redirectURL);
-      console.log("authUrl " + authUrl);
-      document.location = authUrl
+      console.log("already login, location.href: " + location.href);
     }
   }
 
