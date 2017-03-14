@@ -150,6 +150,10 @@ class RoutePage extends Component {
   }
 
   render() {
+    if (!Parse.User.current()) {
+      return;
+    }
+
     return (
       <div style={{maxWidth: 800, width: "80%", height: "100%", margin: "0 auto 10px", marginTop: 50}}>
         <Geosuggest

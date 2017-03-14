@@ -133,6 +133,9 @@ class OfferDetailPage extends ParseComponent {
   }
 
   componentDidMount() {
+    if (!Parse.User.current()) {
+      return;
+    }
     window.onpopstate = this.onBackButtonEvent;
     this.loadOffer();
   }
@@ -142,7 +145,7 @@ class OfferDetailPage extends ParseComponent {
     console.log("appId: " + signatureMap.appId);
 
     let weChatState = {
-      debug: true,
+      debug: false,
       appId: signatureMap.appId,
       timestamp: signatureMap.timestamp,
       nonceStr: signatureMap.noncestr,
@@ -217,6 +220,10 @@ class OfferDetailPage extends ParseComponent {
   }
 
   render() {
+    if (!Parse.User.current()) {
+      return;
+    }
+
     if (!this.state || !this.state.data) {
       return null
     }

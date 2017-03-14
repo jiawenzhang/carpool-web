@@ -36,6 +36,10 @@ class NotePage extends React.Component {
   }
 
   render() {
+    if (!Parse.User.current()) {
+      return;
+    }
+    
     var {isDriver} = this.props;
     var toWho = isDriver ? "rider" : "driver";
 

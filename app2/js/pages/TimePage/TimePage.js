@@ -7,6 +7,7 @@ import PopupDatePicker from 'rmc-date-picker/lib/Popup';
 import DatePicker from 'rmc-date-picker/lib';
 import MultiPicker from 'rmc-picker/lib/MultiPicker'
 import PopupPicker from 'rmc-picker/lib/Popup'
+import Parse from 'parse'
 import {
   Button,
   ButtonArea,
@@ -163,11 +164,15 @@ class TimePage extends React.Component {
     }
 
     render() {
+        if (!Parse.User.current()) {
+          return;
+        }
         console.log("TimePage render, number: " + this.props.number);
         console.log("TimePage render, isDriver: " + this.props.isDriver);
         const props = this.props;
-        let date = this.state.date
-        let time = this.state.time
+        var date = this.state.date
+        var time = this.state.time
+        time && console.log("time " + time.format('lll'));
 
         const datePicker = (
             <DatePicker
@@ -179,12 +184,13 @@ class TimePage extends React.Component {
             />
         );
 
+        console.log("now " + now.format('lll'));
         const timePicker = (
             <DatePicker
             rootNativeProps={{'data-xx':'yy'}}
             minDate={minTime}
             maxDate={maxTime}
-            defaultDate={now}
+            defaultDate={time ? time : now}
             mode={'time'}
             minuteStep={10}
             />
@@ -238,7 +244,7 @@ class TimePage extends React.Component {
                 transitionName="rmc-picker-popup-slide-fade"
                 maskTransitionName="rmc-picker-popup-fade"
                 title=""
-                date={time}
+                date={time ? time : now}
                 mode={"time"}
                 onDismiss={this.onDismiss}
                 onChange={this.onTimeChange}

@@ -208,6 +208,10 @@ class MyOffersPage extends React.Component {
   }
 
   render() {
+    if (!Parse.User.current()) {
+      return;
+    }
+
     return (
       <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 0px", paddingTop: 40, paddingBottom: 20, backgroundColor: "whitesmoke"}}>
           {this.renderNoOfferMsg(this.emptyMsg)}
