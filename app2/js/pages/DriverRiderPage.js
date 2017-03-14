@@ -28,9 +28,7 @@ class DriverRiderPage extends React.Component {
         <div style={{margin: "0 auto"}}>
           <Button
             type="default"
-            bsSize="large"
-            onClick={this.riderClick.bind(this)}
-            block>
+            onClick={this.riderClick.bind(this)}>
             Find a ride
           </Button>
         </div>
@@ -41,9 +39,7 @@ class DriverRiderPage extends React.Component {
         <div style={{margin: "0 auto"}}>
           <Button
             type="default"
-            bsSize="large"
-            onClick={this.driverClick.bind(this)}
-            block>
+            onClick={this.driverClick.bind(this)}>
             Offer a ride
           </Button>
         </div>
@@ -51,15 +47,14 @@ class DriverRiderPage extends React.Component {
         <div className="col-xs-12" style={{height: 20}}>
         </div>
 
-        <div style={{margin: "0 auto"}}>
+        {false && <div style={{margin: "0 auto"}}>
           <Button
             type="default"
-            bsSize="large"
-            onClick={this.logoutClick.bind(this)}
-            block>
+            onClick={this.logoutClick.bind(this)}>
             Logout
           </Button>
         </div>
+        }
 
         <div className="col-xs-12" style={{height: 20}}>
         </div>
