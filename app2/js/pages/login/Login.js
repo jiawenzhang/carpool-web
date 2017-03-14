@@ -8,6 +8,7 @@ import 'react-weui/lib/react-weui.min.css';
 
 import {Toast} from 'react-weui'
 import URI from "urijs";
+import Util from "../../util";
 
 class Login extends React.Component {
 
@@ -16,7 +17,7 @@ class Login extends React.Component {
     this.state = {
       error : null,
       signup : false,
-      showLoading: true};
+      loading: true};
   }
 
   initializeFacebook() {
@@ -58,6 +59,16 @@ class Login extends React.Component {
 
   componentDidMount() {
     //initializeFacebook();
+    if (!Util.isWeChatBrowser()) {
+      if (Parse.User.current()) {
+        this.context.router.push('/driverrider');
+      } else {
+        this.setState({
+          loading: false
+        });
+      }
+      return;
+    }
 
     console.log("login " + document.location.href);
     const uri = new URI(document.location.href);
@@ -234,21 +245,15 @@ class Login extends React.Component {
   }
 
   render() {
-    if (Parse.User.current()) {
-      console.log("already login")
-      this.context.router.push('/driverrider');
-      return null
-    }
-
     console.log("state " + this.state);
     return (
       <div id='login'>
         <Toast
           icon="loading"
-          show={this.state.showLoading}>
+          show={this.state.loading}>
           Loading...
         </Toast>
-        {false && this.renderLoginButtons()}
+        {!this.state.loading && this.renderLoginButtons()}
       </div>
     )
   }

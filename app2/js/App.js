@@ -29,6 +29,7 @@ import RoutePage from "./pages/RoutePage";
 import NotePage from "./pages/NotePage";
 import MatchPage from "./pages/MatchPage";
 import OfferDetailPage from "./pages/OfferDetailPage";
+import Util from "./util";
 
 import Parse from 'parse'
 
@@ -36,7 +37,8 @@ const PARSE_APP_ID = 'myAppId'
 const PARSE_JS_KEY = 'foo'
 
 Parse.initialize(PARSE_APP_ID, PARSE_JS_KEY)
-Parse.serverURL = 'http://192.168.1.68:1337/parse'
+//Parse.serverURL = 'http://192.168.1.68:1337/parse'
+Parse.serverURL = "https://wheels-to-town-server.herokuapp.com/parse"
 //Parse.serverURL = 'http://10.0.9.133:1337/parse'
 
 const reducer = combineReducers({
@@ -82,17 +84,22 @@ class App extends Component {
       console.log("path: " + uri.path());
       console.log("not login, location.href: " + location.href);
 
-      if (!code) {
-        var redirectURL = document.location.href + "login";
-        var authUrl = this.generateGetCodeUrl(redirectURL);
-        console.log("opening authUrl " + authUrl);
-        document.location = authUrl;
-        return;
-      }
+      if (Util.isWeChatBrowser()) {
+        console.log("isWeChatBrowser");
+        if (!code) {
+          var redirectURL = document.location.href + "login";
+          var authUrl = this.generateGetCodeUrl(redirectURL);
+          console.log("opening authUrl " + authUrl);
+          document.location = authUrl;
+          return;
+        }
+      } else {
+        console.log("not WeChatBrowser");
 
-      if (uri.path() !== '/login') {
-        console.log("replace to /login");
-        replace('/login');
+        if (uri.path() !== '/login') {
+          console.log("replace to /login");
+          replace('/login');
+        }
       }
     } else {
       console.log("already login, location.href: " + location.href);
