@@ -59,6 +59,11 @@ class Login extends React.Component {
 
   componentDidMount() {
     //initializeFacebook();
+    if (Parse.User.current()) {
+      this.context.router.push('/driverrider');
+      return;
+    }
+
     if (!Util.isWeChatBrowser()) {
       if (Parse.User.current()) {
         this.context.router.push('/driverrider');

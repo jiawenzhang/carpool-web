@@ -87,7 +87,7 @@ class App extends Component {
       if (Util.isWeChatBrowser()) {
         console.log("isWeChatBrowser");
         if (!code) {
-          var redirectURL = document.location.href + "login";
+          var redirectURL = document.location.origin + "/login";
           var authUrl = this.generateGetCodeUrl(redirectURL);
           console.log("opening authUrl " + authUrl);
           document.location = authUrl;

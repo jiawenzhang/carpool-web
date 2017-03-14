@@ -19,6 +19,10 @@ class DriverRiderPage extends React.Component {
   }
 
   render() {
+    if (!Parse.User.current()) {
+      return;
+    }
+    
     return (
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <div className="col-xs-12" style={{marginTop:50, marginBottom: 50, fontSize: 26, textAlign: "center"}}>
