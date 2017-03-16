@@ -92,7 +92,7 @@ class TimePage extends React.Component {
     }
 
     timeWindowStr = (timeWindow) => {
-      if (!timeWindow) {
+      if (timeWindow == null) {
         return null
       }
 
@@ -121,7 +121,7 @@ class TimePage extends React.Component {
     }
 
     onTimeWindowOk = (value) => {
-      let timeWindow = parseInt(value); // time window in minutes
+      var timeWindow = parseInt(value); // time window in minutes
       this.setState({
         timeWindow: timeWindow,
         timeWindowStr: this.timeWindowStr(timeWindow)
