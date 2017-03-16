@@ -171,8 +171,6 @@ class TimePage extends React.Component {
         console.log("TimePage render, isDriver: " + this.props.isDriver);
         const props = this.props;
         var date = this.state.date
-        var time = this.state.time
-        time && console.log("time " + time.format('lll'));
 
         const datePicker = (
             <DatePicker
@@ -184,13 +182,15 @@ class TimePage extends React.Component {
             />
         );
 
-        console.log("now " + now.format('lll'));
+        const time = this.state.time
+        const remainder = 10 - now.minute() % 10;
+        // defaultTime is the next 10 min step from now
+        const defaultTime = moment(now).add("minutes", remainder);
         const timePicker = (
             <DatePicker
             rootNativeProps={{'data-xx':'yy'}}
             minDate={minTime}
             maxDate={maxTime}
-            defaultDate={time ? time : now}
             mode={'time'}
             minuteStep={10}
             />
@@ -244,7 +244,7 @@ class TimePage extends React.Component {
                 transitionName="rmc-picker-popup-slide-fade"
                 maskTransitionName="rmc-picker-popup-fade"
                 title=""
-                date={time ? time : now}
+                date={time ? time : defaultTime}
                 mode={"time"}
                 onDismiss={this.onDismiss}
                 onChange={this.onTimeChange}
