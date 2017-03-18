@@ -9,19 +9,14 @@ import MultiPicker from 'rmc-picker/lib/MultiPicker'
 import PopupPicker from 'rmc-picker/lib/Popup'
 import Parse from 'parse'
 import {
-  Form,
-  FormCell,
   Label,
   Cells,
   Cell,
+  CellsTitle,
   CellHeader,
   CellBody,
-  CellFooter,
-  Input,
   Button,
-  ButtonArea,
   ActionSheet,
-  Picker,
 } from 'react-weui';
 
 //import weui styles
@@ -40,18 +35,15 @@ maxTime.hour(23).minute(59);
 const maxDate = moment(now).add(10, 'day');
 
 
-function format(date) {
-    return date.format('lll');
-}
-
 class TimePage extends React.Component {
     constructor(props) {
         super(props);
 
-        let {startTime, endTime} = this.props
-        var date = null
+        var {startTime, endTime} = this.props
+        var date = now;
         var timeWindow = null
         var time = null
+        var proximateTime = "Any time";
         if (startTime && endTime) {
           date = startTime
           timeWindow = endTime.diff(startTime, 'minutes');
@@ -59,8 +51,11 @@ class TimePage extends React.Component {
         }
 
         this.state = {
-          popupVisible: false,
+          timePopupVisible: false,
+          datePopupVisible: false,
+          flexibilityPopupVisible: false,
           date: date,
+          proximateTime: proximateTime,
           time: time,
           timeWindow: timeWindow,
           timeWindowStr: this.timeWindowStr(timeWindow),
@@ -91,25 +86,41 @@ class TimePage extends React.Component {
 
     anyTime = () => {
       console.log("anyTime");
-      this.hide();
+      this.setState({
+        proximateTime: "Any time",
+        time: null
+      });
+      this.hideActionMenu();
     }
 
     morning = () => {
       console.log("morning");
-      this.hide();
+      this.setState({
+        proximateTime: "Morning",
+        time: null
+      });
+      this.hideActionMenu();
     }
 
     afternoon = () => {
       console.log("afternoon");
-      this.hide();
+      this.setState({
+        proximateTime: "Afternoon",
+        time: null
+      });
+      this.hideActionMenu();
     }
 
     evening = () => {
       console.log("evening");
-      this.hide();
+      this.setState({
+        proximateTime: "Evening",
+        time: null
+      });
+      this.hideActionMenu();
     }
 
-    hide() {
+    hideActionMenu() {
       this.setState({
         autoShow: false,
         iosShow: false,
@@ -119,17 +130,17 @@ class TimePage extends React.Component {
 
     setMoreTimeVisible(visible) {
       this.setState({
-        popupVisible: visible
+        timePopupVisible: visible
       });
     }
 
     moreTimeOption() {
-      this.hide();
+      this.hideActionMenu();
       this.setMoreTimeVisible(true);
     }
 
     onDateChange = (date) => {
-        console.log('onDateChange', format(date));
+        console.log('onDateChange', date.format("lll"));
         console.log("onDateChange, day " + date.date())
         this.setState({
             date: date
@@ -137,10 +148,11 @@ class TimePage extends React.Component {
     }
 
     onTimeChange = (time) => {
-        console.log('onTimeChange', format(time));
-        this.setState({
-            time: time
-        });
+      console.log('onTimeChange', time.format("lll"));
+      this.setState({
+        proximateTime: null,
+        time: time
+      });
     }
 
     timeWindowStr = (timeWindow) => {
@@ -175,27 +187,65 @@ class TimePage extends React.Component {
     onTimeWindowOk = (value) => {
       var timeWindow = parseInt(value); // time window in minutes
       this.setState({
+        flexibilityPopupVisible: false,
         timeWindow: timeWindow,
         timeWindowStr: this.timeWindowStr(timeWindow)
       });
     }
 
-    onDismiss = () => {
+    onTimePopupDismiss = () => {
       console.log('onDismiss');
       this.setState({
-        popupVisible: false
+        timePopupVisible: false
+      });
+    }
+
+    onDatePopupDismiss = () => {
+      console.log('onDismiss');
+      this.setState({
+        datePopupVisible: false
+      });
+    }
+
+    onDateOk = () => {
+      this.onDatePopupDismiss();
+    }
+
+    onFlexibilityPopupDismiss = () => {
+      console.log('onDismiss');
+      this.setState({
+        flexibilityPopupVisible: false
       });
     }
 
     next = () => {
-      let timeWindow = this.state.timeWindow
-      console.log("timeWindow: " + timeWindow);
-      var startTime = this.state.time.clone()
-      var endTime = this.state.time.clone()
-      startTime.subtract(timeWindow/2, 'minutes')
-      endTime.add(timeWindow/2, 'minutes');
-
       var date = this.state.date
+      var proximateTime = this.state.proximateTime;
+      var startTime;
+      var endTime;
+      if (proximateTime) {
+        if (proximateTime === "Any time") {
+          startTime = date.clone().hour(0).minute(0);
+          endTime = date.clone().hour(23).minute(59);
+        } else if (proximateTime === "Morning") {
+          startTime = date.clone().hour(0).minute(0);
+          endTime = date.clone().hour(12).minute(0);
+        } else if (proximateTime === "Afternoon") {
+          startTime = date.clone().hour(12).minute(0);
+          endTime = date.clone().hour(18).minute(0);
+        } else if (proximateTime === "Evening") {
+          startTime = date.clone().hour(18).minute(0);
+          endTime = date.clone().hour(23).minute(59);
+        }
+      } else {
+        var timeWindow = this.state.timeWindow
+        console.log("timeWindow: " + timeWindow);
+        var startTime = this.state.time.clone()
+        var endTime = this.state.time.clone()
+        startTime.subtract(timeWindow/2, 'minutes')
+        endTime.add(timeWindow/2, 'minutes');
+      }
+
       if (endTime.dayOfYear() != startTime.dayOfYear()) {
         // the endTime is on the next day of startTime
         endTime.year(date.year()).month(date.month()).date(date.date() + 1);
@@ -214,17 +264,16 @@ class TimePage extends React.Component {
       this.context.router.push('/route')
     }
 
-    renderTimePicker() {
+    formatTime() {
+      if (this.state.proximateTime) {
+        return this.state.proximateTime;
+      }
+      return (this.state.time && this.state.time.format("HH:mm") || "Time")
+    }
+
+    renderTimeActionSheet() {
       return (
       <div>
-      <Button
-        type="default"
-        onClick={
-          e=>this.setState({autoShow: true})
-        }
-        disabled={this.state.date ? false : true}>
-        {this.state.time && this.state.time.format("HH:mm") || "Time"}
-      </Button>
       <ActionSheet
         menus={this.state.menus}
         actions={this.state.actions}
@@ -240,11 +289,11 @@ class TimePage extends React.Component {
     onExactTimeOk = () => {
       console.log("onExactTimeOk");
       this.setState({
-        popupVisible: false
+        timePopupVisible: false
       });
     }
 
-    renderExactTimePicker() {
+    renderMoreTimePopup() {
       const time = this.state.time
       const remainder = 10 - now.minute() % 10;
       // defaultTime is the next 10 min step from now
@@ -268,9 +317,9 @@ class TimePage extends React.Component {
         title=""
         date={time ? time : defaultTime}
         mode={"time"}
-        visible={this.state.popupVisible}
+        visible={this.state.timePopupVisible}
         onOk={this.onExactTimeOk}
-        onDismiss={this.onDismiss}
+        onDismiss={this.onTimePopupDismiss}
         onChange={this.onTimeChange}
         >
 
@@ -279,29 +328,82 @@ class TimePage extends React.Component {
       )
     }
 
-    onFooterClick = () => {
-      console.log("footerClick");
+    showDatePopup = () => {
+      this.setState({
+        datePopupVisible: true
+      })
     }
 
-    renderPicker() {
+    showTimePopup = () => {
+      this.setState({
+        timePopupVisible: true
+      })
+    }
+
+    showFlexibilityPopup = () => {
+      console.log("showFlexibilityPopup");
+      this.setState({
+        flexibilityPopupVisible: true
+      })
+    }
+
+    renderDate() {
       return (
+        <div>
+        <CellsTitle>{"Pick a date to leave"}</CellsTitle>
         <Cells>
             <Cell>
+                <CellHeader>
+                  <Label>Date</Label>
+                </CellHeader>
                 <CellBody>
-                    Title
-                </CellBody>
-                <CellFooter>
                 <div
-                onClick={this.onFooterClick}>
-                AAAA
+                onClick={this.showDatePopup}>
+                {this.state.date && this.state.date.format("ddd MMM Do") || "Date"}
                 </div>
-                </CellFooter>
+                </CellBody>
             </Cell>
         </Cells>
+        </div>
       )
     }
 
-    renderDatePicker() {
+    renderTime() {
+      return (
+        <div>
+        <CellsTitle>{"Pick a time to leave"}</CellsTitle>
+        <Cells>
+            <Cell>
+                <CellHeader>
+                  <Label>Time</Label>
+                </CellHeader>
+                <CellBody>
+                <div
+                onClick={e=>this.setState({autoShow: true})}>
+                {this.formatTime()}
+                </div>
+                </CellBody>
+            </Cell>
+
+            {this.state.time &&
+            <Cell>
+                <CellHeader>
+                  <Label>Flexibility</Label>
+                </CellHeader>
+                <CellBody>
+                <div
+                onClick={this.showFlexibilityPopup}>
+                  {this.state.timeWindowStr ? this.state.timeWindowStr : "On time"}
+                </div>
+                </CellBody>
+            </Cell>
+            }
+        </Cells>
+        </div>
+      )
+    }
+
+    renderDatePopup() {
       const datePicker = (
         <DatePicker
         rootNativeProps={{'data-xx':'yy'}}
@@ -320,27 +422,17 @@ class TimePage extends React.Component {
         title=""
         date={this.state.date}
         mode={"date"}
-        onDismiss={this.onDismiss}
+        visible={this.state.datePopupVisible}
+        onDismiss={this.onDatePopupDismiss}
+        onOk={this.onDatePopupDismiss}
         onChange={this.onDateChange}
         >
 
-        <Button
-        type="default"
-        onClick={this.show}>
-        {this.state.date && this.state.date.format("ddd MMM Do") || "Date"}
-        </Button>
         </PopupDatePicker>
       );
     }
 
-    renderSpace() {
-      return (
-        <div className="col-xs-12" style={{marginTop: 10, marginBottom: 10, fontSize: 20, color: "grey", textAlign: "left"}}>
-        </div>
-      )
-    }
-
-    renderFlexibility() {
+    renderFlexibilityPopup() {
       const timeWindow = [
         { label: 'On time', value: '0' },
         { label: '10 min window', value: '10' },
@@ -352,7 +444,6 @@ class TimePage extends React.Component {
 
       return (
         <PopupPicker
-
         picker={
           <MultiPicker>
           {
@@ -364,23 +455,36 @@ class TimePage extends React.Component {
         </MultiPicker>
       }
 
-      className="fortest"
       transitionName="rmc-picker-popup-slide-fade"
       maskTransitionName="rmc-picker-popup-fade"
       title=""
-      onDismiss={this.onDismiss}
+      visible={this.state.flexibilityPopupVisible}
       onOk={this.onTimeWindowOk}
-      value={this.state.timeWindow}
-      >
-      <Button
-      type="default"
-      onClick={this.show}
-      disabled={this.state.time? false : true}>
-        {this.state.timeWindowStr && this.state.timeWindowStr || "Time flexibility"}
-      </Button>
+      onDismiss={this.onFlexibilityPopupDismiss}
+      value={this.state.timeWindow}>
       </PopupPicker>
     )
   }
+
+  renderNextButton() {
+    return (
+      <div style={{marginLeft: 20, marginRight: 20}}>
+        <Button
+          type="primary"
+          onClick={this.next}>
+          {"Next"}
+        </Button>
+      </div>
+    )
+  }
+
+  renderSpace() {
+    return (
+      <div className="col-xs-12" style={{marginTop: 10, marginBottom: 10, fontSize: 20, color: "grey", textAlign: "left"}}>
+      </div>
+    )
+  }
+
 
     render() {
         if (!Parse.User.current()) {
@@ -388,37 +492,23 @@ class TimePage extends React.Component {
         }
         console.log("TimePage render, number: " + this.props.number);
         console.log("TimePage render, isDriver: " + this.props.isDriver);
-        const props = this.props;
-        var date = this.state.date
 
         return (
-          <div>
-          {<div style={{maxWidth: 600, width: "80%", margin: "0 auto 10px"}}>
+          <div style={{maxWidth: 600, width: "100%", margin: "0 auto 0px", backgroundColor: "whitesmoke"}}>
                 <div className="col-xs-12" style={{marginTop: 50, marginBottom: 30, fontSize: 26, textAlign: "center"}}>
-                  When to leave?
                 </div>
 
-                {this.renderDatePicker()}
-                {this.renderSpace()}
+                {this.renderDate()}
+                {this.renderTime()}
 
-                {this.renderTimePicker()}
-
-                {this.renderExactTimePicker()}
-                {this.renderSpace()}
-                {this.renderSpace()}
-
-                {this.renderFlexibility()}
+                {this.renderDatePopup()}
+                {this.renderTimeActionSheet()}
+                {this.renderMoreTimePopup()}
+                {this.renderFlexibilityPopup()}
 
                 <div className="col-xs-12" style={{height: 70}}>
                 </div>
-
-                <Button
-                  type="default"
-                  onClick={this.next}
-                  disabled={this.state.timeWindowStr ? false : true}>
-                  {"Next"}
-                </Button>
-          </div>}
+                {this.renderNextButton()}
           </div>
         );
     }
