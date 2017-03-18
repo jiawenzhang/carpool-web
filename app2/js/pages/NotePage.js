@@ -44,7 +44,7 @@ class NotePage extends React.Component {
     var toWho = isDriver ? "rider" : "driver";
 
     return (
-      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 10px", backgroundColor: "whitesmoke"}}>
+      <div style={{maxWidth: 800, width: "100%", height: "100%", backgroundColor: "whitesmoke"}}>
         <div style={{paddingTop:60, paddingBottom: 0}}>
               <Form>
                 <FormCell>

@@ -485,7 +485,6 @@ class TimePage extends React.Component {
     )
   }
 
-
     render() {
         if (!Parse.User.current()) {
           return;
@@ -494,8 +493,8 @@ class TimePage extends React.Component {
         console.log("TimePage render, isDriver: " + this.props.isDriver);
 
         return (
-          <div style={{maxWidth: 600, width: "100%", margin: "0 auto 0px", backgroundColor: "whitesmoke"}}>
-                <div className="col-xs-12" style={{marginTop: 50, marginBottom: 30, fontSize: 26, textAlign: "center"}}>
+          <div style={{maxWidth: 800, width: "100%", height: "100%", backgroundColor: "whitesmoke"}}>
+                <div style={{height: 80}}>
                 </div>
 
                 {this.renderDate()}
