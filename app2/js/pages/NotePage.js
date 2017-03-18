@@ -39,7 +39,7 @@ class NotePage extends React.Component {
     if (!Parse.User.current()) {
       return;
     }
-    
+
     var {isDriver} = this.props;
     var toWho = isDriver ? "rider" : "driver";
 
@@ -78,7 +78,7 @@ class NotePage extends React.Component {
 
         <div style={{paddingTop: 30, paddingLeft: 20, paddingRight: 20}}>
           <Button
-            type="default"
+            type="primary"
             onClick={this.nextClick.bind(this)}>
             Next
           </Button>

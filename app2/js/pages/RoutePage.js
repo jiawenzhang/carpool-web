@@ -195,7 +195,7 @@ class RoutePage extends Component {
       {this.state.originGeo && this.state.destGeo &&
       <div style={{margin: "0 auto"}}>
         <Button
-          type="default"
+          type="primary"
           onClick={this.next}>
           Next
         </Button>
