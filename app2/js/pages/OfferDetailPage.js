@@ -7,6 +7,7 @@ import Helmet from "react-helmet"
 import Util from "../util"
 
 import {
+  Label,
   Panel,
   PanelHeader,
   PanelFooter,
@@ -15,8 +16,15 @@ import {
   MediaBoxBody,
   MediaBoxTitle,
   MediaBoxDescription,
+  Preview,
+  PreviewHeader,
+  PreviewBody,
+  PreviewItem,
   PreviewFooter,
-  PreviewButton
+  PreviewButton,
+  CellBody,
+  Flex,
+  FlexItem
  }
 from 'react-weui';
 
@@ -230,27 +238,24 @@ class OfferDetailPage extends ParseComponent {
 
     console.log("got data: " + JSON.stringify(this.state.data));
 
-    const priceStr = this.state.data.price ? "$" + this.state.data.price : "";
-    const header = (this.driver === "true" ? "Driver offer" : "Rider offer") + "\u00a0\u00a0" /* whitespace */ + priceStr;
-
     return (
-      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 0px", paddingTop: 0, paddingBottom: 0, backgroundColor: "white"}}>
+      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "auto", backgroundColor: "whitesmoke"}}>
         <Helmet title={this.state.title}/>
-        <Panel>
-          <PanelHeader>
-            <div style={{fontSize: 16}}>
-              {header}
-            </div>
-          </PanelHeader>
-          <PanelBody>
+        <Preview>
+          <PreviewHeader>
+            {this.renderHeader()}
+          </PreviewHeader>
+          <PreviewBody>
             {this.renderTime()}
             {this.renderFrom()}
             {this.renderTo()}
             {this.renderContact()}
             {this.renderNote()}
-          </PanelBody>
-          {this.renderCancel()}
-        </Panel>
+          </PreviewBody>
+          <PreviewFooter>
+            <PreviewButton primary>Cancel</PreviewButton>
+          </PreviewFooter>
+        </Preview>
       </div>
     )
   }
@@ -278,11 +283,11 @@ class OfferDetailPage extends ParseComponent {
   }
 
   renderFrom = () => {
-    return this.renderPanel("From", this.state.data.originLabel);
+    return this.renderRow("From", this.state.data.originLabel);
   }
 
   renderTo = () => {
-    return this.renderPanel("To", this.state.data.destLabel);
+    return this.renderRow("To", this.state.data.destLabel);
   }
 
   renderContact = () => {
@@ -291,7 +296,7 @@ class OfferDetailPage extends ParseComponent {
       return null;
     }
 
-    return this.renderPanel(
+    return this.renderRow(
       "Contact",
       this.state.data.name + (this.state.data.email ? ", email: " + this.state.data.email : "")
     );
@@ -299,7 +304,7 @@ class OfferDetailPage extends ParseComponent {
 
   renderNote = () => {
     var note = this.state.data.note;
-    return note && note.length > 0 ? this.renderPanel("Note", this.state.data.note) : null;
+    return note && note.length > 0 ? this.renderRow("Note", this.state.data.note) : null;
   }
 
   renderPanel = (header, description) => {
@@ -316,28 +321,52 @@ class OfferDetailPage extends ParseComponent {
     )
   }
 
+  renderRow(title, text, secondText) {
+    return (
+      <div style={{position: "relative", paddingTop: 10, paddingBottom: 10}}>
+        <div style={{width: "30%", position: "absolute", left: 0, color: "black", fontWeight: "bold", textAlign: "left", fontSize: "16"}}>
+          {title}
+        </div>
+        <div style={{width: "70%", marginLeft: "30%", position: "relative", color: "black", textAlign: "left", fontSize: "14"}}>
+          {text}
+        </div>
+        {secondText &&
+        <div style={{width: "70%", marginLeft: "30%", position: "relative", color: "black", textAlign: "left", fontSize: "14"}}>
+          {secondText}
+        </div>
+        }
+      </div>
+    )
+  }
+
+  renderHeader = () => {
+    const priceStr = this.state.data.price ? "$" + this.state.data.price : null;
+    //Fixme:
+    const padding = priceStr ? 0 : 40;
+    //const header = (this.driver === "true" ? "Driver offer" : "Rider offer") + "\u00a0\u00a0" /* whitespace */ + priceStr;
+    const header = (this.driver === "true" ? "Driver offer" : "Rider offer");
+
+    return (
+      <div style={{position: "relative", paddingTop: 10, paddingBottom: padding}}>
+        <div style={{width: "50%", position: "absolute", left: 0, color: "grey", textAlign: "left", fontSize: "16"}}>
+          {header}
+        </div>
+        <div style={{width: "50%", marginLeft: "50%", position: "relative", color: "grey", textAlign: "right", fontSize: "16"}}>
+          {priceStr}
+        </div>
+      </div>
+    )
+  }
+
   renderTime = () => {
     var diffStr;
     if (this.state.data.timeDiff == 0) {
       diffStr = "On time"
     } else {
-      diffStr = "flexible by " + this.state.data.timeDiff + " minutes";
+      diffStr = "Flexible by " + this.state.data.timeDiff + " minutes";
     }
 
-    return (
-      <MediaBox
-        type="appmsg">
-        <MediaBoxBody>
-          <MediaBoxTitle>{"Time"}</MediaBoxTitle>
-          <MediaBoxDescription>
-            {this.state.data.time.format("ddd MMM Do H:MM")}
-          </MediaBoxDescription>
-          <MediaBoxDescription>
-            {diffStr}
-          </MediaBoxDescription>
-        </MediaBoxBody>
-      </MediaBox>
-    )
+    return this.renderRow("Time", this.state.data.time.format("ddd MMM Do H:MM"), diffStr);
   }
 }
 
