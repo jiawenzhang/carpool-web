@@ -252,9 +252,7 @@ class OfferDetailPage extends ParseComponent {
             {this.renderContact()}
             {this.renderNote()}
           </PreviewBody>
-          <PreviewFooter>
-            <PreviewButton primary>Cancel</PreviewButton>
-          </PreviewFooter>
+            {this.renderCancel()}
         </Preview>
       </div>
     )
@@ -276,7 +274,7 @@ class OfferDetailPage extends ParseComponent {
         <PreviewButton
           primary
           onClick={() => this.cancelClick()}>
-          Cancel offer
+          CANCEL OFFER
         </PreviewButton>
       </PreviewFooter>
     );
