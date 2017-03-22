@@ -5,6 +5,7 @@ import { isDriver } from '../actions/count'
 import Parse from 'parse'
 
 import {
+  Toast,
   Button,
   CellsTitle,
   CellHeader,
@@ -24,6 +25,9 @@ class NotePage extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      loading: false
+    }
   }
 
   noteChange = (e) => {
@@ -49,6 +53,12 @@ class NotePage extends React.Component {
 
     return (
       <div style={{maxWidth: 800, width: "100%", height: "100%", backgroundColor: "whitesmoke"}}>
+        <Toast
+          icon="loading"
+          show={this.state.loading}>
+          Creating...
+        </Toast>
+
         <div style={{paddingTop:60, paddingBottom: 0}}>
               <Form>
                 <FormCell>
@@ -105,6 +115,9 @@ class NotePage extends React.Component {
   }
 
   nextClick() {
+    this.setState({
+      loading: true
+    });
     console.log("next click")
     console.log("note: " + this.note);
     console.log("contact: " + this.contact);
@@ -182,6 +195,9 @@ class NotePage extends React.Component {
         location.href="offer?driver=" + this.isDriver + "&id=" + offer.id;
       }, (error) => {
         console.log('Failed to create new offer, with error code: ' + error.message);
+        this.setState({
+          loading: false
+        });
       });
   }
 }
