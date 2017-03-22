@@ -30,6 +30,10 @@ class NotePage extends React.Component {
     this.note = e.target.value;
   }
 
+  contactChange = (e) => {
+    this.contact = e.target.value;
+  }
+
   priceChange = (e) => {
     this.price = parseFloat(e.target.value, 10);
     console.log("price " + this.price);
@@ -65,6 +69,19 @@ class NotePage extends React.Component {
                 <FormCell>
                   <CellBody>
                     <TextArea
+                      placeholder={"How can " + toWho + " contact you?"}
+                      rows="2"
+                      maxlength="100"
+                      onChange={this.contactChange}>
+                    </TextArea>
+                  </CellBody>
+                </FormCell>
+              </Form>
+
+             <Form>
+                <FormCell>
+                  <CellBody>
+                    <TextArea
                       placeholder={"Leave a note to " + toWho}
                       rows="4"
                       maxlength="200"
@@ -90,6 +107,7 @@ class NotePage extends React.Component {
   nextClick() {
     console.log("next click")
     console.log("note: " + this.note);
+    console.log("contact: " + this.contact);
     let {isDriver, startTime, endTime, originLocation, destLocation} = this.props;
     this.isDriver = isDriver;
 
@@ -114,6 +132,7 @@ class NotePage extends React.Component {
     this.offer.set("userId", Parse.User.current().id)
     this.offer.set("startTime", startTime.toDate());
     this.offer.set("endTime", endTime.toDate());
+    this.offer.set("contact", this.contact);
     this.offer.set("note", this.note);
     if (this.price && !isNaN(this.price)) {
       this.offer.set("price", this.price);
@@ -150,7 +169,7 @@ class NotePage extends React.Component {
         dest.set("offerId", this.offer.id);
         return dest.save();
       }).then((dest) => {
-        console.log('New destcreated with id: ' + dest.id);
+        console.log('New dest created with id: ' + dest.id);
 
         this.offer.set("originId", this.origin.id)
         this.offer.set("destId", dest.id)

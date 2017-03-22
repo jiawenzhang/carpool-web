@@ -71,6 +71,7 @@ class OfferDetailPage extends ParseComponent {
       console.log("endTime ", endTime.format('lll'))
       this.offerData.timeDiff = endTime.diff(startTime, 'minutes');
       this.offerData.time = startTime.add(this.offerData.timeDiff/2, 'minutes');
+      this.offerData.contact = offer.get("contact");
       this.offerData.note = offer.get("note");
       this.offerData.price = offer.get("price");
       const userId = offer.get("userId");
@@ -170,8 +171,8 @@ class OfferDetailPage extends ParseComponent {
       console.log("ready back");
       this.ready = true;
 
-      let note = this.offerData.note ? ", " + this.offerData.note : "";
-      let desc = this.offerData.originLabel + " to " + this.offerData.destLabel + note;
+      var note = this.offerData.note ? ", " + this.offerData.note : "";
+      var desc = this.offerData.originLabel + " to " + this.offerData.destLabel + note;
 
       var params = {
         driver: this.driver,
@@ -289,14 +290,19 @@ class OfferDetailPage extends ParseComponent {
   }
 
   renderContact = () => {
-    // when logged in with wechat, we don't have user's name and email
-    if (!this.state.data.name || !this.state.data.email) {
+    // // when logged in with wechat, we don't have user's name and email
+    // if (!this.state.data.name || !this.state.data.email) {
+    //   return null;
+    // }
+    //  this.state.data.name + (this.state.data.email ? ", email: " + this.state.data.email : "")
+
+    if (!this.state.data.contact) {
       return null;
     }
 
     return this.renderRow(
       "Contact",
-      this.state.data.name + (this.state.data.email ? ", email: " + this.state.data.email : "")
+      this.state.data.contact
     );
   }
 
