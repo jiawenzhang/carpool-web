@@ -65,12 +65,12 @@ class OfferDetailPage extends ParseComponent {
     query.get(this.offerId).then(offer => {
       offer && console.log(offer.toJSON());
       this.offer = offer
-      let startTime = moment(offer.get("startTime"))
-      let endTime = moment(offer.get("endTime"))
+      var startTime = moment(offer.get("startTime"))
+      var endTime = moment(offer.get("endTime"))
       console.log("startTime ", startTime.format('lll'))
       console.log("endTime ", endTime.format('lll'))
-      this.offerData.timeDiff = endTime.diff(startTime, 'minutes');
-      this.offerData.time = startTime.add(this.offerData.timeDiff/2, 'minutes');
+      this.offerData.startTime = startTime;
+      this.offerData.endTime = endTime;
       this.offerData.contact = offer.get("contact");
       this.offerData.note = offer.get("note");
       this.offerData.price = offer.get("price");
@@ -363,14 +363,24 @@ class OfferDetailPage extends ParseComponent {
   }
 
   renderTime = () => {
-    var diffStr;
-    if (this.state.data.timeDiff == 0) {
-      diffStr = "On time"
-    } else {
-      diffStr = "Flexible by " + this.state.data.timeDiff + " minutes";
+    var startTime = this.offerData.startTime;
+    var endTime = this.offerData.endTime;
+    var proximateTime = Util.proximateTime(startTime, endTime);
+    if (proximateTime) {
+      return this.renderRow("Time", startTime.format("ddd MMM Do"), proximateTime);
     }
 
-    return this.renderRow("Time", this.state.data.time.format("ddd MMM Do H:MM"), diffStr);
+    var timeDiff = endTime.diff(startTime, 'minutes');
+    var time = startTime.add(timeDiff/2, 'minutes');
+
+    var diffStr;
+    if (timeDiff == 0) {
+      diffStr = "On time"
+    } else {
+      diffStr = "Flexible by " + timeDiff + " minutes";
+    }
+
+    return this.renderRow("Time", time.format("ddd MMM Do H:MM"), diffStr);
   }
 }
 

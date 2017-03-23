@@ -3,6 +3,7 @@ import Parse from 'parse'
 import { connect } from 'react-redux'
 import { isDriver } from '../actions/count'
 import moment from 'moment';
+import Util from '../util';
 import {
   Label,
   Panel,
@@ -48,14 +49,17 @@ class MyOffersPage extends React.Component {
 
       for (var i=0; i<offerObjects.length; i++) {
         //console.log(offers[i].toJSON());
-        offerJSONs.push(offerObjects[i].toJSON());
+        var offerJSON = {
+          offerObject: offerObjects[i]
+        }
+        offerJSONs.push(offerJSON);
       }
 
       var promise = Parse.Promise.as();
       offerJSONs.forEach(function(offerJSON) {
         promise = promise.then(function() {
           const query = new Parse.Query("Location")
-          const originId = offerJSON.originId;
+          const originId = offerJSON.offerObject.get("originId");
           console.log("getting originId: " + originId)
           // Return a promise that will be resolved when the delete is finished.
           return query.get(originId).then(origin => {
@@ -63,7 +67,7 @@ class MyOffersPage extends React.Component {
             offerJSON["originPlaceId"] = origin.get("placeId")
             offerJSON["originLocality"] = origin.get("locality")
             const query = new Parse.Query("Location")
-            const destId = offerJSON.destId;
+            const destId = offerJSON.offerObject.get("destId");
             console.log("getting destId: " + destId)
             return query.get(destId)
           }).then(dest => {
@@ -132,11 +136,19 @@ class MyOffersPage extends React.Component {
   }
 
   title = (offer) => {
-    var startTime = moment(offer.startTime);
-    var endTime = moment(offer.endTime);
-    const timeDiff = endTime.diff(startTime, 'minutes');
-    var time = startTime.add(timeDiff/2, 'minutes');
-    const timeString = moment(time).format("ddd H:MM");
+    var startTime = moment(offer.offerObject.get("startTime"));
+    console.error("title offer.startTime " + offer.startTime);
+    var endTime = moment(offer.offerObject.get("endTime"));
+    var proximateTime = Util.proximateTime(startTime, endTime);
+    var timeString;
+    if (proximateTime) {
+      timeString = startTime.format("ddd") + " " + proximateTime;
+    } else {
+      const timeDiff = endTime.diff(startTime, 'minutes');
+      var time = startTime.add(timeDiff/2, 'minutes');
+      timeString = moment(time).format("ddd H:MM");
+    }
+
     const route = " " + offer.originLocality + " to " + offer.destLocality;
     const title = timeString + " " + route;
     return title;
@@ -148,7 +160,7 @@ class MyOffersPage extends React.Component {
 
   offerClick = (offer, isDriver) => {
     console.log("click");
-    location.href="offer?driver=" + isDriver + "&id=" + offer.objectId;
+    location.href="offer?driver=" + isDriver + "&id=" + offer.offerObject.id;
   }
 
   renderNoOfferMsg(msg) {

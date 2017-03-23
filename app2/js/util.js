@@ -31,3 +31,16 @@ exports.isWeChatBrowser = function () {
         return false;
     }
 }
+
+exports.proximateTime = function (startTime, endTime) {
+    if (startTime.hours() == 0 && endTime.hours() == 12) {
+      return "Morning";
+    } else if (startTime.hours() == 12 && endTime.hours() == 18) {
+      return "Afternoon";
+    } else if (startTime.hours() == 18 && endTime.hours() == 23) {
+      return "Evening";
+    } else if (startTime.hours() == 0 && endTime.hours() == 23) {
+      return "Any time";
+    }
+    return null
+}
