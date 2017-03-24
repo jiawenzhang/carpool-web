@@ -109,10 +109,16 @@ class OfferDetailPage extends ParseComponent {
       console.log("offerData: " + JSON.stringify(this.offerData));
       const time = moment(this.offerData.time).format("ddd H:MM")
       // if (route.length > 35) {
-      var route = " " + this.offerData.originLocality + " to " + this.offerData.destLocality
+      const price = this.offerData.price
+      var priceStr = "";
+      if (price) {
+        priceStr = "$" + price + " ";
+      }
+
+      var route = this.offerData.originLocality + " to " + this.offerData.destLocality
       // }
       console.log("route: " + route)
-      const title = time + " " + route;
+      const title = priceStr + time + " " + route;
       this.setState(
         { data: this.offerData,
           title: title
