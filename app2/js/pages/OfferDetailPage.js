@@ -5,8 +5,12 @@ const ParseComponent = ParseReact.Component(React)
 import moment from 'moment';
 import Helmet from "react-helmet"
 import Util from "../util"
+import URI from "urijs";
+import WechatAuth from "../WechatAuth";
+
 
 import {
+  Toast,
   Label,
   Panel,
   PanelHeader,
@@ -23,8 +27,6 @@ import {
   PreviewFooter,
   PreviewButton,
   CellBody,
-  Flex,
-  FlexItem
  }
 from 'react-weui';
 
@@ -142,11 +144,25 @@ class OfferDetailPage extends ParseComponent {
   }
 
   componentDidMount() {
-    if (!Parse.User.current()) {
+    window.onpopstate = this.onBackButtonEvent;
+    if (Parse.User.current()) {
+      this.loadOffer();
       return;
     }
-    window.onpopstate = this.onBackButtonEvent;
-    this.loadOffer();
+
+    console.log("login " + document.location.href);
+    const uri = new URI(document.location.href);
+    const query = uri.query(true);
+    const {code} = query;
+
+    WechatAuth.login(code, (error, result) => {
+      if (error) {
+        console.error("fail to login with wechat: " + error);
+      } else {
+        console.log("login success with wechat");
+        this.loadOffer();
+      }
+    });
   }
 
   gotSignatureMap = (signatureMap) => {
@@ -229,10 +245,6 @@ class OfferDetailPage extends ParseComponent {
   }
 
   render() {
-    if (!Parse.User.current()) {
-      return;
-    }
-
     if (!this.state || !this.state.data) {
       return null
     }
