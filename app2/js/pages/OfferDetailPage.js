@@ -66,6 +66,14 @@ class OfferDetailPage extends ParseComponent {
 
     query.get(this.offerId).then(offer => {
       offer && console.log(offer.toJSON());
+      if (offer.get("cancelled")) {
+        console.log("offer is cancelled");
+        this.setState({
+          cancelled: true
+        })
+        return;
+      }
+
       this.offer = offer
       var startTime = moment(offer.get("startTime"))
       var endTime = moment(offer.get("endTime"))
@@ -82,6 +90,9 @@ class OfferDetailPage extends ParseComponent {
       const query = new Parse.Query(Parse.User);
       return query.get(userId)
     }).then(user => {
+      if (!user) {
+        return;
+      }
       console.log("got user " + JSON.stringify(user));
       this.offerData.name = user.get("name");
       this.offerData.email = user.get("email");
@@ -91,6 +102,9 @@ class OfferDetailPage extends ParseComponent {
       console.log("getting originId: " + originId)
       return query.get(originId)
     }).then(origin => {
+      if (!origin) {
+        return;
+      }
       console.log("got origin " + JSON.stringify(origin));
       this.offerData.originLabel = origin.get("label")
       this.offerData.originPlaceId = origin.get("placeId")
@@ -101,6 +115,9 @@ class OfferDetailPage extends ParseComponent {
       console.log("getting destId: " + destId)
       return query.get(destId)
     }).then(dest => {
+      if (!dest) {
+        return;
+      }
       console.log("got dest " + JSON.stringify(dest));
       this.offerData.destLabel = dest.get("label")
       this.offerData.destPlaceId = dest.get("placeId")
@@ -187,7 +204,7 @@ class OfferDetailPage extends ParseComponent {
     console.log("gotSignatureMap");
     console.log("appId: " + signatureMap.appId);
 
-    let weChatState = {
+    var weChatState = {
       debug: false,
       appId: signatureMap.appId,
       timestamp: signatureMap.timestamp,
@@ -240,6 +257,10 @@ class OfferDetailPage extends ParseComponent {
 
   constructor(props) {
     super(props)
+
+    this.state = {
+      cancelled: false
+    }
   }
 
   fromClick = () => {
@@ -263,15 +284,30 @@ class OfferDetailPage extends ParseComponent {
   }
 
   render() {
-    if (!this.state || !this.state.data) {
+    if (!this.state) {
       return null
     }
-
-    console.log("got data: " + JSON.stringify(this.state.data));
 
     return (
       <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "auto", backgroundColor: "whitesmoke"}}>
         <Helmet title={this.state.title}/>
+        {this.state.cancelled && this.renderMsg("The offer is cancelled")}
+        {this.state.data && this.renderOffer()}
+      </div>
+    )
+  }
+
+  renderMsg(msg) {
+    console.log("renderMsg " + msg);
+    return (
+      <div style={{paddingTop: 50, fontSize: 16, textAlign: "center"}}>
+        {msg}
+      </div>
+    )
+  }
+
+  renderOffer() {
+    return (
         <Preview>
           <PreviewHeader>
             {this.renderHeader()}
@@ -285,8 +321,7 @@ class OfferDetailPage extends ParseComponent {
           </PreviewBody>
             {this.renderCancel()}
         </Preview>
-      </div>
-    )
+      )
   }
 
   renderCancel = () => {
