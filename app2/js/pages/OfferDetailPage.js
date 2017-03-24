@@ -107,7 +107,19 @@ class OfferDetailPage extends ParseComponent {
       this.offerData.destLocality = dest.get("locality")
 
       console.log("offerData: " + JSON.stringify(this.offerData));
-      const time = moment(this.offerData.time).format("ddd H:MM")
+      var startTime = this.offerData.startTime;
+      var endTime = this.offerData.endTime;
+
+      const proximateTime = Util.proximateTime(startTime, endTime);
+      var timeStr;
+      if (proximateTime) {
+        timeStr = startTime.format("ddd") + " " + proximateTime;
+      } else {
+        const timeDiff = endTime.diff(startTime, 'minutes');
+        var time = startTime.add(timeDiff/2, 'minutes');
+        timeStr = moment(time).format("ddd H:MM");
+      }
+
       // if (route.length > 35) {
       const price = this.offerData.price
       var priceStr = "";
@@ -118,7 +130,7 @@ class OfferDetailPage extends ParseComponent {
       var route = this.offerData.originLocality + " to " + this.offerData.destLocality
       // }
       console.log("route: " + route)
-      const title = priceStr + time + " " + route;
+      const title = priceStr + timeStr + " " + route;
       this.setState(
         { data: this.offerData,
           title: title
