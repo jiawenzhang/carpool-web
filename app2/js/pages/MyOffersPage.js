@@ -40,6 +40,7 @@ class MyOffersPage extends React.Component {
     queryOffer.equalTo("userId", Parse.User.current().id);
     queryOffer.notEqualTo("cancelled", true);
     queryOffer.descending('updatedAt');
+    queryOffer.greaterThan("endTime", new Date());
     var results =[];
     queryOffer.find().then(offerObjects => {
       if (!offerObjects || offerObjects.length == 0) {
@@ -110,7 +111,7 @@ class MyOffersPage extends React.Component {
       return;
     }
 
-    this.emptyMsg = "No offer yet";
+    this.emptyMsg = "No active offer";
 
     this.fetchOffers("RiderOffer", (error, offers) => {
       this.loadRiderOffersDone = true;
@@ -173,7 +174,7 @@ class MyOffersPage extends React.Component {
     }
 
     return (
-      <div style={{textAlign: "center"}}>
+      <div style={{fontSize: 16, textAlign: "center"}}>
         {msg}
       </div>
     )
