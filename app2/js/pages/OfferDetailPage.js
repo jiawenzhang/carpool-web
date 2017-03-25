@@ -35,12 +35,47 @@ import 'weui';
 import 'react-weui/lib/react-weui.min.css';
 
 class OfferDetailPage extends ParseComponent {
-  observe() {
+  observe() {}
+
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      cancelled: false,
+      showCancelledToast: false,
+      toastTimer: null
+    }
   }
 
   onBackButtonEvent = (e) => {
     e.preventDefault()
     this.context.router.replace({ pathname: '/'})
+  }
+
+  componentWillUnmount() {
+    this.state.toastTimer && clearTimeout(this.state.toastTimer);
+  }
+
+  componentDidMount() {
+    window.onpopstate = this.onBackButtonEvent;
+    if (Parse.User.current()) {
+      this.loadOffer();
+      return;
+    }
+
+    console.log("login " + document.location.href);
+    const uri = new URI(document.location.href);
+    const query = uri.query(true);
+    const {code} = query;
+
+    WechatAuth.login(code, (error, result) => {
+      if (error) {
+        console.error("fail to login with wechat: " + error);
+      } else {
+        console.log("login success with wechat");
+        this.loadOffer();
+      }
+    });
   }
 
   loadOffer = () => {
@@ -180,28 +215,6 @@ class OfferDetailPage extends ParseComponent {
     xmlHttp.send();
   }
 
-  componentDidMount() {
-    window.onpopstate = this.onBackButtonEvent;
-    if (Parse.User.current()) {
-      this.loadOffer();
-      return;
-    }
-
-    console.log("login " + document.location.href);
-    const uri = new URI(document.location.href);
-    const query = uri.query(true);
-    const {code} = query;
-
-    WechatAuth.login(code, (error, result) => {
-      if (error) {
-        console.error("fail to login with wechat: " + error);
-      } else {
-        console.log("login success with wechat");
-        this.loadOffer();
-      }
-    });
-  }
-
   gotSignatureMap = (signatureMap) => {
     console.log("gotSignatureMap");
     console.log("appId: " + signatureMap.appId);
@@ -257,14 +270,6 @@ class OfferDetailPage extends ParseComponent {
     });
   }
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      cancelled: false
-    }
-  }
-
   fromClick = () => {
     console.log("fromClick")
   }
@@ -279,7 +284,7 @@ class OfferDetailPage extends ParseComponent {
     this.offer.set("cancelled", true);
     this.offer.save().then(offer => {
       console.log("offer cancel success");
-      this.context.router.replace({pathname: '/myoffers'});
+      this.offerCancelled();
     }, (error) => {
       console.error('failed to cancel offer, with error code: ' + error.message);
     });
@@ -295,7 +300,26 @@ class OfferDetailPage extends ParseComponent {
         <Helmet title={this.state.title}/>
         {this.state.cancelled && this.renderMsg("The offer is cancelled")}
         {this.state.data && this.renderOffer()}
+        {this.renderToast()}
       </div>
+    )
+  }
+
+  offerCancelled() {
+    this.setState({showCancelledToast: true});
+    this.state.toastTimer = setTimeout(()=> {
+      this.setState({showCancelledToast: false});
+      this.context.router.replace({pathname: '/myoffers'});
+    }, 1000);
+  }
+
+  renderToast() {
+    return (
+      <Toast
+        icon="success-no-circle"
+        show={this.state.showCancelledToast}>
+        Cancelled
+      </Toast>
     )
   }
 
