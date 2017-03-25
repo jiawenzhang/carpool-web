@@ -439,7 +439,7 @@ class OfferDetailPage extends ParseComponent {
   renderRow(title, text, secondText) {
     return (
       <div style={{position: "relative", paddingTop: 10, paddingBottom: 10}}>
-        <div style={{width: "30%", position: "absolute", left: 0, color: "black", fontWeight: "bold", textAlign: "left", fontSize: "16"}}>
+        <div style={{width: "30%", position: "absolute", left: 0, color: "grey", fontWeight: "normal", textAlign: "left", fontSize: "15"}}>
           {title}
         </div>
         <div style={{width: "70%", marginLeft: "30%", position: "relative", color: "black", textAlign: "left", fontSize: "14"}}>
@@ -463,10 +463,10 @@ class OfferDetailPage extends ParseComponent {
 
     return (
       <div style={{position: "relative", paddingTop: 10, paddingBottom: padding}}>
-        <div style={{width: "50%", position: "absolute", left: 0, color: "grey", textAlign: "left", fontSize: "16"}}>
+        <div style={{width: "50%", position: "absolute", left: 0, color: "black", textAlign: "left", fontSize: "17"}}>
           {header}
         </div>
-        <div style={{width: "50%", marginLeft: "50%", position: "relative", color: "grey", textAlign: "right", fontSize: "16"}}>
+        <div style={{width: "50%", marginLeft: "50%", position: "relative", color: "grey", textAlign: "left", fontSize: "16"}}>
           {priceStr}
         </div>
       </div>
