@@ -1,7 +1,7 @@
 import React from 'react'
 import Parse from 'parse'
 import { connect } from 'react-redux'
-import { isDriver } from '../actions/count'
+import { setLastPage } from '../actions/count'
 import moment from 'moment';
 import Util from '../util';
 import {
@@ -32,6 +32,49 @@ class MyOffersPage extends React.Component {
 
     this.loadRiderOffersDone = false;
     this.loadDriverOffersDone = false;
+  }
+
+  componentDidMount() {
+    window.onpopstate = this.onBackButtonEvent;
+
+    if (!Parse.User.current()) {
+      console.log("not logged in!");
+      this.emptyMsg = "Not logged in";
+      this.setState({
+        loadState: "done"
+      });
+      return;
+    }
+
+    this.emptyMsg = "No active offer";
+
+    this.fetchOffers("RiderOffer", (error, offers) => {
+      this.loadRiderOffersDone = true;
+      this.updateLoadState();
+      if (error) {
+        return;
+      }
+      this.setState({
+        riderOffers: offers
+      })
+    });
+
+    this.fetchOffers("DriverOffer", (error, offers) => {
+      this.loadDriverOffersDone = true;
+      this.updateLoadState();
+      if (error) {
+        return;
+      }
+      this.setState({
+        driverOffers: offers
+      })
+    });
+  }
+
+  onBackButtonEvent = (e) => {
+    console.error("onBackButtonEvent");
+    e.preventDefault()
+    this.context.router.replace({ pathname: '/'})
   }
 
   fetchOffers = (objectName, callback) => {
@@ -101,44 +144,8 @@ class MyOffersPage extends React.Component {
     });
   }
 
-  componentDidMount() {
-    if (!Parse.User.current()) {
-      console.log("not logged in!");
-      this.emptyMsg = "Not logged in";
-      this.setState({
-        loadState: "done"
-      });
-      return;
-    }
-
-    this.emptyMsg = "No active offer";
-
-    this.fetchOffers("RiderOffer", (error, offers) => {
-      this.loadRiderOffersDone = true;
-      this.updateLoadState();
-      if (error) {
-        return;
-      }
-      this.setState({
-        riderOffers: offers
-      })
-    });
-
-    this.fetchOffers("DriverOffer", (error, offers) => {
-      this.loadDriverOffersDone = true;
-      this.updateLoadState();
-      if (error) {
-        return;
-      }
-      this.setState({
-        driverOffers: offers
-      })
-    });
-  }
-
   title = (offer) => {
     var startTime = moment(offer.offerObject.get("startTime"));
-    console.error("title offer.startTime " + offer.startTime);
     var endTime = moment(offer.offerObject.get("endTime"));
     var proximateTime = Util.proximateTime(startTime, endTime);
     var timeString;
@@ -165,7 +172,9 @@ class MyOffersPage extends React.Component {
 
   offerClick = (offer, isDriver) => {
     console.log("click");
-    location.href="offer?driver=" + isDriver + "&id=" + offer.offerObject.id;
+    var {setLastPage} = this.props;
+    setLastPage("myoffers");
+    location.href="offer?driver=" + isDriver + "&id=" + offer.offerObject.id + "&lastPage=myoffers";
   }
 
   renderNoOfferMsg(msg) {
@@ -246,6 +255,7 @@ MyOffersPage.contextTypes = {
 export default connect(
   state => (
   { number: state.count.number,
-    isDriver: state.count.isDriver}),
-  { isDriver }
+    isDriver: state.count.isDriver,
+    lastPage: state.count.lastPage}),
+  { setLastPage }
 )(MyOffersPage)

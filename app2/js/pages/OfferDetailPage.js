@@ -8,6 +8,8 @@ import Util from "../util"
 import URI from "urijs";
 import WechatAuth from "../WechatAuth";
 
+import { connect } from 'react-redux'
+
 
 import {
   Toast,
@@ -58,14 +60,18 @@ class OfferDetailPage extends ParseComponent {
 
   componentDidMount() {
     window.onpopstate = this.onBackButtonEvent;
+
+    const uri = new URI(document.location.href);
+    const query = uri.query(true);
+    const {lastPage} = query;
+    this.lastPage = lastPage;
+
     if (Parse.User.current()) {
       this.loadOffer();
       return;
     }
 
     console.log("login " + document.location.href);
-    const uri = new URI(document.location.href);
-    const query = uri.query(true);
     const {code} = query;
 
     WechatAuth.login(code, (error, result) => {
@@ -309,7 +315,12 @@ class OfferDetailPage extends ParseComponent {
     this.setState({showCancelledToast: true});
     this.state.toastTimer = setTimeout(()=> {
       this.setState({showCancelledToast: false});
-      this.context.router.goBack();
+      if (this.lastPage && this.lastPage === "myoffers") {
+        this.context.router.goBack();
+      } else {
+        //page is opened from no history, no where to go back
+        this.context.router.replace({pathname: '/'});
+      }
     }, 1000);
   }
 
@@ -479,4 +490,8 @@ OfferDetailPage.contextTypes = {
   router: React.PropTypes.func.isRequired
 };
 
-export default OfferDetailPage
+export default connect(
+  state => (
+  {}),
+  {}
+)(OfferDetailPage)

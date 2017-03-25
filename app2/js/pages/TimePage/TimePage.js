@@ -39,7 +39,9 @@ class TimePage extends React.Component {
     constructor(props) {
         super(props);
 
-        var {startTime, endTime} = this.props
+        var {lastPage, startTime, endTime} = this.props;
+        console.log("lastPage " + lastPage);
+
         var date = now;
         var timeWindow = null
         var time = null
@@ -522,7 +524,8 @@ export default connect(
   { number: state.count.number,
     startTime: state.count.startTime,
     endTime: state.count.endTime,
-    isDriver: state.count.isDriver}),
+    isDriver: state.count.isDriver,
+    lastPage: state.count.lastPage}),
   { setStartTime,
     setEndTime }
 )(TimePage)

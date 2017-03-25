@@ -3,7 +3,8 @@ import {
   START_TIME,
   END_TIME,
   ORIGIN_LOCATION,
-  DEST_LOCATION
+  DEST_LOCATION,
+  LAST_PAGE
   } from '../constants'
 
 const initialState = {
@@ -22,6 +23,8 @@ export default function update(state = initialState, action) {
     state.originLocation = action.originLocation
   } else if (action.type === DEST_LOCATION) {
     state.destLocation = action.destLocation
+  } else if (action.type === LAST_PAGE) {
+    state.lastPage = action.lastPage
   }
   return state
 }

@@ -3,7 +3,8 @@ import {
   START_TIME,
   END_TIME,
   ORIGIN_LOCATION,
-  DEST_LOCATION
+  DEST_LOCATION,
+  LAST_PAGE
   } from '../constants'
 
 export function isDriver(value) {
@@ -38,5 +39,12 @@ export function setDestLocation(location) {
     return {
         type: DEST_LOCATION,
         destLocation: location
+    }
+}
+
+export function setLastPage(page) {
+    return {
+        type: LAST_PAGE,
+        lastPage: page
     }
 }

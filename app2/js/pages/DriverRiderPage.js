@@ -2,7 +2,7 @@ import React from 'react'
 import Parse from 'parse'
 //import { Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { isDriver } from '../actions/count'
+import { isDriver, setLastPage } from '../actions/count'
 import {Button, ButtonArea} from 'react-weui';
 
 //import weui styles
@@ -15,14 +15,13 @@ class DriverRiderPage extends React.Component {
     super(props)
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
     if (!Parse.User.current()) {
       return;
     }
-    
+
     return (
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <div className="col-xs-12" style={{marginTop:50, marginBottom: 50, fontSize: 26, textAlign: "center"}}>
@@ -75,14 +74,16 @@ class DriverRiderPage extends React.Component {
 
   driverClick() {
     console.log("driver click")
-    let {isDriver} = this.props
+    var {isDriver, setLastPage} = this.props
     isDriver(true)
+    setLastPage("driverrider");
     this.context.router.push('/time')
   }
 
   riderClick() {
-    let {isDriver} = this.props
-    isDriver(false)
+    var {setLastPage, isDriver} = this.props
+    isDriver(false);
+    setLastPage("driverrider");
     console.log("rider click")
     this.context.router.push('/time')
   }
@@ -113,6 +114,8 @@ DriverRiderPage.contextTypes = {
 export default connect(
   state => (
   { number: state.count.number,
-    isDriver: state.count.isDriver}),
-  { isDriver }
+    isDriver: state.count.isDriver,
+    lastPage: state.count.lastPage}),
+  { isDriver,
+    setLastPage }
 )(DriverRiderPage)
