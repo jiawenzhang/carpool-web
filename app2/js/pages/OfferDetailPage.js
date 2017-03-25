@@ -309,7 +309,7 @@ class OfferDetailPage extends ParseComponent {
     this.setState({showCancelledToast: true});
     this.state.toastTimer = setTimeout(()=> {
       this.setState({showCancelledToast: false});
-      this.context.router.replace({pathname: '/myoffers'});
+      this.context.router.goBack();
     }, 1000);
   }
 
