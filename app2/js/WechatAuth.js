@@ -50,11 +50,9 @@ exports.login = function (code, callback) {
 
         Parse.User.logInWith(provider, options).then(() => {
           console.log("login with wechat!");
-          //this.context.router.replace('/driverrider');
           callback(null, "success");
         }, (error) => {
           console.log(error)
-          //this.setState({error: error.message});
           callback(error.message, null);
         })
       }

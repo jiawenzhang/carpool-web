@@ -150,8 +150,12 @@ class MyOffersPage extends React.Component {
       timeString = moment(time).format("ddd H:MM");
     }
 
-    const route = " " + offer.originLocality + " to " + offer.destLocality;
-    const title = timeString + " " + route;
+    var route = "";
+    if (offer.originLocality && offer.destLocality) {
+      // if user only selects a country, locality is null
+      route = " " + offer.originLocality + " to " + offer.destLocality;
+    }
+    const title = timeString + route;
     return title;
   }
 

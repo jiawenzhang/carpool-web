@@ -137,15 +137,17 @@ class OfferDetailPage extends ParseComponent {
         timeStr = moment(time).format("ddd H:MM");
       }
 
-      // if (route.length > 35) {
+      // if (route.length > 35)
       const price = this.offerData.price
       var priceStr = "";
       if (price) {
         priceStr = "$" + price + " ";
       }
 
-      var route = this.offerData.originLocality + " to " + this.offerData.destLocality
-      // }
+      var route = "";
+      if (this.offerData.originLocality && this.offerData.destLocality) {
+        route = this.offerData.originLocality + " to " + this.offerData.destLocality
+      }
       console.log("route: " + route)
       const title = priceStr + timeStr + " " + route;
       this.setState(
