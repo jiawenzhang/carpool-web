@@ -192,7 +192,7 @@ class NotePage extends React.Component {
         console.log('offer updated with objectId: ' + offer.id);
         //this.context.router.replace({ pathname: '/offer', query: { id : offer.id, driver: this.isDriver }})
         // 由 router 跳转的页面无法在微信网页环境下验证 url signautre
-        location.href="offer?driver=" + this.isDriver + "&id=" + offer.id;
+        location.href="offer?driver=" + this.isDriver + "&id=" + offer.id + "&lastPage=note";
       }, (error) => {
         console.log('Failed to create new offer, with error code: ' + error.message);
         this.setState({

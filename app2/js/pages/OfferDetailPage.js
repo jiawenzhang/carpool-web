@@ -313,12 +313,21 @@ class OfferDetailPage extends ParseComponent {
 
   offerCancelled() {
     this.setState({showCancelledToast: true});
-    this.state.toastTimer = setTimeout(()=> {
+    this.state.toastTimer = setTimeout(() => {
       this.setState({showCancelledToast: false});
-      if (this.lastPage && this.lastPage === "myoffers") {
-        this.context.router.goBack();
+
+      if (this.lastPage) {
+        if (this.lastPage === "myoffers") {
+          this.context.router.goBack();
+        } else if (this.lastPage === "note") {
+          // newly created offer, if cancelled, go to root page
+          this.context.router.replace({pathname: '/'});
+        } else {
+          console.error("unknown lastPage!");
+          this.context.router.replace({pathname: '/'});
+        }
       } else {
-        //page is opened from no history, no where to go back
+        //page is opened from no history, no where to go back, show root page
         this.context.router.replace({pathname: '/'});
       }
     }, 1000);
