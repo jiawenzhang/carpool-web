@@ -58,7 +58,8 @@ class RoutePage extends Component {
       destGeo: destLatLng,
       originLabel: originLabel,
       destLabel: destLabel,
-      directions: null
+      directions: null,
+      showError: false
     }
   }
 
@@ -113,11 +114,13 @@ class RoutePage extends Component {
       if (status === google.maps.DirectionsStatus.OK) {
         this.setState({
           directions: result,
+          showError: false
         });
       } else {
         console.error(`error fetching directions ${result}`);
         this.setState({
           directions: null,
+          showError: true
         });
       }
     });
@@ -211,7 +214,7 @@ class RoutePage extends Component {
           Next
         </Button>
       </div>}
-      {this.state.originGeo && this.state.destGeo && !this.state.directions &&
+      {this.state.showError &&
         this.renderError("Please select a valid route")}
       </div>
     );

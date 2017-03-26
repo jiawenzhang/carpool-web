@@ -1,6 +1,5 @@
 import React from 'react'
 import Parse from 'parse'
-//import { Button } from 'react-bootstrap'
 import { connect } from 'react-redux'
 import { isDriver, setLastPage } from '../actions/count'
 import {Button, ButtonArea} from 'react-weui';
