@@ -166,7 +166,7 @@ class RoutePage extends Component {
     }
 
     return (
-      <div style={{maxWidth: 800, width: "80%", height: "100%", margin: "0 auto 10px", marginTop: 50}}>
+      <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 10px", paddingTop: 30, paddingLeft: 20, paddingRight: 20, backgroundColor: "whitesmoke"}}>
         <Geosuggest
           ref={el=>this._geoSuggest=el}
           placeholder="Start location"
