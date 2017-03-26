@@ -100,16 +100,6 @@ DriverRiderPage.contextTypes = {
   router: React.PropTypes.func.isRequired
 };
 
-//number: state.count.number
-// const mapStateToProps = (state) => (
-// {
-//   state: state
-// });
-//
-// const mapDispatchToProps = (dispatch) => ({
-//   actions: bindActionCreators(Actions, dispatch)
-// })
-
 export default connect(
   state => (
   { number: state.count.number,
