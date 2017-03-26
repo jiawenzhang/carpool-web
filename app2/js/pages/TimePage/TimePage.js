@@ -26,6 +26,7 @@ import 'react-weui/lib/react-weui.min.css';
 import moment from 'moment';
 import { connect } from 'react-redux'
 import { setStartTime, setEndTime } from '../../actions/count'
+import Util from '../../util';
 
 const now = moment();
 var minTime = moment();
@@ -48,8 +49,11 @@ class TimePage extends React.Component {
         var proximateTime = "Any time";
         if (startTime && endTime) {
           date = startTime
-          timeWindow = endTime.diff(startTime, 'minutes');
-          time = startTime.clone().add(timeWindow/2, 'minutes');
+          proximateTime = Util.proximateTime(startTime, endTime);
+          if (!proximateTime) {
+            timeWindow = endTime.diff(startTime, 'minutes');
+            time = startTime.clone().add(timeWindow/2, 'minutes');
+          }
         }
 
         this.state = {
