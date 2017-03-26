@@ -116,6 +116,9 @@ class RoutePage extends Component {
         });
       } else {
         console.error(`error fetching directions ${result}`);
+        this.setState({
+          directions: null,
+        });
       }
     });
   }
@@ -147,6 +150,14 @@ class RoutePage extends Component {
         return component.long_name
       }
     }
+  }
+
+  renderError(msg) {
+    return (
+      <div style={{color: "red", fontSize: 16, textAlign: "center"}}>
+        {msg}
+      </div>
+    )
   }
 
   render() {
@@ -192,7 +203,7 @@ class RoutePage extends Component {
       <div className="col-xs-12" style={{height: 30}}>
       </div>
 
-      {this.state.originGeo && this.state.destGeo &&
+      {this.state.originGeo && this.state.destGeo && this.state.directions &&
       <div style={{margin: "0 auto"}}>
         <Button
           type="primary"
@@ -200,6 +211,8 @@ class RoutePage extends Component {
           Next
         </Button>
       </div>}
+      {this.state.originGeo && this.state.destGeo && !this.state.directions &&
+        this.renderError("Please select a valid route")}
       </div>
     );
   }
