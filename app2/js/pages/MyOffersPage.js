@@ -5,6 +5,7 @@ import { setLastPage } from '../actions/count'
 import moment from 'moment';
 import Util from '../util';
 import {
+  Toast,
   Label,
   Panel,
   PanelHeader,
@@ -27,7 +28,8 @@ class MyOffersPage extends React.Component {
     this.state = {
       riderOffers: [],
       driverOffers: [],
-      loadState: "loading"
+      loadState: "loading",
+      showLoadingToast: true
     }
 
     this.loadRiderOffersDone = false;
@@ -142,6 +144,13 @@ class MyOffersPage extends React.Component {
     this.setState({
       loadState: loadState
     });
+
+    if (this.loadRiderOffersDone || this.loadDriverOffersDone) {
+      // as soon as one kind of offer is loaded, we dismiss the loading toast
+      this.setState({
+        showLoadingToast: false
+      })
+    }
   }
 
   title = (offer) => {
@@ -233,6 +242,16 @@ class MyOffersPage extends React.Component {
     )
   }
 
+  renderLoadingToast() {
+    return (
+      <Toast
+        icon="loading"
+        show={this.state.showLoadingToast}>
+        Loading...
+      </Toast>
+    )
+  }
+
   render() {
     if (!Parse.User.current()) {
       return;
@@ -240,6 +259,7 @@ class MyOffersPage extends React.Component {
 
     return (
       <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "0 auto 0px", paddingTop: 40, paddingBottom: 20, backgroundColor: "whitesmoke"}}>
+          {this.renderLoadingToast()}
           {this.renderNoOfferMsg(this.emptyMsg)}
           {this.renderOffersPanel(true)}
           {this.renderOffersPanel(false)}
