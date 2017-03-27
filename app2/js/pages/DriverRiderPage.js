@@ -1,8 +1,11 @@
 import React from 'react'
 import Parse from 'parse'
 import { connect } from 'react-redux'
-import { isDriver, setLastPage } from '../actions/count'
-import {Button, ButtonArea} from 'react-weui';
+import { setIsDriver, setLastPage } from '../actions/count'
+import {
+  Button,
+  ButtonArea
+} from 'react-weui';
 
 //import weui styles
 import 'weui';
@@ -12,11 +15,29 @@ class DriverRiderPage extends React.Component {
 
   constructor(props) {
     super(props)
+
+    var {lastPage, newOfferId, isDriver} = this.props;
+    var showUi = true;
+    if (lastPage && lastPage === "note" && newOfferId) {
+      showUi = false;
+      //this.context.router.replace({ pathname: '/offer', query: { id : offer.id, driver: this.isDriver }})
+      // 由 router 跳转的页面无法在微信网页环境下验证 url signautre
+      // we just created a new offer and navigates back from note page, show the new offer
+      location.href="offer?driver=" + isDriver + "&id=" + newOfferId + "&lastPage=note";
+    }
+
+    this.state = {
+      showUi: showUi
+    }
   }
 
   componentDidMount() {}
 
   render() {
+    if (!this.state.showUi) {
+      return;
+    }
+
     if (!Parse.User.current()) {
       return;
     }
@@ -73,15 +94,15 @@ class DriverRiderPage extends React.Component {
 
   driverClick() {
     console.log("driver click")
-    var {isDriver, setLastPage} = this.props
-    isDriver(true)
+    var {setIsDriver, setLastPage} = this.props
+    setIsDriver(true)
     setLastPage("driverrider");
     this.context.router.push('/time')
   }
 
   riderClick() {
-    var {setLastPage, isDriver} = this.props
-    isDriver(false);
+    var {setLastPage, setIsDriver} = this.props
+    setIsDriver(false);
     setLastPage("driverrider");
     console.log("rider click")
     this.context.router.push('/time')
@@ -104,7 +125,8 @@ export default connect(
   state => (
   { number: state.count.number,
     isDriver: state.count.isDriver,
-    lastPage: state.count.lastPage}),
-  { isDriver,
+    lastPage: state.count.lastPage,
+    newOfferId: state.count.newOfferId}),
+  { setIsDriver,
     setLastPage }
 )(DriverRiderPage)

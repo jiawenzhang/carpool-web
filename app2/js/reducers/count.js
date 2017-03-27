@@ -4,7 +4,8 @@ import {
   END_TIME,
   ORIGIN_LOCATION,
   DEST_LOCATION,
-  LAST_PAGE
+  LAST_PAGE,
+  NEW_OFFER_ID
   } from '../constants'
 
 const initialState = {
@@ -25,6 +26,8 @@ export default function update(state = initialState, action) {
     state.destLocation = action.destLocation
   } else if (action.type === LAST_PAGE) {
     state.lastPage = action.lastPage
+  } else if (action.type === NEW_OFFER_ID) {
+    state.newOfferId = action.newOfferId
   }
   return state
 }

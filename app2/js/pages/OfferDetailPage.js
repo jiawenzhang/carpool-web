@@ -321,7 +321,7 @@ class OfferDetailPage extends ParseComponent {
           this.context.router.goBack();
         } else if (this.lastPage === "note") {
           // newly created offer, if cancelled, go to root page
-          this.context.router.replace({pathname: '/'});
+          this.context.router.goBack();
         } else {
           console.error("unknown lastPage!");
           this.context.router.replace({pathname: '/'});

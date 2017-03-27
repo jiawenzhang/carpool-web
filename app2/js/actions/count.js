@@ -4,10 +4,11 @@ import {
   END_TIME,
   ORIGIN_LOCATION,
   DEST_LOCATION,
-  LAST_PAGE
+  LAST_PAGE,
+  NEW_OFFER_ID
   } from '../constants'
 
-export function isDriver(value) {
+export function setIsDriver(value) {
     return {
         type: IS_DRIVER,
         isDriver: value
@@ -46,5 +47,12 @@ export function setLastPage(page) {
     return {
         type: LAST_PAGE,
         lastPage: page
+    }
+}
+
+export function setNewOfferId(id) {
+    return {
+        type: NEW_OFFER_ID,
+        newOfferId: id
     }
 }

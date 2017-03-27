@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap'
 import { connect } from 'react-redux'
-import { isDriver } from '../actions/count'
+import { setIsDriver, setLastPage, setNewOfferId } from '../actions/count'
 import Parse from 'parse'
 
 import {
@@ -121,7 +121,7 @@ class NotePage extends React.Component {
     console.log("next click")
     console.log("note: " + this.note);
     console.log("contact: " + this.contact);
-    let {isDriver, startTime, endTime, originLocation, destLocation} = this.props;
+    var {isDriver, startTime, endTime, originLocation, destLocation} = this.props;
     this.isDriver = isDriver;
 
     console.log("isDriver: " + isDriver)
@@ -190,9 +190,11 @@ class NotePage extends React.Component {
         return this.offer.save()
       }).then((offer) => {
         console.log('offer updated with objectId: ' + offer.id);
-        //this.context.router.replace({ pathname: '/offer', query: { id : offer.id, driver: this.isDriver }})
-        // 由 router 跳转的页面无法在微信网页环境下验证 url signautre
-        location.href="offer?driver=" + this.isDriver + "&id=" + offer.id + "&lastPage=note";
+        var {setLastPage, setNewOfferId} = this.props;
+        setLastPage("note");
+        setNewOfferId(offer.id);
+        // go back to the driverrider page, which will show the offer detail page
+        this.context.router.go(-3);
       }, (error) => {
         console.log('Failed to create new offer, with error code: ' + error.message);
         this.setState({
@@ -214,8 +216,11 @@ export default connect(
     endTime: state.count.endTime,
     originLocation: state.count.originLocation,
     destLocation: state.count.destLocation,
+    lastPage: state.count.lastPage,
     }),
-  {}
+  { setIsDriver,
+    setLastPage,
+    setNewOfferId}
 )(NotePage)
 
 // <FormGroup controlId="formControlsTextarea">
