@@ -251,14 +251,16 @@ class OfferDetailPage extends ParseComponent {
         id: this.offerId
       }
 
-      let link = location.protocol + '//' + location.host + this.props.location.pathname +
+      var link = location.protocol + '//' + location.host + this.props.location.pathname +
       "?" + Util.urlEncode(params);
+      var imageUrl = location.protocol + '//' + location.host + "/images/logo.png";
       console.log("link " + link);
+      console.log("imageUrl " + imageUrl);
       window.wx.onMenuShareAppMessage({
         title: this.state.title,
         desc: desc,
         link: link, // 分享链接
-        imgUrl: '', // 分享图标
+        imgUrl: imageUrl, // 分享图标
         type: '', // 分享类型,music、video或link，不填默认为link
         dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
         success: function () {

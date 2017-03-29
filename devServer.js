@@ -22,6 +22,7 @@ app.use(require('webpack-dev-middleware')(compiler, {
 app.use(require('webpack-hot-middleware')(compiler));
 
 app.use("/",router);
+app.use("/images", express.static(path.join(__dirname, 'images')));
 
 app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, 'index2.html'));
