@@ -85,7 +85,7 @@ class DriverRiderPage extends React.Component {
         <Button
           type="default"
           onClick={this.seeMyOffers.bind(this)}>
-          See my offers
+          My offers
         </Button>
 
       </div>
