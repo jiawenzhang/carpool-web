@@ -189,8 +189,9 @@ class OfferDetailPage extends ParseComponent {
       if (this.offerData.originLocality && this.offerData.destLocality) {
         route = this.offerData.originLocality + " to " + this.offerData.destLocality
       }
+      var prefix = this.driver === "true" ? "Offer:" : "Req:";
       console.log("route: " + route)
-      const title = priceStr + timeStr + " " + route;
+      const title = prefix + " " + priceStr + timeStr + " " + route;
       this.setState(
         { data: this.offerData,
           title: title
@@ -253,7 +254,7 @@ class OfferDetailPage extends ParseComponent {
 
       var link = location.protocol + '//' + location.host + this.props.location.pathname +
       "?" + Util.urlEncode(params);
-      var imageUrl = location.protocol + '//' + location.host + "/images/logo.png";
+      var imageUrl = location.protocol + '//' + location.host + "/images/logo300.png";
       console.log("link " + link);
       console.log("imageUrl " + imageUrl);
       window.wx.onMenuShareAppMessage({
