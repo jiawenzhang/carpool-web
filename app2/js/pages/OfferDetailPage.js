@@ -171,7 +171,7 @@ class OfferDetailPage extends ParseComponent {
       const proximateTime = Util.proximateTime(startTime, endTime);
       var timeStr;
       if (proximateTime) {
-        timeStr = startTime.format("ddd") + " " + proximateTime;
+        timeStr = startTime.format("ddd") + " " + proximateTime.toLowerCase();
       } else {
         const timeDiff = endTime.diff(startTime, 'minutes');
         var time = startTime.add(timeDiff/2, 'minutes');
