@@ -4,7 +4,9 @@ import { connect } from 'react-redux'
 import { setIsDriver, setLastPage } from '../actions/count'
 import {
   Button,
-  ButtonArea
+  ButtonArea,
+  Footer,
+  FooterText
 } from 'react-weui';
 
 //import weui styles
@@ -85,9 +87,15 @@ class DriverRiderPage extends React.Component {
 
         <Button
           type="default"
-          onClick={this.seeMyOffers.bind(this)}>
+          onClick={this.myOffers.bind(this)}>
           My offers
         </Button>
+
+        {false && <div style={{position: "absolute", bottom: 0 }}>
+          <Footer>
+            <FooterText>Copyright &copy; 2017 Beans</FooterText>
+          </Footer>
+        </div>}
 
       </div>
     );
@@ -109,7 +117,7 @@ class DriverRiderPage extends React.Component {
     this.context.router.push('/time')
   }
 
-  seeMyOffers() {
+  myOffers() {
     this.context.router.push('/myoffers')
   }
 
