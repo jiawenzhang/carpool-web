@@ -68,7 +68,7 @@ class NotePage extends React.Component {
                    <CellBody>
                        <Input
                          type="number"
-                         placeholder="Preferred price (optional)"
+                         placeholder="Enter price"
                          onChange={this.priceChange}>
                        </Input>
                    </CellBody>
@@ -92,7 +92,7 @@ class NotePage extends React.Component {
                 <FormCell>
                   <CellBody>
                     <TextArea
-                      placeholder={"Additional message to " + toWho + " (special request, number of seats, vehicle modal etc. )"}
+                      placeholder={"Additional message to " + toWho}
                       rows="4"
                       maxlength="200"
                       onChange={this.noteChange}>
