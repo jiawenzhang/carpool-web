@@ -283,7 +283,15 @@ class OfferDetailPage extends ParseComponent {
     console.log("fromClick")
   }
 
-  cancelClick = () => {
+  buttonClick = (buttonText) => {
+    if (buttonText === "HOME") {
+      this.goHome();
+    } else if (buttonText === "CANCEL OFFER") {
+      this.cancelOffer();
+    }
+  }
+
+  cancelOffer = () => {
     console.log("cancelOffer");
     if (!this.offer) {
       console.error("no offer, cannot cancel");
@@ -318,22 +326,25 @@ class OfferDetailPage extends ParseComponent {
     this.setState({showCancelledToast: true});
     this.state.toastTimer = setTimeout(() => {
       this.setState({showCancelledToast: false});
+      this.goBack();
+    }, 1000);
+  }
 
-      if (this.lastPage) {
-        if (this.lastPage === "myoffers") {
-          this.context.router.goBack();
-        } else if (this.lastPage === "note") {
-          // newly created offer, if cancelled, go to root page
-          this.context.router.goBack();
-        } else {
-          console.error("unknown lastPage!");
-          this.context.router.replace({pathname: '/'});
-        }
+  goBack = () => {
+    if (this.lastPage) {
+      if (this.lastPage === "myoffers") {
+        this.context.router.goBack();
+      } else if (this.lastPage === "note") {
+        // newly created offer, if cancelled, go to root page
+        this.context.router.goBack();
       } else {
-        //page is opened from no history, no where to go back, show root page
+        console.error("unknown lastPage!");
         this.context.router.replace({pathname: '/'});
       }
-    }, 1000);
+    } else {
+      //page is opened from no history, no where to go back, show root page
+      this.context.router.replace({pathname: '/'});
+    }
   }
 
   renderToast() {
@@ -368,28 +379,30 @@ class OfferDetailPage extends ParseComponent {
             {this.renderContact()}
             {this.renderNote()}
           </PreviewBody>
-            {this.renderCancel()}
+            {this.renderButton()}
         </Preview>
       )
   }
 
-  renderCancel = () => {
-    if (!Parse.User.current()) {
-      console.log("user not login, disable cancel offer");
-      return null;
-    }
+  goHome = () => {
+    this.context.router.replace({pathname: '/'});
+  }
 
-    if (Parse.User.current().id != this.offerData.userId) {
-      console.log("logged in user is not owner of the offer, disable cancel offer");
-      return null;
+  renderButton = () => {
+    var buttonText;
+    if (!Parse.User.current() || Parse.User.current().id != this.offerData.userId) {
+      console.log("not logged or logged in user is not owner of the offer");
+      buttonText = "HOME";
+    } else {
+      buttonText = "CANCEL OFFER"
     }
 
     return (
       <PreviewFooter>
         <PreviewButton
           primary
-          onClick={() => this.cancelClick()}>
-          CANCEL OFFER
+          onClick={() => this.buttonClick(buttonText)}>
+          {buttonText}
         </PreviewButton>
       </PreviewFooter>
     );
