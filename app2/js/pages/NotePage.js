@@ -161,6 +161,8 @@ class NotePage extends React.Component {
         this.origin.set("placeId", originLocation.placeId)
         this.origin.set("geo", originGeoPoint);
         this.origin.set("locality", originLocation.locality)
+        this.origin.set("state", originLocation.state)
+        this.origin.set("country", originLocation.country)
         this.origin.set("label", originLocation.label);
         this.origin.set("for", this.isDriver ? "driver" : "rider");
         this.origin.set("type", "origin");
@@ -177,6 +179,8 @@ class NotePage extends React.Component {
         dest.set("placeId", this.destLocation.placeId)
         dest.set("label", this.destLocation.label)
         dest.set("locality", this.destLocation.locality)
+        dest.set("state", this.destLocation.state)
+        dest.set("country", this.destLocation.country)
         dest.set("for", this.isDriver ? "driver" : "rider");
         dest.set("type", "dest");
         dest.set("offerId", this.offer.id);
@@ -222,14 +226,3 @@ export default connect(
     setLastPage,
     setNewOfferId}
 )(NotePage)
-
-// <FormGroup controlId="formControlsTextarea">
-//   <ControlLabel></ControlLabel>
-//   <FormControl
-//     componentClass="textarea"
-//     placeholder={"Message to the " + toWho + " (max 200 characters)"}
-//     maxLength={200}
-//     onChange={this.noteChange}
-//     style={{height: 100, maxHeight:100}}
-//     />
-// </FormGroup>

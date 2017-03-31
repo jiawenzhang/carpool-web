@@ -70,27 +70,31 @@ class RoutePage extends Component {
   onStartLocationSelect = (place) => {
     //console.log("start place" + JSON.stringify(place, null, 2))
     const startLatLng = new google.maps.LatLng(place.location.lat, place.location.lng)
-    let locality = this.getLocality(place)
+    var placeData = this.getPlaceData(place)
 
     this.setState({
       originPlaceId: place.placeId,
       originGeo: startLatLng,
       originLabel: place.label,
-      originLocality: locality,
+      originLocality: placeData.locality,
+      originState: placeData.state,
+      originCountry: placeData.country
     });
 
     this.updateRoute()
   }
 
   onDestinationSelect = (place) => {
-    //console.log("destPlace" + JSON.stringify(place, null, 2))
+    console.log("destPlace" + JSON.stringify(place, null, 2))
     const destinationLatLng = new google.maps.LatLng(place.location.lat, place.location.lng)
-    let locality = this.getLocality(place)
+    var placeData = this.getPlaceData(place)
     this.setState({
       destPlaceId: place.placeId,
       destGeo: destinationLatLng,
       destLabel: place.label,
-      destLocality: locality
+      destLocality: placeData.locality,
+      destState: placeData.state,
+      destCountry: placeData.country
     });
 
     this.updateRoute()
@@ -133,6 +137,8 @@ class RoutePage extends Component {
       placeId: this.state.originPlaceId,
       geo: this.state.originGeo,
       locality: this.state.originLocality,
+      state: this.state.originState,
+      country: this.state.originCountry,
       label: this.state.originLabel
     })
 
@@ -140,19 +146,38 @@ class RoutePage extends Component {
       placeId: this.state.destPlaceId,
       geo: this.state.destGeo,
       locality: this.state.destLocality,
+      state: this.state.destState,
+      country: this.state.destCountry,
       label: this.state.destLabel
     })
 
     this.context.router.push('/note')
   }
 
-  getLocality = (place) => {
+  getPlaceData = (place) => {
+    var placeData = {
+      locality: null,
+      state: null,
+      country: null
+    }
     for (let component of place.gmaps.address_components) {
       if (component.types.indexOf('locality') > -1) {
         console.log("locality " + component.long_name)
-        return component.long_name
+        placeData.locality = component.long_name;
+        continue;
+      }
+      if (component.types.indexOf("administrative_area_level_1") > -1) {
+        console.log("state " + component.short_name)
+        placeData.state = component.short_name;
+        continue;
+      }
+      if (component.types.indexOf("country") > -1) {
+        console.log("country " + component.long_name)
+        placeData.country = component.long_name;
+        continue;
       }
     }
+    return placeData;
   }
 
   renderError(msg) {

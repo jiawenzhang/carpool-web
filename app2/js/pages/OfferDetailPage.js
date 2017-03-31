@@ -150,6 +150,8 @@ class OfferDetailPage extends ParseComponent {
       this.offerData.originLabel = origin.get("label")
       this.offerData.originPlaceId = origin.get("placeId")
       this.offerData.originLocality = origin.get("locality")
+      this.offerData.originState = origin.get("state");
+      this.offerData.originCountry = origin.get("country");
 
       const query = new Parse.Query("Location")
       const destId = this.offer.get("destId")
@@ -163,6 +165,8 @@ class OfferDetailPage extends ParseComponent {
       this.offerData.destLabel = dest.get("label")
       this.offerData.destPlaceId = dest.get("placeId")
       this.offerData.destLocality = dest.get("locality")
+      this.offerData.destState = dest.get("state");
+      this.offerData.destCountry = dest.get("country");
 
       console.log("offerData: " + JSON.stringify(this.offerData));
       var startTime = this.offerData.startTime;
@@ -222,6 +226,17 @@ class OfferDetailPage extends ParseComponent {
     xmlHttp.send();
   }
 
+  sliceAddress(label, remove) {
+    var i = label.lastIndexOf(remove);
+    if (i > -1) {
+      label = label.substring(0, i).trim();
+      if (label.slice(-1) === ',') {
+        label = label.slice(0, -1);
+      }
+    }
+    return label;
+  }
+
   gotSignatureMap = (signatureMap) => {
     console.log("gotSignatureMap");
     console.log("appId: " + signatureMap.appId);
@@ -245,7 +260,37 @@ class OfferDetailPage extends ParseComponent {
       this.ready = true;
 
       var note = this.offerData.note ? ", " + this.offerData.note : "";
-      var desc = this.offerData.originLabel + " to " + this.offerData.destLabel + note;
+      const originLocality = this.offerData.originLocality;
+      const originState = this.offerData.originState;
+      const originCountry = this.offerData.originCountry;
+
+      const destLocality = this.offerData.destLocality;
+      const destState = this.offerData.destState;
+      const destCountry = this.offerData.destCountry;
+
+      var from = this.offerData.originLabel;
+      var to = this.offerData.destLabel;
+
+      // Fixme: following may only work for English address
+      if (originLocality && destLocality && originLocality === destLocality) {
+        // city is the same, remove string after city
+        from = this.sliceAddress(from, originLocality);
+        to = this.sliceAddress(to, destLocality);
+      } else if (originState && destState && originState === destState) {
+        // state is the same, remove string after state
+        console.error("slice state");
+        console.error("from " + from);
+        from = this.sliceAddress(from, originState);
+        to = this.sliceAddress(to, destState);
+      } else if (originCountry && destCountry && originCountry === destCountry) {
+        // country is the same, remove string after country
+        console.error("slice country");
+        console.error("from " + from);
+        from = this.sliceAddress(from, originCountry);
+        to = this.sliceAddress(to, destCountry);
+      }
+
+      var desc = from + " to " + to + note;
 
       var params = {
         driver: this.driver,
