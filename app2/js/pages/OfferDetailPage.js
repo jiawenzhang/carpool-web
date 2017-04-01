@@ -278,14 +278,10 @@ class OfferDetailPage extends ParseComponent {
         to = this.sliceAddress(to, destLocality);
       } else if (originState && destState && originState === destState) {
         // state is the same, remove string after state
-        console.error("slice state");
-        console.error("from " + from);
         from = this.sliceAddress(from, originState);
         to = this.sliceAddress(to, destState);
       } else if (originCountry && destCountry && originCountry === destCountry) {
         // country is the same, remove string after country
-        console.error("slice country");
-        console.error("from " + from);
         from = this.sliceAddress(from, originCountry);
         to = this.sliceAddress(to, destCountry);
       }
