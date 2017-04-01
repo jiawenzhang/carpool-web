@@ -59,7 +59,7 @@ class App extends Component {
       <Provider store={store}>
         <Router history={history}>
           <Route path="/" onEnter={this.checkLogin.bind(this)}>
-            <IndexRoute path="driverrider" component={DriverRiderPage} />
+            <IndexRoute component={DriverRiderPage} />
             <Route path="login" component={Login} />
             <Route path="myoffers" component={MyOffersPage} />
             <Route path="time" component={TimePage} />
@@ -123,9 +123,5 @@ class App extends Component {
         .toString();
   }
 }
-
-App.contextTypes = {
-  router: React.PropTypes.func.isRequired
-};
 
 export default App;

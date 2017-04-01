@@ -61,13 +61,13 @@ class Login extends React.Component {
   componentDidMount() {
     //initializeFacebook();
     if (Parse.User.current()) {
-      this.context.router.push('/driverrider');
+      this.context.router.push('/');
       return;
     }
 
     if (!Util.isWeChatBrowser()) {
       if (Parse.User.current()) {
-        this.context.router.push('/driverrider');
+        this.context.router.push('/');
       } else {
         this.setState({
           loading: false
@@ -87,7 +87,7 @@ class Login extends React.Component {
         this.setState({error: error.message});
       } else {
         console.log("login success with wechat");
-        this.context.router.replace('/driverrider');
+        this.context.router.replace('/');
       }
     });
   }
@@ -257,7 +257,7 @@ class Login extends React.Component {
       }
 
       Parse.User.logIn(email, password).then(() => {
-        this.context.router.replace('/driverrider');
+        this.context.router.replace('/');
       }, (error) => {
         console.log(error)
         this.setState({error: error.message});
@@ -300,7 +300,7 @@ class Login extends React.Component {
 
       user.signUp(null).then(() => {
         console.log("signup success");
-        this.context.router.replace('/driverrider');
+        this.context.router.replace('/');
       }, (error) => {
         console.log(error);
         this.setState({error: error.message});
@@ -323,7 +323,7 @@ class Login extends React.Component {
         } else {
           console.log("User logged in through Facebook!");
         }
-        this.context.router.replace('/driverrider');
+        this.context.router.replace('/');
       },
       error: (user, error) => {
         console.error("User cancelled the Facebook login or did not fully authorize.");
