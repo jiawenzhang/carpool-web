@@ -74,7 +74,6 @@ class MyOffersPage extends React.Component {
   }
 
   onBackButtonEvent = (e) => {
-    console.error("onBackButtonEvent");
     e.preventDefault()
     this.context.router.replace({ pathname: '/'})
   }
