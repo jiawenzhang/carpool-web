@@ -45,7 +45,8 @@ class OfferDetailPage extends ParseComponent {
     this.state = {
       cancelled: false,
       showCancelledToast: false,
-      toastTimer: null
+      toastTimer: null,
+      loading: true
     }
   }
 
@@ -198,7 +199,8 @@ class OfferDetailPage extends ParseComponent {
       const title = prefix + " " + priceStr + timeStr + " " + route;
       this.setState(
         { data: this.offerData,
-          title: title
+          title: title,
+          loading: false
         });
 
       this.getSignatureMap();
@@ -256,7 +258,10 @@ class OfferDetailPage extends ParseComponent {
 
     window.wx.config(weChatState);
     window.wx.ready(() => {
-      console.log("ready back");
+      console.log("ready");
+      this.setState({
+        loading: false
+      });
       this.ready = true;
 
       var note = this.offerData.note ? ", " + this.offerData.note : "";
@@ -356,6 +361,11 @@ class OfferDetailPage extends ParseComponent {
     return (
       <div style={{maxWidth: 800, width: "100%", height: "100%", margin: "auto", backgroundColor: "whitesmoke"}}>
         <Helmet title={this.state.title}/>
+        <Toast
+          icon="loading"
+          show={this.state.loading}>
+          Loading...
+        </Toast>
         {this.state.cancelled && this.renderMsg("The offer is cancelled")}
         {this.state.data && this.renderOffer()}
         {this.renderToast()}
