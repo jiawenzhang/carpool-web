@@ -47,7 +47,7 @@ class DriverRiderPage extends React.Component {
     return (
       <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <img
-          src={"/images/logo300.png"}
+          src={require("../../../images/logo300.png")}
           style={{width: "40vw", display: "block", margin: "0 auto", paddingBottom: 60, paddingTop: 60}}
         />
 
