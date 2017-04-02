@@ -37,11 +37,11 @@ class DriverRiderPage extends React.Component {
 
   render() {
     if (!this.state.showUi) {
-      return;
+      return null;
     }
 
     if (!Parse.User.current()) {
-      return;
+      return null;
     }
 
     return (
