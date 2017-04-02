@@ -41,6 +41,9 @@ Parse.initialize(PARSE_APP_ID, PARSE_JS_KEY)
 Parse.serverURL = "https://wheels-to-town-server.herokuapp.com/parse"
 //Parse.serverURL = 'http://10.0.9.133:1337/parse'
 
+import ReactGA from 'react-ga';
+ReactGA.initialize('UA-96636577-1');
+
 const reducer = combineReducers({
   ...reducers,
   routing: routerReducer
@@ -57,7 +60,9 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Router history={history}>
+        <Router
+          history={history}
+          onUpdate={this.logPageView}>
           <Route path="/" onEnter={this.checkLogin.bind(this)}>
             <IndexRoute component={DriverRiderPage} />
             <Route path="login" component={Login} />
@@ -72,6 +77,9 @@ class App extends Component {
         </Router>
       </Provider>
     );
+  }
+
+  logPageView = () => {
   }
 
   checkLogin(nextState, replace) {

@@ -7,6 +7,7 @@ import Helmet from "react-helmet"
 import Util from "../util"
 import URI from "urijs";
 import WechatAuth from "../WechatAuth";
+import ReactGA from 'react-ga';
 
 import { connect } from 'react-redux'
 
@@ -48,6 +49,9 @@ class OfferDetailPage extends ParseComponent {
       toastTimer: null,
       loading: true
     }
+
+    ReactGA.set({ page: window.location.pathname });
+    ReactGA.pageview(window.location.pathname);
   }
 
   onBackButtonEvent = (e) => {
