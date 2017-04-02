@@ -372,6 +372,7 @@ class OfferDetailPage extends ParseComponent {
         </Toast>
         {this.state.cancelled && this.renderMsg("The offer is cancelled")}
         {this.state.data && this.renderOffer()}
+        {this.state.data && this.renderQr()}
         {this.renderToast()}
       </div>
     )
@@ -437,6 +438,22 @@ class OfferDetailPage extends ParseComponent {
             {this.renderButton()}
         </Preview>
       )
+  }
+
+  renderQr() {
+    if (Parse.User.current().id == this.offerData.userId) {
+      return null;
+    }
+
+    return (
+      <div style={{paddingBottom: 50, paddingTop: 50, fontSize: 12, color: "grey", textAlign: "center", backgroundColor: "whitesmoke"}}>
+      <img
+        src={require("../../../images/qr.jpeg")}
+        style={{width: "30vw", display: "block", margin: "0 auto", paddingBottom: 5}}
+        />
+      长按关注我们
+      </div>
+    )
   }
 
   goHome = () => {
