@@ -28,6 +28,8 @@ class DriverRiderPage extends React.Component {
       location.href="offer?driver=" + isDriver + "&id=" + newOfferId + "&lastPage=note";
     }
 
+    this.isWeChatBrowser = Util.isWeChatBrowser();
+
     this.state = {
       showUi: showUi
     }
@@ -100,7 +102,32 @@ class DriverRiderPage extends React.Component {
     )
   }
 
+  renderNotWeChat() {
+    return (
+      <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
+        {this.renderLogo()}
+        {this.renderQr()}
+      </div>
+    )
+  }
+
+  renderQr() {
+    return (
+      <div style={{paddingBottom: 50, paddingTop: 50, fontSize: 14, color: "grey", textAlign: "center"}}>
+      <img
+        src={require("../../../images/qr.jpeg")}
+        style={{width: "45vw", maxWidth: 300, display: "block", margin: "0 auto", paddingBottom: 5}}
+        />
+      微信扫一扫使用
+      </div>
+    )
+  }
+
   render() {
+    if (!this.isWeChatBrowser) {
+      return this.renderNotWeChat();
+    }
+
     if (!this.state.showUi) {
       return null;
     }
