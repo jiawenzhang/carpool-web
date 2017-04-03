@@ -35,22 +35,18 @@ class DriverRiderPage extends React.Component {
 
   componentDidMount() {}
 
-  render() {
-    if (!this.state.showUi) {
-      return null;
-    }
-
-    if (!Parse.User.current()) {
-      return null;
-    }
-
+  renderLogo() {
     return (
-      <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
         <img
           src={require("../../../images/logo300.png")}
           style={{width: "40vw", maxWidth: 300, display: "block", margin: "0 auto", paddingBottom: 60, paddingTop: 60}}
         />
+    )
+  }
 
+  renderButtons() {
+    return (
+        <div>
         <div style={{margin: "0 auto"}}>
           <Button
             type="default"
@@ -90,12 +86,35 @@ class DriverRiderPage extends React.Component {
           onClick={this.myOffers.bind(this)}>
           My offers
         </Button>
+        </div>
+    )
+  }
 
-        {false && <div style={{position: "absolute", bottom: 0 }}>
-          <Footer>
-            <FooterText>Copyright &copy; 2017 Beans</FooterText>
-          </Footer>
-        </div>}
+  renderFooter() {
+    return (
+      <div style={{position: "absolute", bottom: 0 }}>
+        <Footer>
+          <FooterText>Copyright &copy; 2017 Beans</FooterText>
+        </Footer>
+      </div>
+    )
+  }
+
+  render() {
+    if (!this.state.showUi) {
+      return null;
+    }
+
+    if (!Parse.User.current()) {
+      return null;
+    }
+
+    return (
+      <div style={{maxWidth: 800, width: "80%", margin: "0 auto 10px"}}>
+
+        {this.renderLogo()}
+        {this.renderButtons()}
+        {false && this.renderFooter()}
 
       </div>
     );
