@@ -2,6 +2,7 @@ import React from 'react'
 import Parse from 'parse'
 import { connect } from 'react-redux'
 import { setIsDriver, setLastPage } from '../actions/count'
+import Util from '../util'
 import {
   Button,
   ButtonArea,
