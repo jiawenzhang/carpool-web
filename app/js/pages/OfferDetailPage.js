@@ -11,7 +11,6 @@ import ReactGA from 'react-ga';
 
 import { connect } from 'react-redux'
 
-
 import {
   Toast,
   Label,
@@ -36,6 +35,12 @@ from 'react-weui';
 //import weui styles
 import 'weui';
 import 'react-weui/lib/react-weui.min.css';
+
+var ReactToastr = require("react-toastr");
+var {ToastContainer} = ReactToastr; // This is a React Element.
+var ToastMessageFactory = React.createFactory(ReactToastr.ToastMessage.animation);
+//var ArrowUp = require("react-icons/lib/fa/arrow-up");
+var ArrowUp = require("react-icons/lib/fa/angle-up");
 
 class OfferDetailPage extends ParseComponent {
   observe() {}
@@ -374,6 +379,7 @@ class OfferDetailPage extends ParseComponent {
         {this.state.data && this.renderOffer()}
         {this.state.data && this.renderQr()}
         {this.renderToast()}
+        {this.renderTip()}
       </div>
     )
   }
@@ -429,6 +435,7 @@ class OfferDetailPage extends ParseComponent {
             {this.renderHeader()}
           </PreviewHeader>
           <PreviewBody>
+            {this.renderPrice()}
             {this.renderTime()}
             {this.renderFrom()}
             {this.renderTo()}
@@ -454,6 +461,28 @@ class OfferDetailPage extends ParseComponent {
       长按关注我们
       </div>
     )
+  }
+
+  renderTip() {
+    return (
+      <div>
+        <ToastContainer
+          ref="container"
+          toastMessageFactory={ToastMessageFactory}
+          className="toast-top-right" />
+      </div>
+    );
+  }
+
+  addAlert = () => {
+    this.refs.container.success(
+      "点击右上角菜单分享",
+      null, {
+      timeOut: 5000,
+      extendedTimeOut: 10000,
+      closeButton: false,
+      preventDuplicates:true
+    });
   }
 
   goHome = () => {
@@ -543,9 +572,9 @@ class OfferDetailPage extends ParseComponent {
   }
 
   renderHeader = () => {
-    const priceStr = this.state.data.price ? "$" + this.state.data.price : null;
     //Fixme:
-    const padding = priceStr ? 0 : 40;
+    //const padding = priceStr ? 0 : 40;
+    const padding = 0 ;
     //const header = (this.driver === "true" ? "Driver offer" : "Rider offer") + "\u00a0\u00a0" /* whitespace */ + priceStr;
     const header = (this.driver === "true" ? "Driver offer" : "Rider offer");
 
@@ -554,11 +583,19 @@ class OfferDetailPage extends ParseComponent {
         <div style={{width: "50%", position: "absolute", left: 0, color: "black", textAlign: "left", fontSize: 17}}>
           {header}
         </div>
-        <div style={{width: "50%", marginLeft: "50%", position: "relative", color: "grey", textAlign: "left", fontSize: 16}}>
-          {priceStr}
+        <div style={{width: "50%", marginLeft: "50%", position: "relative", color: "grey", textAlign: "right", fontSize: 16}}>
+          {<ArrowUp
+            onClick={this.addAlert}
+            size={22}
+            />}
         </div>
       </div>
     )
+  }
+
+  renderPrice = () => {
+    const priceStr = this.state.data.price ? "$" + this.state.data.price : null;
+    return priceStr ? this.renderRow("Price", priceStr) : null;
   }
 
   renderTime = () => {
